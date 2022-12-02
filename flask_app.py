@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from functools import reduce
 import pandas as pd
-
+import ast
 # Set All Recommendation Model Parameters
 N_topics = 50             # Number of Topics to Extract from corpora
 N_top_docs = 200          # Number of top documents within each topic to extract keywords
@@ -66,15 +66,25 @@ def print_recipes(index, query, recipe_range):
     '''Prints recipes according to query similary ranks'''
     print('Search Query: {}\n'.format(query))
     dict = []
+    nutrition_labels=["calories (kcal)", "total fat (PDV)", "sugar (PDV)" ," sodium (PDV) "," protein (PDV) ", "saturated fat (PDV) ", "Carbohydrates (PDV)"]
+
     for i, index in enumerate(index, recipe_range[0]):
-        tmp = {
-            "reicpe_rank": recipes.loc[index, 'name'],
-            "ingredients": recipes.loc[index, 'ingredients'],
-            "steps": recipes.loc[index, 'name']
-        }
-        print('Recipe Rank: {}\t'.format(i+1),recipes.loc[index, 'name'],'\n')
+       
+        print('Recipe Rank: {}\t'.format(i+1),i,'\n')
         print('Ingredients:\n{}\n '.format(recipes.loc[index, 'ingredients']))
         print('Instructions:\n{}\n'.format(recipes.loc[index, 'steps']))
+        print('Nutrition:\n{}\n'.format(recipes.loc[index, 'nutrition']))
+        nutrition={}
+        for loc in range(0,5):
+            nutrition_values=ast.literal_eval(recipes.loc[index, 'nutrition'])
+            nutrition[nutrition_labels[loc]]=nutrition_values[loc]
+        print(nutrition)
+        tmp = {
+            "recipe_rank": i,     "recipe_name":  recipes.loc[index, 'name'],
+            "ingredients": recipes.loc[index, 'ingredients'],
+            "steps": recipes.loc[index, 'steps'],
+            "nutrition_data":nutrition,
+        }
         dict.append(tmp)
     return dict
     
@@ -93,11 +103,18 @@ def Search_Recipes(query, query_ranked=False, recipe_range=(0,3)):
 @app.route('/api/recommend',methods = ['POST'])
 def login():
    if request.method == 'POST':
-        print(request.form)
-        print(request.json)
+       
         ingredients = request.json.get('ingredients')
-        op = Search_Recipes(ingredients, query_ranked=True, recipe_range=(0,10))
-        return {"data": op}
+        if(ingredients):
+            if len(ingredients) <1:
+                return {"error": "Invalid input"},400
+            op = Search_Recipes(ingredients, query_ranked=True, recipe_range=(0,10))
+            return {"data": op}
+        else:   
+            return {"error": "Invalid input"},400
+
+    
+       
 
 if __name__ == '__main__':
    app.run(debug = True)
