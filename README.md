@@ -20,12 +20,6 @@ UI
 
 Interactive UI 
 
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="1200" src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FD9XHugak568jndUGNp2lRH%2FLy-Smart-Fridge-App-UI%3Fscaling%3Dmin-zoom%26page-id%3D0%253A1%26node-id%3D1%253A216%26starting-point-node-id%3D1%253A216%26show-proto-sidebar%3D1" allowfullscreen></iframe>
-
-UI Prototype Flows
-
-![alt text](https://github.com/harsh3401/SmartFridgeSystem/blob/main/UI/flow.gif)
-
-
+https://www.figma.com/proto/D9XHugak568jndUGNp2lRH/Ly-Smart-Fridge-App-UI?scaling=min-zoom&page-id=0%3A1&node-id=1%3A216&starting-point-node-id=1%3A216&show-proto-sidebar=1
 
 
