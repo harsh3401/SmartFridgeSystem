@@ -13,4 +13,14 @@
 
 -A frontend made via the PWA standard for easy integration in devices of all sizes.
 
+UI 
+
+![alt text](https://github.com/harsh3401/SmartFridgeSystem/blob/main/UI/Ly%20Smart%20Fridge%20App%20UI.jpg)
+
+
+UI Flows
+
+
+
+
 -Hardware implementation and implementation diagram and embedded systems ( code and specifications )
