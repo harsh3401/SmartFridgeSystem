@@ -1,4 +1,7 @@
 venv/
-pics/
 *.csv
 *.pkl
+node_modules/
+CUSTOM_YOLO_DATA/
+pics/
+*.h5
