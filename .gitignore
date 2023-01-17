@@ -5,3 +5,4 @@ node_modules/
 CUSTOM_YOLO_DATA/
 pics/
 *.h5
+*.DS_Store
