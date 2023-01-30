@@ -15,6 +15,7 @@
     "axios-react": "^2.0.8",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.1.2",
+    "dotenv": "^16.0.3",
     "firebase": "^9.15.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",

@@ -19,6 +19,7 @@ class CustomRecipeRecommendationAdmin(ModelAdmin):
         "sodium",
         "protein",
         "steps",
+        "time_to_make",
         "created_at",
         "updated_at",
     ]

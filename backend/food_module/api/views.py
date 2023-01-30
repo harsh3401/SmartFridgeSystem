@@ -105,6 +105,7 @@ class GetRecommendations(APIView):
                 obj = FoodItem.objects.get_or_create(item_name=j)
                 food_item_objects.append(obj[0].id)
 
+            print("creating recipe recommendation: ", i)
             obj = RecipeRecommendation.objects.create(
                 user=user,
                 recipe_name=i["recipe_name"],
@@ -115,6 +116,7 @@ class GetRecommendations(APIView):
                 protein=i["nutrition_data"]["protein (PDV)"],
                 saturated_fat=i["nutrition_data"]["saturated fat (PDV)"],
                 carbohydrates=i["nutrition_data"]["carbohydrates (PDV)"],
+                time_to_make=i["time_to_make"],
                 steps=i["steps"],
             )
             [obj.ingredients.add(i) for i in food_item_objects]

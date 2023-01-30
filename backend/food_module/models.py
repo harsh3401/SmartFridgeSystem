@@ -31,7 +31,8 @@ class RecipeRecommendation(models.Model):
     carbohydrates = models.IntegerField(null=True, blank=True)
 
     steps = models.CharField(max_length=1024, null=True, blank=True)
-
+    time_to_make = models.IntegerField(null=True, blank=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

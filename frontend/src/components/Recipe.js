@@ -34,6 +34,9 @@ export default () => {
                         <p>{item['ingredients']}</p>
                         <p className="text-2xl">Steps: </p>
                         <p>{item['steps']}</p>
+                        <p className="text-2xl">Time to make: </p>
+                        <p>{item['time_to_make']}</p>
+                        
                     </div>
                 ))}
 

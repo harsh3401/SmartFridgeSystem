@@ -68,27 +68,24 @@ def print_recipes(index, query, recipe_range):
     '''Prints recipes according to query similary ranks'''
     print('Search Query: {}\n'.format(query))
     dict = []
-    nutrition_labels=["calories (kcal)", "total fat (PDV)", "sugar (PDV)" ,"sodium (PDV)","protein (PDV)", "saturated fat (PDV)", "Carbohydrates (PDV)"]
+    nutrition_labels=["calories (kcal)", "total fat (PDV)", "sugar (PDV)" ,"sodium (PDV)","protein (PDV)", "saturated fat (PDV)", "carbohydrates (PDV)"]
 
     for i, index in enumerate(index, recipe_range[0]):
-       
-        print('Recipe Rank: {}\t'.format(i+1),i,'\n')
-        print('Ingredients:\n{}\n '.format(recipes.loc[index, 'ingredients']))
-        print('Instructions:\n{}\n'.format(recipes.loc[index, 'steps']))
-        print('Nutrition:\n{}\n'.format(recipes.loc[index, 'nutrition']))
         nutrition={}
-        print(recipes.loc[index, 'nutrition'])
-        for loc in range(len(recipes.loc[index,nutrition])):
-            nutrition_values=ast.literal_eval(recipes.loc[index, 'nutrition'])
-            nutrition[nutrition_labels[loc]]=nutrition_values[loc]
-        print(nutrition)
+        recipe_nutrition_values = ast.literal_eval(recipes.loc[index, 'nutrition']) 
+        for j in range(len(nutrition_labels)):
+            nutrition[nutrition_labels[j]]=recipe_nutrition_values[j]
+        
         tmp = {
-            "recipe_rank": i,     "recipe_name":  recipes.loc[index, 'name'],
+            "recipe_rank": i, 
+            "recipe_name":  recipes.loc[index, 'name'],
             "ingredients": recipes.loc[index, 'ingredients'],
             "steps": recipes.loc[index, 'steps'],
             "nutrition_data":nutrition,
+            "time_to_make": int(recipes.loc[index, 'minutes']),
         }
         dict.append(tmp)
+        print(tmp)
     return dict
     
 def Search_Recipes(query, query_ranked=False, recipe_range=(0,3)):
@@ -104,7 +101,7 @@ def Search_Recipes(query, query_ranked=False, recipe_range=(0,3)):
 
 
 @app.route('/api/recommend/',methods = ['POST'])
-def login():
+def recommend():
    if request.method == 'POST':
        
         ingredients = request.json.get('ingredients')

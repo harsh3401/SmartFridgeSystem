@@ -5,3 +5,7 @@ node_modules/
 CUSTOM_YOLO_DATA/
 pics/
 *.h5
+*/.env
+backend/backend/.env
+*/ly-project-8891c-firebase-adminsdk-e7ien-f03f6f6cc8.json
+__pycache__/

@@ -8,7 +8,8 @@ export default function TimesOpened ()  {
     const getTimesOpened = async () => {
         axios.get('api/open-count/').then((response) => {
             console.log(response);
-            setTimesOpened(response.data[0].count);
+            if (response.data.length > 0)
+                setTimesOpened(response.data[0].count);
         });
     }
     useEffect(() => {

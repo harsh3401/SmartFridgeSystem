@@ -26,7 +26,7 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # firebase config
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/home/naman/Desktop/ly_project/backend/smartfridgesystem-firebase-adminsdk-ihtvw-e7b58fe85f.json"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "/home/naman/Desktop/ly_project/SmartFridgeSystem/backend/ly-project-8891c-firebase-adminsdk-e7ien-f03f6f6cc8.json"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

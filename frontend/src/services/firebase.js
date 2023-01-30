@@ -4,19 +4,13 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 // TODO: refactor this using env
 const firebaseConfig = {
 
-  apiKey: "AIzaSyChgCJ81UXsk83oUqDaphOmT70Iug47gEQ",
-
-  authDomain: "smartfridgesystem.firebaseapp.com",
-
-  projectId: "smartfridgesystem",
-
-  storageBucket: "smartfridgesystem.appspot.com",
-
-  messagingSenderId: "1025891063959",
-
-  appId: "1:1025891063959:web:8b7cfa2c51cfdacac031d2",
-
-  measurementId: "G-F4QZ8M7DDG"
+  apiKey: process.env.REACT_APP_apiKey,
+  authDomain: process.env.REACT_APP_authDomain,
+  projectId: process.env.REACT_APP_projectId,
+  storageBucket: process.env.REACT_APP_storageBucket,
+  messagingSenderId: process.env.REACT_APP_messagingSenderId,
+  appId: process.env.REACT_APP_appId,
+  measurementId: process.env.REACT_APP_measurementId
 
 };
 
