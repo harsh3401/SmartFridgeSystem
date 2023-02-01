@@ -13,7 +13,7 @@ class FoodItem(models.Model):
 class UserFoodItem(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     food_item = models.ManyToManyField(FoodItem)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -32,7 +32,7 @@ class RecipeRecommendation(models.Model):
 
     steps = models.CharField(max_length=1024, null=True, blank=True)
     time_to_make = models.IntegerField(null=True, blank=True)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

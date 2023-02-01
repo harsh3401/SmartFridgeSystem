@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_module', '0004_customuser_fcm_token'),
+        ("user_module", "0004_customuser_fcm_token"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='customuser',
-            name='username',
+            model_name="customuser",
+            name="username",
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='email',
+            model_name="customuser",
+            name="email",
             field=models.EmailField(db_index=True, max_length=254, unique=True),
         ),
     ]

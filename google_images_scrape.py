@@ -82,7 +82,7 @@ if __name__ == '__main__':
     # wd = webdriver.Chrome(executable_path='/chromedriver')
     query = input("Enter query to download...")
     max_links = int(input("Enter number of images to download..."))
-    wd = webdriver.Chrome(executable_path="/usr/lib/chromium-browser/chromedriver")
+    wd = webdriver.Chrome(executable_path="/home/naman/Downloads/chromedriver_linux64/chromedriver")
     links = get_image_urls(wd, max_links, query)
     wd.quit()
     if not os.path.exists('pics/'):

@@ -1,4 +1,8 @@
-from .serializers import NutritionSerializer, UserFoodItemSerializer, RecipeRecommendationSerializer
+from .serializers import (
+    NutritionSerializer,
+    UserFoodItemSerializer,
+    RecipeRecommendationSerializer,
+)
 from rest_framework.views import APIView, Response
 from rest_framework.status import (
     HTTP_200_OK,
@@ -139,7 +143,7 @@ class NutritionalDetailsAPIView(APIView):
             return Response(
                 {"detail": "No recipes found for user"}, status=HTTP_400_BAD_REQUEST
             )
-        
+
         # get the average of all the recipes
         calories = 0
         total_fat = 0
@@ -167,6 +171,16 @@ class NutritionalDetailsAPIView(APIView):
         carbohydrates = carbohydrates / recipes.count()
 
         return Response(
-            {"nutrition": [calories, total_fat, sugar, sodium, protein, saturated_fat, carbohydrates]},
+            {
+                "nutrition": [
+                    calories,
+                    total_fat,
+                    sugar,
+                    sodium,
+                    protein,
+                    saturated_fat,
+                    carbohydrates,
+                ]
+            },
             status=HTTP_200_OK,
         )

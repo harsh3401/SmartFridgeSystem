@@ -30,4 +30,3 @@ class NutritionSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["calories", "fat", "protein", "carbs", "sugar"]
-    
