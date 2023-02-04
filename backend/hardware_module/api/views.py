@@ -15,6 +15,7 @@ import datetime
 from firebase_admin import messaging
 from user_module.models import CustomUser
 import firebase_admin
+from drf_yasg import openapi
 
 # initialize firebase app if not already initialized
 if not firebase_admin._apps:
@@ -25,7 +26,10 @@ class ImageAPIView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ImageSerializer
 
-    @swagger_auto_schema(operation_summary="Get the last image of the fridge")
+    @swagger_auto_schema(
+        operation_summary="Get the last image of the fridge",
+        responses={200: ImageSerializer},
+    )
     def get(self, request):
         user = request.user
 
@@ -38,7 +42,8 @@ class TemperatureAPIView(APIView):
     serializer_class = TemperatureSerializer
 
     @swagger_auto_schema(
-        operation_summary="Get the last 10 refrigerator temperature readings"
+        operation_summary="Get the last 10 refrigerator temperature readings",
+        responses={200: TemperatureSerializer},
     )
     def get(self, request):
         user = request.user
@@ -52,7 +57,8 @@ class OpenCountAPIView(APIView):
     serializer_class = OpenCountSerializer
 
     @swagger_auto_schema(
-        operation_summary="Get the number of times the fridge has been opened for that day"
+        operation_summary="Get the number of times the fridge has been opened for that day",
+        responses={200: OpenCountSerializer},
     )
     def get(self, request):
         user = request.user
@@ -91,7 +97,7 @@ class HardwareImageAPIView(APIView):
 
 class HardwareTemperatureAPIView(APIView):
     permission_classes = [IsAuthenticated]
-    
+
     @swagger_auto_schema(
         operation_summary="Request the arduino to get the temperature of the fridge"
     )
@@ -139,13 +145,13 @@ class ArduinoListenerAPIView(APIView):
     permission_classes = [AllowAny]
 
     @swagger_auto_schema(
-        operation_summary="Arduino listener for image and temperature"
+        operation_summary="Arduino listener for image and temperature (internal use only)"
     )
     def post(self, request):
         type = request.data.get("type")
         user = request.data.get("user")
         user = CustomUser.objects.filter(email=user)
-        
+
         # in the case that the user or user's FCM token is deleted, we don't want to send a notification
         if not user or user[0].fcm_token is None:
             return Response(status=HTTP_204_NO_CONTENT)

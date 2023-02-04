@@ -36,7 +36,9 @@ class SignInView(APIView):
     permission_classes = [AllowAny]
     serializer_class = SignInSerializer
 
-    @swagger_auto_schema(operation_summary="Authenticate the user")
+    @swagger_auto_schema(
+        operation_summary="Authenticate the user", request_body=SignInSerializer
+    )
     def post(self, request):
         data = request.data
         ser = SignInSerializer(data=request.data)
@@ -83,7 +85,9 @@ class UserProfileView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     lookup_field = "id"
 
-    @swagger_auto_schema(operation_summary="Display user details")
+    @swagger_auto_schema(
+        operation_summary="Display user details", responses={200: UserSerializer}
+    )
     def get(self, request):
         email = request.user
         ser = UserSerializer(request.user)
@@ -121,7 +125,9 @@ class SignUpAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = SignUpSerializer
 
-    @swagger_auto_schema(operation_summary="Signup api endpoint")
+    @swagger_auto_schema(
+        operation_summary="Signup api endpoint", request_body=SignUpSerializer
+    )
     def post(self, request):
         data = request.data
 
@@ -138,17 +144,23 @@ class SignUpAPIView(APIView):
 
 class UserFCMAPI(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = FCMTokenSerializer
 
-    @swagger_auto_schema(operation_summary="Get authenticated user's FCM token")
+    @swagger_auto_schema(
+        operation_summary="Get authenticated user's FCM token",
+        responses={200: FCMTokenSerializer},
+    )
     def get(self, request):
         return Response(data={"fcm_token": request.user.fcm_token}, status=HTTP_200_OK)
 
-    @swagger_auto_schema(operation_summary="Save the user's FCM token")
+    @swagger_auto_schema(
+        operation_summary="Save the user's FCM token", request_body=FCMTokenSerializer
+    )
     def post(self, request):
         fcm_token = request.data.get("fcm_token", None)
         if not fcm_token:
             return Response(
-                {"error": "FCM Token is a requored field"}, status=HTTP_400_BAD_REQUEST
+                {"error": "FCM Token is a required field"}, status=HTTP_400_BAD_REQUEST
             )
         user = request.user
         user.fcm_token = fcm_token
@@ -160,7 +172,10 @@ class UserNotificationAPIView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserNotificationSerializer
 
-    @swagger_auto_schema(operation_summary="Get last 10 notifications of the user")
+    @swagger_auto_schema(
+        operation_summary="Get last 10 notifications of the user",
+        responses={200: UserNotificationSerializer},
+    )
     def get(self, request):
         user = request.user
         notifications = UserNotification.objects.filter(user=user).order_by("-id")[:10]

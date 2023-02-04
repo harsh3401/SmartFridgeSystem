@@ -44,3 +44,10 @@ class UserNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserNotification
         fields = "__all__"
+
+
+class FCMTokenSerializer(serializers.Serializer):
+    fcm_token = serializers.CharField()
+
+    class Meta:
+        fields = ["fcm_token"]

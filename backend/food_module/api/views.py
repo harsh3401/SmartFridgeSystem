@@ -1,5 +1,6 @@
 from .serializers import (
     NutritionSerializer,
+    RecommendationsResponseSerializer,
     UserFoodItemSerializer,
     RecipeRecommendationSerializer,
 )
@@ -16,6 +17,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from ..models import RecipeRecommendation, UserFoodItem, FoodItem
 from ..utils import get_recommendation
+from drf_yasg import openapi
 
 
 class UserFoodItemAPI(APIView):
@@ -36,7 +38,10 @@ class UserFoodItemAPI(APIView):
         items = [i.item_name for i in food_items.last().food_item.all()]
         return Response({"food_items": items}, status=HTTP_200_OK)
 
-    @swagger_auto_schema(operation_description="Add food items to a user")
+    @swagger_auto_schema(
+        operation_description="Add food items to a user, called manually as well as by DL server",
+        request_body=UserFoodItemSerializer,
+    )
     def post(self, request):
         data = request.data
         ser = UserFoodItemSerializer(data=data)
@@ -61,7 +66,36 @@ class UserFoodItemAPI(APIView):
         obj.save()
         return Response(status=HTTP_200_OK)
 
-    # TODO: add support for patch request
+    @swagger_auto_schema(
+        operation_description="Delete food items from a user",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "food_items": openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Items(type=openapi.TYPE_STRING),
+                ),
+            },
+        ),
+    )
+    def delete(self, request):
+        user = request.user
+        deleted_items = request.data.get("food_items", None)
+        if not deleted_items:
+            return Response(
+                {"error": "food_items: This is a required field"},
+                status=HTTP_400_BAD_REQUEST,
+            )
+        food_items = UserFoodItem.objects.filter(user=user)
+        if not food_items.exists():
+            return Response(
+                {"detail": "No food items found for user"}, status=HTTP_400_BAD_REQUEST
+            )
+
+        food_items = food_items.last()
+        food_items.food_item.remove(*deleted_items)
+        food_items.save()
+        return Response(status=HTTP_200_OK)
 
 
 class PastRecipeRecommendAPI(APIView):
@@ -73,7 +107,8 @@ class PastRecipeRecommendAPI(APIView):
     serializer_class = RecipeRecommendationSerializer
 
     @swagger_auto_schema(
-        operation_description="Get all the previous recipe recommendations"
+        operation_description="Get all the previous recipe recommendations",
+        responses={200: RecipeRecommendationSerializer},
     )
     def get(self, request):
         user = request.user
@@ -85,12 +120,17 @@ class PastRecipeRecommendAPI(APIView):
 class GetRecommendations(APIView):
     """
     Calls the DL server in order to get recommendations based on current food items.
-    Can be executed periodically / when frontend calls api
+    Can be executed periodically / when frontend calls api.
+    Creates FoodItem and RecipeRecommendation objects in db.
     """
 
     permission_classes = [IsAuthenticated]
     serializer_class = UserFoodItemSerializer
 
+    @swagger_auto_schema(
+        operation_summary="Get the recipe recommendations for a user",
+        responses={200: RecommendationsResponseSerializer},
+    )
     def get(self, request):
         user = request.user
         food_items = UserFoodItem.objects.filter(user=user)
@@ -135,6 +175,11 @@ class NutritionalDetailsAPIView(APIView):
     permission_classes = [IsAuthenticated]
     serializer_class = NutritionSerializer
 
+    @swagger_auto_schema(
+        operation_summary="Get the average of nutritional details for a user",
+        operation_description="Order: calories, total_fat, sugar, sodium, protein, saturated_fat, carbohydrates",
+        responses={200: NutritionSerializer},
+    )
     def get(self, request):
         # get the average of user recipes nutrition values
         user = request.user
