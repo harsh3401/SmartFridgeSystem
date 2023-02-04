@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_module', '0003_customuser_is_staff_alter_customuser_is_superuser'),
+        ("user_module", "0003_customuser_is_staff_alter_customuser_is_superuser"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='fcm_token',
+            model_name="customuser",
+            name="fcm_token",
             field=models.CharField(blank=True, max_length=1024, null=True),
         ),
     ]

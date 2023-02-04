@@ -5,9 +5,9 @@ from rest_framework import serializers
 class SignInSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=128)
     password = serializers.CharField(max_length=128)
-  
+
     class Meta:
-        fields = ['email', 'password']
+        fields = ["email", "password"]
 
 
 class SignUpSerializer(serializers.Serializer):
@@ -16,16 +16,16 @@ class SignUpSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     class Meta:
-        fields = ['password1', 'password2', 'email']
+        fields = ["password1", "password2", "email"]
 
     def validate(self, data):
-        if CustomUser.objects.filter(email=data.get('email')).exists():
+        if CustomUser.objects.filter(email=data.get("email")).exists():
             print("this")
             raise serializers.ValidationError("Email is already in use")
         return data
 
     def create(self, validated_data):
-        password = validated_data['password1']
+        password = validated_data["password1"]
         validated_data.pop("password1")
         validated_data.pop("password2")
         user = CustomUser.objects.create(**validated_data)
@@ -44,4 +44,10 @@ class UserNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserNotification
         fields = "__all__"
-        
+
+
+class FCMTokenSerializer(serializers.Serializer):
+    fcm_token = serializers.CharField()
+
+    class Meta:
+        fields = ["fcm_token"]

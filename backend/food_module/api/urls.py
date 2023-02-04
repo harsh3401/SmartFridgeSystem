@@ -1,5 +1,10 @@
 from django.urls import path
-from .views import PastRecipeRecommendAPI, UserFoodItemAPI, GetRecommendations, NutritionalDetailsAPIView
+from .views import (
+    PastRecipeRecommendAPI,
+    UserFoodItemAPI,
+    GetRecommendations,
+    NutritionalDetailsAPIView,
+)
 
 urlpatterns = [
     path("api/prev-recipes/", PastRecipeRecommendAPI.as_view()),

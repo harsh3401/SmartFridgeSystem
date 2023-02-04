@@ -2,6 +2,7 @@ from django.db import models
 from user_module.models import CustomUser
 from datetime import datetime
 
+
 class Image(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="hardware_images/")
@@ -20,7 +21,6 @@ class Temperature(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
 
 
 class OpenCount(models.Model):

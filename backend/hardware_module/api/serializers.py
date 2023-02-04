@@ -6,7 +6,7 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = "__all__"
-        
+
 
 class TemperatureSerializer(serializers.ModelSerializer):
     class Meta:

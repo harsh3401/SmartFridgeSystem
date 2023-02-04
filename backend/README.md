@@ -5,11 +5,13 @@
 
 TODO:
  Backend Server
- - keep track of user food items
- - user profile api's
+ - <s>Keep track of user food items</s>
+ - Get / update the status of user's notifications
+ - Get current state of fridge items    
+ - <s>user profile api's</s>
  - periodically call getImage in hardware (django_crontab)
- - firebase integration for cloud messaging 
- - S3 integration for image storage
+ - <s>firebase integration for cloud messaging </s> 
+ -  S3 integration for image storage
  - store food items shelf lifetimes and alert of expiration?
 
  DL server
@@ -25,7 +27,7 @@ TODO:
  - add listener for backend server 
 
  Frontend
- - authenticated routes
+ - <s> authenticated routes
  - persist token 
  - logout when 401 request
- - autocomplete when manually adding food items
+ - autocomplete when manually adding food items </s>

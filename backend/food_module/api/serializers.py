@@ -22,12 +22,47 @@ class UserFoodItemSerializer(serializers.ModelSerializer):
 
 
 class NutritionSerializer(serializers.Serializer):
-    calories = serializers.IntegerField()
-    fat = serializers.IntegerField()
-    protein = serializers.IntegerField()
-    carbs = serializers.IntegerField()
-    sugar = serializers.IntegerField()
+    calories = serializers.FloatField()
+    total_fat = serializers.FloatField()
+    sugar = serializers.FloatField()
+    sodium = serializers.FloatField()
+    protein = serializers.FloatField()
+    saturated_fat = serializers.FloatField()
+    carbohydrates = serializers.FloatField()
 
     class Meta:
-        fields = ["calories", "fat", "protein", "carbs", "sugar"]
-    
+        fields = [
+            "calories",
+            "total_fat",
+            "sugar",
+            "sodium",
+            "protein",
+            "saturated_fat",
+            "carbohydrates",
+        ]
+
+
+class DummmyRecommendSerializer(serializers.Serializer):
+    ingredients = serializers.ListField()
+    nutrition_data = serializers.ListField()
+    recipe_name = serializers.CharField()
+    recipe_rank = serializers.IntegerField()
+    steps = serializers.ListField()
+    time_to_make = serializers.IntegerField()
+
+    class Meta:
+        fields = [
+            "ingredients",
+            "nutrition_data",
+            "recipe_name",
+            "recipe_rank",
+            "steps",
+            "time_to_make",
+        ]
+
+
+class RecommendationsResponseSerializer(serializers.Serializer):
+    recommendations = DummmyRecommendSerializer(many=True, read_only=True)
+
+    class Meta:
+        fields = ["recommendations"]

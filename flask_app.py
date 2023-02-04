@@ -80,12 +80,12 @@ def print_recipes(index, query, recipe_range):
             "recipe_rank": i, 
             "recipe_name":  recipes.loc[index, 'name'],
             "ingredients": recipes.loc[index, 'ingredients'],
-            "steps": recipes.loc[index, 'steps'],
+            "steps": ast.literal_eval(recipes.loc[index, 'steps']),
             "nutrition_data":nutrition,
             "time_to_make": int(recipes.loc[index, 'minutes']),
         }
         dict.append(tmp)
-        print(tmp)
+        # print(tmp)
     return dict
     
 def Search_Recipes(query, query_ranked=False, recipe_range=(0,3)):

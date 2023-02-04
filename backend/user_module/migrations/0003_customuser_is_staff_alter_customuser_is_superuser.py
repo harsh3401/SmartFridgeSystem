@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_module', '0002_alter_customuser_managers'),
+        ("user_module", "0002_alter_customuser_managers"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='customuser',
-            name='is_staff',
+            model_name="customuser",
+            name="is_staff",
             field=models.BooleanField(default=False),
         ),
         migrations.AlterField(
-            model_name='customuser',
-            name='is_superuser',
+            model_name="customuser",
+            name="is_superuser",
             field=models.BooleanField(default=False),
         ),
     ]
