@@ -3,10 +3,6 @@ from .models import FoodItem, RecipeRecommendation, UserFoodItem
 from django.contrib.admin import ModelAdmin
 
 
-class CustomUserFoodItemAdmin(ModelAdmin):
-    filter_horizontal = ("food_item",)
-
-
 class CustomRecipeRecommendationAdmin(ModelAdmin):
     filter_horizontal = ("ingredients",)
     fields = [
@@ -28,4 +24,4 @@ class CustomRecipeRecommendationAdmin(ModelAdmin):
 
 admin.site.register(FoodItem)
 admin.site.register(RecipeRecommendation, CustomRecipeRecommendationAdmin)
-admin.site.register(UserFoodItem, CustomUserFoodItemAdmin)
+admin.site.register(UserFoodItem)

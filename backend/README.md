@@ -31,3 +31,8 @@ TODO:
  - persist token 
  - logout when 401 request
  - autocomplete when manually adding food items </s>
+
+
+
+<!-- TODO: assign every arduino module a unique identifier associated with user (MAC Address??) -->
+<!-- currently: one arduino module -->

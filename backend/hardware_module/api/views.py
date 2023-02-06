@@ -16,6 +16,7 @@ from firebase_admin import messaging
 from user_module.models import CustomUser
 import firebase_admin
 from drf_yasg import openapi
+import requests
 
 # initialize firebase app if not already initialized
 if not firebase_admin._apps:
@@ -86,7 +87,9 @@ class HardwareImageAPIView(APIView):
         operation_summary="Request the arduino to take a picture of the fridge"
     )
     def get(self, request):
-        response = request.get("<arduino_ip>/api/image")
+        response = requests.get(
+            "http://<arduino_ip>/api/image", data={"user": request.user.email}
+        )
         # 200 means that arduino is available
         if response.status_code == 200:
             return Response(status=HTTP_200_OK)
@@ -102,7 +105,9 @@ class HardwareTemperatureAPIView(APIView):
         operation_summary="Request the arduino to get the temperature of the fridge"
     )
     def get(self, request):
-        response = request.get("<arduino_ip>/api/temperature")
+        response = requests.get(
+            "http://<arduino_ip>/api/temperature", data={"user": request.user.email}
+        )
         # 200 means that arduino is available
         if response.status_code == 200:
             return Response(status=HTTP_200_OK)

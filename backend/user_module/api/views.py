@@ -20,6 +20,7 @@ from rest_framework.generics import UpdateAPIView
 
 import os
 from django.db.models import Q
+from drf_yasg import openapi
 
 
 class PingView(APIView):
@@ -93,14 +94,14 @@ class UserProfileView(generics.UpdateAPIView):
         ser = UserSerializer(request.user)
         return Response(data=ser.data, status=HTTP_200_OK)
 
-    def get_object(self):
+    def get_object(self, request):
         queryset = self.filter_queryset(self.get_queryset())
-        obj = queryset.get(email=self.request.data.get("email"))
+        obj = queryset.get(email=request.user.email)
         return obj
 
     @swagger_auto_schema(operation_summary="Partially update the user details")
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = self.get_object(request)
         ser = self.get_serializer(instance, data=request.data, partial=True)
         if ser.is_valid():
             ser.save()
@@ -109,11 +110,14 @@ class UserProfileView(generics.UpdateAPIView):
             )
 
         else:
-            return Response({"message": "failed", "details": ser.errors})
+            return Response(
+                {"message": "failed", "details": ser.errors},
+                status=HTTP_400_BAD_REQUEST,
+            )
 
     @swagger_auto_schema(operation_summary="Delete the user associated with email")
     def delete(self, request, *args, **kwargs):
-        obj = CustomUser.objects.filter(email=self.request.data.get("email")) or None
+        obj = CustomUser.objects.filter(email=request.user.email) or None
         if not obj:
             return Response({"message": "No User found"}, status=HTTP_400_BAD_REQUEST)
 
@@ -183,14 +187,23 @@ class UserNotificationAPIView(APIView):
         return Response(data=ser.data, status=HTTP_200_OK)
 
     @swagger_auto_schema(
-        operation_summary="Update the user's notification read field to true"
+        operation_summary="Update the user's notification read field to true",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "notif_id": openapi.Schema(
+                    type=openapi.TYPE_INTEGER, description="Notification id"
+                )
+            },
+        ),
+        responses={200: None, 400: "notif_id: This is a required field"},
     )
     def post(self, request):
         user = request.user
-        notif_id = request.POST.get("id", None)
+        notif_id = request.data.get("notif_id", None)
         if not notif_id:
             return Response(
-                {"error": "Notification id is a required field"},
+                {"error": "notif_id: This is a required field"},
                 status=HTTP_400_BAD_REQUEST,
             )
         notifications = UserNotification.objects.filter(user=user, id=notif_id)

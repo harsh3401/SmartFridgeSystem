@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     PastRecipeRecommendAPI,
+    StaleFoodAPIView,
     UserFoodItemAPI,
     GetRecommendations,
     NutritionalDetailsAPIView,
@@ -11,4 +12,5 @@ urlpatterns = [
     path("api/user-food-items/", UserFoodItemAPI.as_view()),
     path("api/get-recommendation/", GetRecommendations.as_view()),
     path("api/nutrition/", NutritionalDetailsAPIView.as_view()),
+    path("api/stale-food/", StaleFoodAPIView.as_view()),
 ]
