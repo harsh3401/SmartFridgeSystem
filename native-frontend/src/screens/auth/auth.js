@@ -1,11 +1,11 @@
 import React from 'react'
 import {useState} from 'react'
-import {View,Text,Pressable} from 'react-native'
+import {View,Pressable} from 'react-native'
 import { Stack, Text, IconButton } from "@react-native-material/core";
-import {SignUpForm} from '.../components/auth/SignUpForm.js'
-import {LoginForm} from '.../components/auth/LoginForm.js'
-import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-const auth = () => {
+import SignUpForm from '../../components/auth/SignUpForm'
+import LoginForm from '../../components/auth/LoginForm'
+import {  HStack, VStack, Spacer } from 'react-native-flex-layout';
+const Auth = () => {
     const [isUserRegistered, setIsUserRegistered] = useState(true);
   return isUserRegistered ?
     (
@@ -57,4 +57,4 @@ styles = {
     }
 }
 
-export default auth
+export default Auth

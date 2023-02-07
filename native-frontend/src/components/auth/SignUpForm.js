@@ -1,7 +1,7 @@
 import { useState, useEffect} from 'react';
 import {View} from 'react-native'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-import { Stack, TextInput, Text, IconButton } from "@react-native-material/core";
+import {  TextInput, Text, IconButton } from "@react-native-material/core";
 import {TextDivider} from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 const SignUpForm = () => {

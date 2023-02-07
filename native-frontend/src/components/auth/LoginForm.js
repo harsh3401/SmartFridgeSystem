@@ -1,7 +1,7 @@
 import { useState, useEffect} from 'react';
-import {View} from 'react-native'
-import { Stack, TextInput, Text, IconButton } from "@react-native-material/core";
-import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
+import {View,Pressable,Button} from 'react-native'
+import { Stack, TextInput, Text, IconButton,CheckBox } from "@react-native-material/core";
+import { HStack, VStack, Spacer } from 'react-native-flex-layout';
 import {TextDivider} from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 
@@ -14,6 +14,11 @@ const LoginForm = () => {
     //Email Redux storage
     //Firebase authentication
   }
+
+  const handleSignUp = async () =>{
+    //Email Redux storage
+    //Firebase authentication
+  }
   const handleGoogleLogin = async () =>{
     //call appropriate method from services
   }
@@ -22,12 +27,13 @@ const LoginForm = () => {
   }
   return (
     <View style={{padding:20}}>
+      {/* <Text>Harsh</Text> */}
         <Stack>
           <View>
             <Text style={styles.inputHelperStyle}>Email Address</Text>
             <TextInput onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
           </View>
-
+    
           <Spacer />
 
           <View>
@@ -36,7 +42,7 @@ const LoginForm = () => {
           </View>
 
           <Spacer />
-
+{/* 
           <View style={styles.horizontalcontainer1}>
             <View style={styles.checkboxcontainer}>
               <CheckBox
@@ -48,9 +54,9 @@ const LoginForm = () => {
             <View>
               <Pressable onPress={handleSignUp}><Text style={{color:'red'}}>forgot password</Text></Pressable>
             </View>
-          </View>
+          </View>  */}
 
-          <Spacer />
+          {/* <Spacer />
 
           <View>
             <Button style={styles.buttonStyle} title="Login" />
@@ -58,9 +64,9 @@ const LoginForm = () => {
 
           <Spacer />
           
-          <View>
+          {/* <View>
             <TextDivider text="Or With"/>
-          </View>
+          </View> */}
 
           <Spacer />
 
