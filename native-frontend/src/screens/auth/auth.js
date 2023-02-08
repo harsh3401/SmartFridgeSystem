@@ -1,9 +1,9 @@
 import React from 'react'
 import {useState} from 'react'
-import {View,Text,Pressable} from 'react-native'
-import { Stack, Text, IconButton } from "@react-native-material/core";
-import {SignUpForm} from '.../components/auth/SignUpForm.js'
-import {LoginForm} from '.../components/auth/LoginForm.js'
+import {View,Pressable} from 'react-native'
+import { Text, IconButton } from "@react-native-material/core";
+import SignUpForm from '../../components/auth/SignUpForm.js'
+import LoginForm from '../../components/auth/LoginForm.js'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
 const auth = () => {
     const [isUserRegistered, setIsUserRegistered] = useState(true);
@@ -11,13 +11,13 @@ const auth = () => {
     (
     <Stack style={{margin:20}}>
         <View>
-            <Text variant="h4" style={{ margin: 16 }}>
+            <Text variant="h4" style={{ marginTop: 16, marginHorizontal:16 }}>
                 Hi, Welcome Back!
             </Text>
-            <Text variant="" style={{ margin: 16, color:'grey' }}>Hello again, you've been missed</Text>
+            <Text variant="" style={{ marginHorizontal: 16, marginBottom:30, color:'grey' }}>Hello again, you've been missed</Text>
         </View>
         <Spacer />
-        <View>
+        <View style={{height:400}}>
             <LoginForm />
         </View>
         <Spacer />
