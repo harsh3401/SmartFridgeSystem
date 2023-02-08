@@ -115,3 +115,13 @@ webencodings==0.5.1
 websocket-client==1.4.2
 Werkzeug==2.2.2
 wsproto==1.2.0
+django
+django-rest-framework
+python-dotenv
+django-storages
+django-cors-headers
+drf-yasg
+django-crontab
+psycopg20-binary
+firebase-admin
+boto3

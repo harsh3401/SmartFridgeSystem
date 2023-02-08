@@ -14,7 +14,6 @@ class Image(models.Model):
         return self.user.email + " --> " + self.image.name
 
 
-# TODO: create cronjob to auto track temperature, hourly basis
 class Temperature(models.Model):
     temperature = models.FloatField()
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -35,10 +34,13 @@ class OpenCount(models.Model):
 
     # if same day, increment that same obj else create new obj
     def save(self, *args, **kwargs):
-        date = datetime.today()
-        qs = OpenCount.objects.filter(user=self.user, created_at__contains=date)
-        if qs:
-            obj = qs[0].count() + 1
-            obj.save()
-            return super(OpenCount, self).save(*args, **kwargs)
-        return super(OpenCount, self).save(*args, **kwargs)
+        if kwargs.get("quit", False):
+            return super().save()
+        date = datetime.today().date()
+        qs = OpenCount.objects.filter(user=self.user, created_at__date=date)
+        if qs.exists():
+            qs = qs.first()
+            qs.count += 1
+            qs.save(quit=True)
+        else:
+            super().save(*args, **kwargs)

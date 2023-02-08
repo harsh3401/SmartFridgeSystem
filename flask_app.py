@@ -131,5 +131,11 @@ def classify():
         return {"data": "success"}
 
 
+@app.route('/api/image/', methods = ['GET'])
+def image():
+    # temporary route to test image upload
+    print(request.query_string)
+    return {"data": "success"}
+
 if __name__ == '__main__':
    app.run(debug = True)

@@ -1,10 +1,13 @@
 from django.db import models
 from user_module.models import CustomUser
+from django.contrib.postgres.fields import ArrayField
 
 
 class FoodItem(models.Model):
     item_name = models.CharField(max_length=128, null=False, blank=False)
-    expiry_time = models.DateTimeField(null=True, blank=True)
+    expiry_time = models.IntegerField(
+        null=True, blank=True
+    )  # in how many days will it expire?
 
     def __str__(self) -> str:
         return self.item_name
@@ -12,8 +15,10 @@ class FoodItem(models.Model):
 
 class UserFoodItem(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    food_item = models.ManyToManyField(FoodItem)
+    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE)
+    is_stale = models.BooleanField(default=False)
 
+    # sets the date and time when the food item was added
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -30,7 +35,7 @@ class RecipeRecommendation(models.Model):
     saturated_fat = models.IntegerField(null=True, blank=True)
     carbohydrates = models.IntegerField(null=True, blank=True)
 
-    steps = models.CharField(max_length=1024, null=True, blank=True)
+    steps = models.CharField(max_length=10024, null=True, blank=True)
     time_to_make = models.IntegerField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)

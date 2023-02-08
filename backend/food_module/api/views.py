@@ -1,8 +1,10 @@
 from .serializers import (
     NutritionSerializer,
     RecommendationsResponseSerializer,
+    UserFoodItemListSerializer,
     UserFoodItemSerializer,
     RecipeRecommendationSerializer,
+    UserFoodItemUpdateSerializer,
 )
 from rest_framework.views import APIView, Response
 from rest_framework.status import (
@@ -28,55 +30,67 @@ class UserFoodItemAPI(APIView):
     serializer_class = UserFoodItemSerializer
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(operation_description="Get the food items for a user")
+    @swagger_auto_schema(
+        operation_summary="Get the food items for a user",
+        responses={200: UserFoodItemSerializer},
+    )
     def get(self, request):
         user = request.user
         food_items = UserFoodItem.objects.filter(user=user)
         if not food_items.exists():
             return Response({"food_items": []}, status=HTTP_200_OK)
 
-        items = [i.item_name for i in food_items.last().food_item.all()]
-        return Response({"food_items": items}, status=HTTP_200_OK)
+        ser = UserFoodItemSerializer(food_items, many=True)
+        return Response({"food_items": ser.data}, status=HTTP_200_OK)
 
     @swagger_auto_schema(
-        operation_description="Add food items to a user, called manually as well as by DL server",
-        request_body=UserFoodItemSerializer,
+        operation_summary="Add food items to a user, called manually as well as by DL server",
+        # request body should have a list of food items as well as expiration date
+        request_body=UserFoodItemUpdateSerializer,
     )
     def post(self, request):
         data = request.data
-        ser = UserFoodItemSerializer(data=data)
-
+        ser = UserFoodItemUpdateSerializer(data=data)
         if not ser.is_valid():
-            return Response({"error": ser.errors}, status=HTTP_400_BAD_REQUEST)
+            return Response(ser.errors, status=HTTP_400_BAD_REQUEST)
 
-        # create food item if not exist
-        # NOTE: need to check for similarity with already existing items in db
-        food_item_objs = []
-        for i in ser.validated_data["food_item"]:
-            qs = FoodItem.objects.filter(item_name=i)
-            print(qs)
+        data = data["food_item"]
+        print(f"data: {data}")
+        for item in data:
+            print(item)
+            # create food item if not exist
+            # NOTE: need to check for similarity with already existing items in db
+            food_item_objs = []
+            qs = FoodItem.objects.filter(item_name=item["item_name"])
             if not qs.exists():
-                tmp = FoodItem.objects.create(item_name=i)
-                food_item_objs.append(tmp.id)
+                tmp = FoodItem.objects.create(
+                    item_name=item["item_name"], expiry_time=item["expiry_time"]
+                )
+                food_item_objs.append(tmp)
             else:
-                food_item_objs.append(qs.first().id)
+                food_item_objs.append(qs.first())
 
-        obj = UserFoodItem.objects.create(user=request.user)
-        obj.food_item.set(food_item_objs)
-        obj.save()
-        return Response(status=HTTP_200_OK)
+            for i in food_item_objs:
+                obj = UserFoodItem.objects.create(user=request.user, food_item=i)
+
+        return Response(status=HTTP_201_CREATED)
 
     @swagger_auto_schema(
-        operation_description="Delete food items from a user",
+        operation_summary="Delete food items from a user based on id (also delete stale food items)",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 "food_items": openapi.Schema(
                     type=openapi.TYPE_ARRAY,
-                    items=openapi.Items(type=openapi.TYPE_STRING),
+                    items=openapi.Items(type=openapi.TYPE_INTEGER),
                 ),
             },
         ),
+        responses={
+            200: None,
+            204: "No food items found for user",
+            400: "food_items: This is a required field",
+        },
     )
     def delete(self, request):
         user = request.user
@@ -86,15 +100,13 @@ class UserFoodItemAPI(APIView):
                 {"error": "food_items: This is a required field"},
                 status=HTTP_400_BAD_REQUEST,
             )
-        food_items = UserFoodItem.objects.filter(user=user)
+        food_items = UserFoodItem.objects.filter(id__in=deleted_items)
         if not food_items.exists():
             return Response(
-                {"detail": "No food items found for user"}, status=HTTP_400_BAD_REQUEST
+                {"detail": "No food items found for user"}, status=HTTP_204_NO_CONTENT
             )
 
-        food_items = food_items.last()
-        food_items.food_item.remove(*deleted_items)
-        food_items.save()
+        food_items.delete()
         return Response(status=HTTP_200_OK)
 
 
@@ -107,7 +119,7 @@ class PastRecipeRecommendAPI(APIView):
     serializer_class = RecipeRecommendationSerializer
 
     @swagger_auto_schema(
-        operation_description="Get all the previous recipe recommendations",
+        operation_summary="Get all the previous recipe recommendations",
         responses={200: RecipeRecommendationSerializer},
     )
     def get(self, request):
@@ -129,27 +141,32 @@ class GetRecommendations(APIView):
 
     @swagger_auto_schema(
         operation_summary="Get the recipe recommendations for a user",
-        responses={200: RecommendationsResponseSerializer},
+        responses={
+            200: RecommendationsResponseSerializer,
+            400: "No food items found for user",
+        },
     )
     def get(self, request):
         user = request.user
         food_items = UserFoodItem.objects.filter(user=user)
         if not food_items.exists():
             return Response(
-                {"detail": "No food items found for user"}, status=HTTP_400_BAD_REQUEST
+                {"error": "No food items found for user"}, status=HTTP_400_BAD_REQUEST
             )
 
-        items = [i.item_name for i in food_items.last().food_item.all()]
+        items = [i.food_item.item_name for i in food_items]
         recommendations = get_recommendation(items)
         # save the recommendations to db
         for i in recommendations["data"][0:3]:
             # get or create the food item
             food_item_objects = []
             for j in i["ingredients"]:
+                # don't know the expiry_time so kept null here
                 obj = FoodItem.objects.get_or_create(item_name=j)
                 food_item_objects.append(obj[0].id)
 
-            print("creating recipe recommendation: ", i)
+            # print("creating recipe recommendation: ", i)
+            # print("steps: ", i['steps'])
             obj = RecipeRecommendation.objects.create(
                 user=user,
                 recipe_name=i["recipe_name"],
@@ -229,3 +246,18 @@ class NutritionalDetailsAPIView(APIView):
             },
             status=HTTP_200_OK,
         )
+
+
+class StaleFoodAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserFoodItemListSerializer
+
+    @swagger_auto_schema(
+        operation_summary="Get user stale items",
+        responses={200: UserFoodItemListSerializer},
+    )
+    def get(self, request):
+        user = request.user
+        qs = UserFoodItem.objects.filter(user=user, is_stale=True)
+        ser = UserFoodItemSerializer(qs, many=True)
+        return Response(ser.data, status=HTTP_200_OK)

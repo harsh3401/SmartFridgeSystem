@@ -35,9 +35,27 @@ class SignUpSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(read_only=True)
+    push_notification = serializers.BooleanField()
+    mobile_number = serializers.CharField()
+    last_login = serializers.DateTimeField()
+    fcm_token = serializers.CharField()
+
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = [
+            "email",
+            "push_notification",
+            "mobile_number",
+            "last_login",
+            "fcm_token",
+        ]
+
+    # mobile number should be 10 digits
+    def validate(self, data):
+        if len(data.get("mobile_number")) != 10:
+            raise serializers.ValidationError("Mobile number should be 10 digits")
+        return data
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):

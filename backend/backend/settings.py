@@ -183,11 +183,16 @@ CORS_ALLOWED_ORIGINS = [
 # crontab config
 # NOTE: logs/ folder needs to exist
 CRONJOBS = [
-    (
-        "* * * * *",
-        "food_module.cron.get_food_items",
-        f">> {BASE_DIR}/logs/scheduled_jobs.log",
-    )
+    # (
+    #     "* * * * *",
+    #     "food_module.cron.send_image_request_task",
+    #     f">> {BASE_DIR}/logs/scheduled_jobs.log",
+    # ),
+    # (
+    #     "* * * * *",
+    #     "food_module.cron.stale_items_checker_task",
+    #     f">> {BASE_DIR}/logs/scheduled_jobs.log",
+    # )
 ]
 CRONTAB_COMMAND_SUFFIX = "2>&1"
 
