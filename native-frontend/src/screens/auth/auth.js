@@ -1,40 +1,40 @@
 import React from 'react'
 import {useState} from 'react'
-import {View,Text,Pressable} from 'react-native'
-import { Stack, Text, IconButton } from "@react-native-material/core";
-import {SignUpForm} from '.../components/auth/SignUpForm.js'
-import {LoginForm} from '.../components/auth/LoginForm.js'
+import {View,Pressable} from 'react-native'
+import { Text, IconButton } from "@react-native-material/core";
+import SignUpForm from '../../components/auth/SignUpForm.js'
+import LoginForm from '../../components/auth/LoginForm.js'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-const auth = () => {
-    const [isUserRegistered, setIsUserRegistered] = useState(true);
+const Auth = () => {
+    const [isUserRegistered, setIsUserRegistered] = useState(false);
   return isUserRegistered ?
     (
-    <Stack style={{margin:20}}>
-        <View>
-            <Text variant="h4" style={{ margin: 16 }}>
+    <Stack style={{margin:12}}>
+        <View >
+            <Text variant="h4" style={{ marginHorizontal: 16, marginTop:20 }}>
                 Hi, Welcome Back!
             </Text>
-            <Text variant="" style={{ margin: 16, color:'grey' }}>Hello again, you've been missed</Text>
+            <Text variant="" style={{ marginHorizontal: 16, marginBottom:30, color:'grey' }}>Hello again, you've been missed</Text>
         </View>
         <Spacer />
-        <View>
+        <View style={styles.logincontainer}>
             <LoginForm />
         </View>
         <Spacer />
         <View style={styles.registerStatusChange}>
             <Text style={{color:'purple'}}>Don't have an account?</Text>
-            <Pressable isPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>SignUp</Text></Pressable>
+            <Pressable onPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>SignUp</Text></Pressable>
         </View>
     </Stack>
     )
     :
     (
-    <Stack>
+    <Stack style={{margin:12}}>
         <View>
-            <Text variant="h4" style={{ margin: 16 }}>
+            <Text variant="h4" style={{ marginHorizontal: 16, marginTop:20 }}>
                 Create an account
             </Text>
-            <Text style={{ margin: 16, color:'grey' }}>Connect with your friends today!</Text>
+            <Text style={{ marginHorizontal: 16, color:'grey' }}>Connect with your friends today!</Text>
         </View>
         <Spacer />
         <View>
@@ -43,7 +43,7 @@ const auth = () => {
         <Spacer />
         <View style={styles.registerStatusChange}>
             <Text  style={{color:'grey'}}>Already have an account</Text>
-            <Pressable isPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>Login</Text></Pressable>
+            <Pressable onPress={()=>setIsUserRegistered(true)}><Text style={{color:'purple'}}>Login</Text></Pressable>
         </View>
     </Stack>
    )
@@ -53,8 +53,11 @@ styles = {
     'registerStatusChange':{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 5
+        
+    },
+    'logincontainer':{
+        height: 400
     }
 }
 
-export default auth
+export default Auth

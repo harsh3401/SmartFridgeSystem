@@ -1,8 +1,9 @@
 import { useState, useEffect} from 'react';
-import {View} from 'react-native'
-import { Stack, TextInput, Text, IconButton } from "@react-native-material/core";
-import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-import {TextDivider} from '../general/TextDivider.js';
+import {View, Pressable} from 'react-native'
+import CheckBox from 'expo-checkbox';
+import { TextInput, Text, Button } from "@react-native-material/core";
+import { Stack, Spacer } from 'react-native-flex-layout';
+import TextDivider from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const LoginForm = () => {
@@ -21,32 +22,30 @@ const LoginForm = () => {
     //call appropriate method from services
   }
   return (
-    <View style={{padding:20}}>
-        <Stack>
-          <View>
+    <View style={{margin:5}}>
+          <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Email Address</Text>
             <TextInput onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
-          <View>
+          <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Password</Text>
             <TextInput onChangeText={(data)=>setPassword(data)} secureTextEntry={true} variant="outlined" placeholder="Enter password" style={styles.textInputStyle} />
           </View>
 
-          <Spacer />
-
           <View style={styles.horizontalcontainer1}>
             <View style={styles.checkboxcontainer}>
               <CheckBox
-                      value={remember}
-                      onValueChange={()=>setRemember(!remember)}
+                  disabled={false}
+                  value={remember}
+                  onValueChange={(remember)=>setRemember(!remember)}
               />
-              <Text style={{marginLeft:5}}>Remember me</Text>
+              <Text style={{margin:2}}>Remember me</Text>
             </View>
             <View>
-              <Pressable onPress={handleSignUp}><Text style={{color:'red'}}>forgot password</Text></Pressable>
+              <Pressable onPress={handleLogin}><Text style={{color:'red'}}>forgot password</Text></Pressable>
             </View>
           </View>
 
@@ -58,32 +57,31 @@ const LoginForm = () => {
 
           <Spacer />
           
-          <View>
+          <View style={{marginVertical:5}}>
             <TextDivider text="Or With"/>
           </View>
 
           <Spacer />
 
           <View style={styles.horizontalcontainer2}>
-            <View style={styles.buttoncontainer}>
+            
               <Button
                 onPress = {handleFacebookLogin}
                 variant="outlined"
                 title="facebook"
                 leading={props => <FontAwesome5 name="facebook" size={24} color="black" {...props}/>}
               />
-            </View>
-            <View style={styles.buttoncontainer}>
+            
+           
               <Button
                 onPress = {handleGoogleLogin}
                 variant="outlined"
                 title="google"
                 leading={props => <FontAwesome5 name="google" size={24} color="" {...props}/>}
               />
-            </View>
+            
           </View>
 
-        </Stack>
     </View>
   )
 }
@@ -91,7 +89,8 @@ const LoginForm = () => {
 styles = {
   'horizontalcontainer1':{
     flexDirection:'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom:30
   },
   'checkboxcontainer':{
     flexDirection:'row'
@@ -111,9 +110,11 @@ styles = {
     flexDirection:'row',
     justifyContent: 'space-between'
   },
-  'buttoncontainer':{
-    flexDirection:'row'
+  'inputdiv':{
+   height: 100,
+   marginVertical: 5
   }
+  
 }
 
 export default LoginForm

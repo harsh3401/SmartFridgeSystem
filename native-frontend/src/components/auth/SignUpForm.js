@@ -1,8 +1,9 @@
 import { useState, useEffect} from 'react';
-import {View} from 'react-native'
-import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-import { Stack, TextInput, Text, IconButton } from "@react-native-material/core";
-import {TextDivider} from '../general/TextDivider.js';
+import {View, Pressable} from 'react-native'
+import CheckBox from 'expo-checkbox'
+import { Stack, Spacer } from 'react-native-flex-layout';
+import { TextInput, Text, Button } from "@react-native-material/core";
+import TextDivider from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
@@ -21,23 +22,22 @@ const SignUpForm = () => {
     //call appropriate method from services
   }
   return (
-    <View style={{padding:20}}>
-        <Stack>
-          <View>
+    <View style={{margin:5}}>
+          <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Email Address</Text>
             <TextInput onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
-          <View>
+          <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Phone Number</Text>
             <TextInput onChangeText={(data)=>setPhNumber(data)} variant="outlined" placeholder="Enter your phone no." style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
-          <View>
+          <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Password</Text>
             <TextInput onChangeText={(data)=>setPassword(data)} secureTextEntry={true} variant="outlined" placeholder="Enter password" style={styles.textInputStyle} />
           </View>
@@ -65,8 +65,8 @@ const SignUpForm = () => {
 
           <Spacer />
           
-          <View>
-            <TextDivider />
+          <View style={{marginVertical:5}}>
+            <TextDivider text="Or With"/>
           </View>
 
           <Spacer />
@@ -89,8 +89,6 @@ const SignUpForm = () => {
               />
             </View>
           </View>
-
-        </Stack>
     </View>
   )
 }
@@ -98,7 +96,8 @@ const SignUpForm = () => {
 styles = {
   'horizontalcontainer1':{
     flexDirection:'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom:30
   },
   'checkboxcontainer':{
     flexDirection:'row'
@@ -118,8 +117,9 @@ styles = {
     flexDirection:'row',
     justifyContent: 'space-between'
   },
-  'buttoncontainer':{
-    flexDirection:'row'
+  'inputdiv':{
+   height: 100,
+   marginVertical: 5
   }
 }
 export default SignUpForm
