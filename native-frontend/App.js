@@ -8,7 +8,7 @@ export default function App() {
    
   return (
     <View>
-      <SignUpForm />
+      <Auth />
     </View>
   )
 };
