@@ -1,8 +1,11 @@
-import React from 'react'
-import {View} from 'react-native'
+import React,{useState, useEffect} from 'react'
+import {ScrollableView} from 'react-native'
+import { ListItem, Avatar, Text } from "@react-native-material/core";
 const recipeDetail = () => {
   return (
-    <View></View>
+    <ScrollableView>
+
+    </ScrollableView>
   )
 }
 
