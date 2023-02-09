@@ -20,6 +20,7 @@
     "react-native": "0.70.5",
     "react-native-chart-kit": "^6.12.0",
     "react-native-charts-wrapper": "^0.5.11",
+    "react-native-paper": "^5.2.0",
     "victory-native": "^36.6.8"
   },
   "devDependencies": {

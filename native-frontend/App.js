@@ -5,11 +5,13 @@ import Auth from './src/screens/auth/auth.js'
 import LoginForm from './src/components/auth/LoginForm.js'
 import SignUpForm from './src/components/auth/SignUpForm.js';
 import Dashboard from './src/screens/Dashboard/Dashboard.js';
+import GroceryList from './src/screens/GroceryList/GroceryList.js';
+import EditItem from './src/screens/GroceryList/EditGroceryItem.js';
 export default function App() {
    
   return (
     <View>
-      <Dashboard />
+      <EditItem />
     </View>
   )
 };

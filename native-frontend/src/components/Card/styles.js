@@ -2,18 +2,19 @@ import { StyleSheet } from "react-native"
 const styles=StyleSheet.create({
     card:
       {
-        width: 180,
+        flex:1,
         justifyContent: 'flex-start',
         shadowColor: '#000',
         backgroundColor: 'white',
-    shadowOffset: {width: 0, height: 0},
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    margin:"1%",
-    
-
+        shadowOffset: {width: 0, height: 0},
+        shadowOpacity: 0.5,
+        shadowRadius: 3,
+        margin:"1%",
+  
+   
+        
       },
-      cardTitle:
+    cardTitle:
       {
         paddingLeft:"10%",
         paddingTop:"10%",
@@ -21,21 +22,14 @@ const styles=StyleSheet.create({
         fontSize: 11,
         color:'#6f6f6f'
       },
-      graphStyle:
-      {
-
-        flex:1
-      },
       indicator:
       {  paddingLeft:"10%",
       paddingTop:"10%",
         fontSize: 31,
       },
       foodItem:{
-        width: '50%',
-        height: '100%',
-      
-    
+        width: 50,
+        height: 100,
       },
 
      
