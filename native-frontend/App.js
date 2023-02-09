@@ -4,11 +4,12 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import Auth from './src/screens/auth/auth.js'
 import LoginForm from './src/components/auth/LoginForm.js'
 import SignUpForm from './src/components/auth/SignUpForm.js';
+import Recipes from './src/screens/recipe/recipes.js';
 export default function App() {
    
   return (
     <View>
-      <Auth />
+      <Recipes />
     </View>
   )
 };
