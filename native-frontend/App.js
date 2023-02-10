@@ -8,13 +8,15 @@ import Dashboard from './src/screens/Dashboard/Dashboard.js';
 import GroceryList from './src/screens/GroceryList/GroceryList.js';
 import EditItem from './src/screens/GroceryList/EditGroceryItem.js';
 import Recipes from './src/screens/recipe/recipes.js';
+import RecipeDetail from './src/screens/recipe/recipe-detail.js';
+import Notifications from './src/screens/notification/notifications.js';
 
 
 export default function App() {
    
   return (
     <View>
-      <Recipes />
+      <RecipeDetail />
     </View>
   )
 };

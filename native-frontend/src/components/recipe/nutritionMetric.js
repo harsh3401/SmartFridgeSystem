@@ -15,7 +15,7 @@ const NutritionMetric = () => {
             data = {nutritiondetails}
             renderItem = {data=>{
                 return (
-                    <Flex inline style={{minHeight:40, width:320, marginLeft:15, elevation:4}}>
+                    <Flex inline style={{minHeight:40, width:250, marginLeft:15, elevation:4}}>
                       <Text style={{fontSize:20,color:'black', fontStyle:'italic', marginLeft:20,textShadowRadius: 10}}>{data.item.key}</Text>
                       <Spacer />
                       <Text style={{fontSize:20,color:'black', fontStyle:'italic', marginLeft:20,textShadowRadius: 10}}>{data.item.value}</Text>
