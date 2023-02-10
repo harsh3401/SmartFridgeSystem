@@ -5,6 +5,16 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "plugins": [
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "4143226195901613",
+          "clientToken": "cae855ee17fbc5c635906dae5fc1e15b",
+          "displayName": "fy-project-smartfridge"
+        }
+      ]
+    ],
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -29,5 +39,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }

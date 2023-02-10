@@ -5,6 +5,8 @@ import { TextInput, Text, Button } from "@react-native-material/core";
 import { Stack, Spacer } from 'react-native-flex-layout';
 import { FontAwesome5 } from '@expo/vector-icons';
 import TextDivider from '../general/TextDivider.js';
+import { signInWithFacebook } from '../../services/firebase/facebook/facebook-signin.js';
+import { signInWithGoogle } from '../../services/firebase/google/google-signin.js';
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,11 +16,11 @@ const LoginForm = () => {
     //Email Redux storage
     //Firebase authentication
   }
-  const handleGoogleLogin = async () =>{
-    //call appropriate method from services
+  const handleGoogleLogin = () =>{
+    signInWithGoogle();
   }
   const handleFacebookLogin = async ()=>{
-    //call appropriate method from services
+    signInWithFacebook();
   }
   return (
     <View >
