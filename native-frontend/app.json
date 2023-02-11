@@ -28,9 +28,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true, 
+      "bundleIdentifier":"com.native-frontend.smartfridgesystem"
     },
-    "android": {
+    "android": { 
+      "package":"com.native-frontend.smartfridgesystem",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
