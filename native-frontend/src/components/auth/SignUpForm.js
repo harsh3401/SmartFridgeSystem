@@ -1,17 +1,44 @@
 import { useState, useEffect} from 'react';
 import {View, Pressable} from 'react-native'
+import { Button } from 'react-native-paper';
 import CheckBox from 'expo-checkbox'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-import {TextInput, Text, Button } from "@react-native-material/core";
+import {TextInput, Text } from "@react-native-material/core";
 import TextDivider from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
+import useFetch from '../../hooks/useFetch.js';
+import axios from 'axios';
 const SignUpForm = () => {
   const [email, setEmail] = useState("");
-  const [phNumber, setPhNumber] = useState("");
+  const [passwordC,setPasswordC] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+  const validateData = (data) => {
+    //validation logic
+    if(data.password1===data.password2)
+    {
+      return true
+    }
+    else
+    {
+      return false
+    }
+  }
+  const handleSignUp =  () =>{
 
-  const handleSignUp = async () =>{
+    const requestData={email:email,password1:password,password2:passwordC}
+
+        axios.post('http://192.168.1.57:8000/api/signup/',
+      
+      requestData
+      
+    ).then((response) =>{
+      console.log('User created', response.data)
+    }).catch((error)=>{
+      console.log(error)
+    })
+
+
     //Email Redux storage
     //Firebase authentication
   }
@@ -32,15 +59,15 @@ const SignUpForm = () => {
           <Spacer />
 
           <View style={styles.inputdiv}>
-            <Text style={styles.inputHelperStyle}>Phone Number</Text>
-            <TextInput onChangeText={(data)=>setPhNumber(data)} variant="outlined" placeholder="Enter your phone no." style={styles.textInputStyle} />
+            <Text style={styles.inputHelperStyle}>Password</Text>
+            <TextInput onChangeText={(data)=>setPassword(data)} variant="outlined" secureTextEntry={true} placeholder="Enter your password" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
           <View style={styles.inputdiv}>
-            <Text style={styles.inputHelperStyle}>Password</Text>
-            <TextInput onChangeText={(data)=>setPassword(data)} secureTextEntry={true} variant="outlined" placeholder="Enter password" style={styles.textInputStyle} />
+            <Text style={styles.inputHelperStyle}>Password Confirmation</Text>
+            <TextInput onChangeText={(data)=>setPasswordC(data)} secureTextEntry={true} variant="outlined" placeholder="Enter your password again" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
@@ -54,14 +81,14 @@ const SignUpForm = () => {
               <Text style={{marginLeft:5}}>Remember me</Text>
             </View>
             <View>
-              <Pressable onPress={handleSignUp}><Text style={{color:'red'}}>forgot password</Text></Pressable>
+              <Pressable ><Text style={{color:'red'}}>forgot password</Text></Pressable>
             </View>
           </View>
 
           <Spacer />
 
           <View>
-            <Button style={styles.buttonStyle} title="Sign Up" />
+     <Button onPress={handleSignUp}style={styles.buttonStyle} title="Sign Up" >Sign Up </Button>
           </View>
 
           <Spacer />

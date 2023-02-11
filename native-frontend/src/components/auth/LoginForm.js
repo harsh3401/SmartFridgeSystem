@@ -1,19 +1,39 @@
 import { useState, useEffect} from 'react';
 import {View, Pressable} from 'react-native'
 import CheckBox from 'expo-checkbox';
-import { TextInput, Text, Button } from "@react-native-material/core";
+import { TextInput, Text } from "@react-native-material/core";
 import { Stack, Spacer } from 'react-native-flex-layout';
 import { FontAwesome5 } from '@expo/vector-icons';
 import TextDivider from '../general/TextDivider.js';
 import { signInWithFacebook } from '../../services/firebase/facebook/facebook-signin.js';
 import { signInWithGoogle } from '../../services/firebase/google/google-signin.js';
+import { Button } from 'react-native-paper';
+import { login,updateToken} from '../../slice/authSlice.js';
+import { useDispatch } from "react-redux";
+import {useSelector} from 'react-redux'
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
-  
-  const handleLogin = async () =>{
+  const dispatch=useDispatch()
+  const authState=useSelector((state)=>state.auth)
+  const navigation = useNavigation();
+
+  const handleLogin = () =>{
     //Email Redux storage
+    const requestData={email:email,password:password}
+    axios.post('http://192.168.1.57:8000/api/signin/',
+      requestData
+
+    ).then((response) =>{
+      console.log('User logged in', response.data)
+      dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
+      navigation.navigate("Dashboard")
+    }).catch((error)=>{
+      console.log(error)
+    })
     //Firebase authentication
   }
   const handleGoogleLogin = () =>{
@@ -26,14 +46,14 @@ const LoginForm = () => {
     <View >
           <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Email Address</Text>
-            <TextInput onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
+            <TextInput autoCapitalize='none' onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
           <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Password</Text>
-            <TextInput onChangeText={(data)=>setPassword(data)} secureTextEntry={true} variant="outlined" placeholder="Enter password" style={styles.textInputStyle} />
+            <TextInput autoCapitalize='none' onChangeText={(data)=>setPassword(data)} secureTextEntry={true} variant="outlined" placeholder="Enter password" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
@@ -55,7 +75,8 @@ const LoginForm = () => {
           <Spacer />
 
           <View>
-            <Button style={styles.buttonStyle} title="Login" />
+        
+            <Button onPress={handleLogin}style={styles.buttonStyle} title="Login" >Login </Button>
           </View>
 
           <Spacer />

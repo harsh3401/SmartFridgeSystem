@@ -22,8 +22,8 @@ const Auth = () => {
         </View>
         <Spacer />
         <View style={styles.registerStatusChange}>
-            <Text style={{color:'purple'}}>Don't have an account?</Text>
-            <Pressable isPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>SignUp</Text></Pressable>
+            <Text >Don't have an account?</Text>
+            <Pressable onPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>SignUp</Text></Pressable>
         </View>
     </Stack>
     )
