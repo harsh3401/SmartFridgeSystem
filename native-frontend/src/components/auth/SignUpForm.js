@@ -1,18 +1,24 @@
 import { useState, useEffect} from 'react';
 import {View, Pressable} from 'react-native'
-import { Button } from 'react-native-paper';
+import { Button , Snackbar} from 'react-native-paper';
 import CheckBox from 'expo-checkbox'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
 import {TextInput, Text } from "@react-native-material/core";
 import TextDivider from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 import useFetch from '../../hooks/useFetch.js';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
-const SignUpForm = () => {
+import { login} from '../../slice/authSlice.js';
+const SignUpForm = (props) => {
   const [email, setEmail] = useState("");
   const [passwordC,setPasswordC] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
+
+const [snackData,setSnackData]=useState('')
+const [snackVis,setSnackVis]=useState(false)
+  const dispatch=useDispatch()
   const validateData = (data) => {
     //validation logic
     if(data.password1===data.password2)
@@ -27,13 +33,29 @@ const SignUpForm = () => {
   const handleSignUp =  () =>{
 
     const requestData={email:email,password1:password,password2:passwordC}
-
-        axios.post('http://192.168.1.57:8000/api/signup/',
+    
+        axios.post('signup/',
       
       requestData
       
     ).then((response) =>{
-      console.log('User created', response.data)
+      console.log('User created', {email:requestData.email,password:requestData.password2})
+
+    setSnackData('Account Created Successfully')
+    setSnackVis(true)
+      axios.post('signin/',
+      {email:requestData.email,password:requestData.password2}
+
+    ).then((response) =>{
+   
+      dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
+      navigation.navigate("Dashboard")
+
+    setSnackData('Welcome')
+     setSnackVis(true)
+    }).catch((error)=>{
+      console.log(error)
+    })
     }).catch((error)=>{
       console.log(error)
     })
@@ -53,21 +75,21 @@ const SignUpForm = () => {
         <Stack>
           <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Email Address</Text>
-            <TextInput onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
+            <TextInput autoCapitalize='none' onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
           <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Password</Text>
-            <TextInput onChangeText={(data)=>setPassword(data)} variant="outlined" secureTextEntry={true} placeholder="Enter your password" style={styles.textInputStyle} />
+            <TextInput autoCapitalize='none' onChangeText={(data)=>setPassword(data)} variant="outlined" secureTextEntry={true} placeholder="Enter your password" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
 
           <View style={styles.inputdiv}>
             <Text style={styles.inputHelperStyle}>Password Confirmation</Text>
-            <TextInput onChangeText={(data)=>setPasswordC(data)} secureTextEntry={true} variant="outlined" placeholder="Enter your password again" style={styles.textInputStyle} />
+            <TextInput autoCapitalize='none' onChangeText={(data)=>setPasswordC(data)} secureTextEntry={true} variant="outlined" placeholder="Enter your password again" style={styles.textInputStyle} />
           </View>
 
           <Spacer />
@@ -82,6 +104,7 @@ const SignUpForm = () => {
             </View>
             <View>
               <Pressable ><Text style={{color:'red'}}>forgot password</Text></Pressable>
+ 
             </View>
           </View>
 
@@ -91,7 +114,7 @@ const SignUpForm = () => {
      <Button onPress={handleSignUp}style={styles.buttonStyle} title="Sign Up" >Sign Up </Button>
           </View>
 
-          <Spacer />
+          {/* <Spacer />
           
           <View>
             <TextDivider text="Or With"/>
@@ -116,9 +139,22 @@ const SignUpForm = () => {
                 leading={props => <FontAwesome5 name="google" size={24} color="" {...props}/>}
               />
             </View>
-          </View>
+          </View> */}
 
         </Stack>
+        <Snackbar
+        visible={snackVis}
+        onDismiss={()=>{setSnackVis(false)}}
+        action={{
+          label: 'Undo',
+          onPress: () => {
+
+            dispatch(modify({listdata:lastData}))
+        setSnackVis(false)
+          },
+        }}>
+        {snackData}
+      </Snackbar>
     </View>
   )
 }

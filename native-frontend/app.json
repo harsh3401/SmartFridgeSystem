@@ -32,7 +32,7 @@
       "bundleIdentifier":"com.native-frontend.smartfridgesystem"
     },
     "android": { 
-      "package":"com.native-frontend.smartfridgesystem",
+      "package":"host.exp.exponent",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -40,7 +40,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-    
+    },
+    "extra": {
+      "IOS_KEY":"1036148748900-njqpi8j3jttf43j31gl35ugmj3us1lkv.apps.googleusercontent.com",
+      "ANDROID_KEY":"1036148748900-tdlpdhh1cturhthklmne4ubvqo7h65ur.apps.googleusercontent.com"    }
   }
 }

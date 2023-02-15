@@ -5,11 +5,13 @@ import { Text, IconButton } from "@react-native-material/core";
 import SignUpForm from '../../components/auth/SignUpForm.js'
 import LoginForm from '../../components/auth/LoginForm.js'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
-const Auth = () => {
+import { Button } from 'react-native-paper';
+const Auth = (props) => {
     const [isUserRegistered, setIsUserRegistered] = useState(true);
-  return isUserRegistered ?
+
+  return <>{isUserRegistered ?
     (
-    <Stack style={{margin:20}}>
+    <Stack style={{marginLeft:20,marginRight:20,marginTop:'20%'}}>
         <View>
             <Text variant="h4" style={{ marginTop: 16, marginHorizontal:16 }}>
                 Hi, Welcome Back!
@@ -18,7 +20,7 @@ const Auth = () => {
         </View>
         <Spacer />
         <View style={{height:400}}>
-            <LoginForm />
+            <LoginForm {...props} />
         </View>
         <Spacer />
         <View style={styles.registerStatusChange}>
@@ -31,22 +33,24 @@ const Auth = () => {
     (
     <Stack>
         <View>
-            <Text variant="h4" style={{ margin: 16 }}>
+            <Text variant="h4" style={{ marginLeft:20,marginRight:20,marginTop:'20%'}}>
                 Create an account
             </Text>
-            <Text style={{ margin: 16, color:'grey' }}>Connect with your friends today!</Text>
+            {/* <Text style={{ margin: 16, color:'grey' }}>Connect with your friends today!</Text> */}
         </View>
         <Spacer />
         <View>
-            <SignUpForm />
+            <SignUpForm {...props}/>
         </View>
         <Spacer />
         <View style={styles.registerStatusChange}>
-            <Text  style={{color:'grey'}}>Already have an account</Text>
-            <Pressable isPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>Login</Text></Pressable>
+            <Text  style={{margin:10,color:'grey'}}>Already have an account</Text>
+            <Button onPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple',margin:10}}>Login</Text></Button>
         </View>
     </Stack>
-   )
+   )}
+  
+   </>
 }
 
 styles = {

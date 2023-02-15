@@ -1,12 +1,26 @@
 import { View,Text,StyleSheet,Image } from "react-native"
 import Card from "../../components/Card";
+import { useEffect ,useState} from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { modify } from "../../slice/listSlice";
 
 const Dashboard=()=>{
+  const dispatch=useDispatch()
+  const [grocerydata,setGroceryData]=useState([])
+  useEffect(()=>{
+    axios.get('user-food-items/').then((response)=>{
+      dispatch(modify({listdata:response.data.food_items}))
+      
 
+    }).catch((error)=>{
+      console.log(error)
+    })
+  },[])
  
    
     return <View style={styles.dashContainer}>
-        <Text style={styles.titleText}>Dashboard</Text>
+        {/* <Text style={styles.titleText}>Dashboard</Text> */}
         <Image source={require('../../../assets/Dashboard/camera-feed-mockup.jpeg')} style={styles.cameraFeed}/>
    
         <View style={styles.graphContainer}>
@@ -34,7 +48,7 @@ const Dashboard=()=>{
             <Card height={'50%'} titleText={"No of times Opened"} indicator={5}/>
             <Card height={'50%'} indicator={5} titleText={"Stale Items Found"}/>
             </View>
-            <Card list titleText={"Suggested Grocery"}/>
+            <Card list  titleText={"Grocery List"}/>
         </View>
     
             {/* <Card  height={'50%'} titleText={"Recipes Ready to Prepare"} indicator={11} image={true}/> */}
@@ -48,7 +62,7 @@ const Dashboard=()=>{
 
 const styles=StyleSheet.create({
     dashContainer:{
-        paddingTop:'15%',
+
         paddingLeft:'5%',
         paddingRight:'5%',
         height:'95%',

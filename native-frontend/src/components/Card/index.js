@@ -1,9 +1,14 @@
-import { View ,Text,Image,FlatList} from "react-native";
+import { View ,Text,Image,FlatList, Pressable} from "react-native";
 import { VictoryAxis,VictoryBar,VictoryChart,VictoryTheme } from "victory-native";
 import styles from "./styles"
-
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 const Card=(props)=>{
-    return <View style={{...styles.card,height:props.height}}>
+
+  const navigation = useNavigation();
+  const listdata = useSelector((state)=>state.glist.listdata)
+
+    return <Pressable onPress={()=>{navigation.navigate("GList")}}><View style={{...styles.card,height:props.height}}>
 
 <Text style={styles.cardTitle}>{props.titleText}</Text>
 {props.data.graphData && <VictoryChart 
@@ -25,13 +30,8 @@ height={200} width={200} theme={VictoryTheme.material}>
         {props?.image&&<Image style={styles.foodItem} source={require('../../../assets/Dashboard/Pasta.png')}/>}
         {props.list&&<FlatList
         style={{paddingLeft:10,color:'#6200EE'}}
-          data={[
-            { key: 'Tomatoes' },
-            { key: 'Potatoes' },
-            { key: 'Butter' },
-            { key: 'Milk' },
-   
-          ]}
+          data={
+            listdata.map((obj)=>{return {key:obj.item_name}})}
           renderItem={({ item }) => {
             return (
               <View style={{ marginBottom: 10 }}>
@@ -41,6 +41,7 @@ height={200} width={200} theme={VictoryTheme.material}>
           }}
         />}
         </View>
+        </Pressable>
 }
 Card.defaultProps = {
     data:{graphOrientation:'vertical'}

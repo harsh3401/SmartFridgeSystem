@@ -1,18 +1,47 @@
-import { View,Button,StyleSheet,Text,TextInput} from "react-native"
+import { View,StyleSheet,Text,TextInput} from "react-native"
 import { useState } from "react"
+import { Button } from "react-native-paper"
 import { Divider,Chip,IconButton } from "react-native-paper"
+import { useDispatch } from "react-redux"
+import { useNavigation } from "@react-navigation/native"
+import { modify } from "../../slice/listSlice";
+import axios from "axios"
+const EditItem=(route)=>{
 
-
-const EditItem=()=>{
-
-    const [itemName,setItemName] = useState("")
-
+    const dispatch=useDispatch()
+    
+    const [itemName,setItemName] = useState(route.route.params.hasOwnProperty('obj')?route.route.params.obj.key:"")
+    const navigation=useNavigation()
     return <View style={styles.dashContainer}> 
     <View style={styles.topHalf}>
         <View style={styles.buttonContainer}>
-            <Button color={'#e7e7f9'} title="Cancel" />
-            <Button color={'#e7e7f9'} title="Done"/>
+        <Button textColor={'#e7e7f9'} title="Done" onPress={()=>{  navigation.navigate('GList')}}>Cancel</Button>
+        <Button textColor={'#e7e7f9'} onPress={()=>{
+            console.log(route.route.params)
+            var data=[...route.route.params.listdata]
+            console.log("this",data)
+            console.log(itemName.trim()!=='')
+            if(itemName.trim()!=='')
+            {
+          
+            console.log("request",{food_item:[{item_name:itemName,expiry_time:0}]})
+            axios.post('/user-food-items/',{
+                food_item:[{item_name:  itemName,expiry_time:0}]
+              }).then((response) => {
+                // console.log(response.data);
+                data.push({item_name:  itemName,expiry_time:0})
+                dispatch(modify({listdata:data}))
+             
+              }).catch((error) =>{
+
+
+              })
+          
             
+        }   
+            navigation.navigate('GList')
+
+        }} title="Done">Done</Button>
         </View>
        
             <Text style={{color: '#cacaf2',marginTop:10,marginBottom:5}}>ITEM NAME</Text>
@@ -60,20 +89,20 @@ const EditItem=()=>{
 
 const styles = StyleSheet.create({
     topHalf: {
+       
         backgroundColor: '#5856d6',
-        borderWidth: 2,
-        paddingTop:'15%',
         paddingLeft:'5%',
         paddingRight:'5%',
     },
     dashContainer:{
-     
+ 
         height:'95%',
         justifyContent: 'flex-start',
         
 
     },
     buttonContainer:{
+        marginTop:'15%',
         flexDirection:'row',
         justifyContent:'space-between',
  
@@ -83,7 +112,7 @@ const styles = StyleSheet.create({
         padding:"1%",
         backgroundColor:"#ffffff",
         fontColor:"#000000",
-        borderRadius:"50px",
+        // borderRadius:"50px",
         width:"30%",
         marginBottom:"5%"
     },

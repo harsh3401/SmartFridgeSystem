@@ -1,5 +1,5 @@
 import { useState, useEffect} from 'react';
-import {View, Pressable} from 'react-native'
+import {View, Pressable,Touchable} from 'react-native'
 import CheckBox from 'expo-checkbox';
 import { TextInput, Text } from "@react-native-material/core";
 import { Stack, Spacer } from 'react-native-flex-layout';
@@ -24,12 +24,15 @@ const LoginForm = () => {
   const handleLogin = () =>{
     //Email Redux storage
     const requestData={email:email,password:password}
-    axios.post('http://192.168.1.57:8000/api/signin/',
+    axios.post('signin/',
       requestData
 
     ).then((response) =>{
       console.log('User logged in', response.data)
       dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Token ${response.data["token"]}`;
       navigation.navigate("Dashboard")
     }).catch((error)=>{
       console.log(error)
@@ -76,10 +79,18 @@ const LoginForm = () => {
 
           <View>
         
-            <Button onPress={handleLogin}style={styles.buttonStyle} title="Login" >Login </Button>
+            <Button onPress={handleLogin}  title="Login" >Login </Button>
+            {/* <Button 
+ style={{ backgroundColor: '#4285F4', marginTop: 20 }}
+ onPress={() => handleGoogleLogin()}
+ mode="contained"
+ icon="google"
+>
+Login with Google
+</Button> */}
           </View>
 
-          <Spacer />
+          {/* <Spacer />
 
           <View>
             <TextDivider text="Or With"/>
@@ -104,7 +115,7 @@ const LoginForm = () => {
                 leading={props => <FontAwesome5 name="google" size={24} color="" {...props}/>}
               />
             
-          </View>
+          </View> */}
 
     </View>
   )
@@ -120,7 +131,8 @@ styles = {
     flexDirection:'row'
   },
   'buttonStyle':{
-    flexDirection:'row', justifyContent:'center', alignSelf: 'stretch'
+    flexDirection:'row', justifyContent:'center', alignSelf: 'stretch',
+  
   },
   'inputHelperStyle':{
     color:'purple', 

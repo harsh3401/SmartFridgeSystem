@@ -1,7 +1,27 @@
 import { View,StyleSheet,Text,FlatList} from "react-native"
 import { Chip } from 'react-native-paper';
-import { Divider,Button, FAB  } from 'react-native-paper';
+import { Divider,Button, FAB ,Snackbar } from 'react-native-paper';
+import { useState,useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
+import listSlice, { modify } from "../../slice/listSlice"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux";
+import axios from 'axios'
 const GroceryList=(props)=>{
+
+const navigation=useNavigation()
+const dispatch=useDispatch()
+const listState=useSelector((state)=>state.glist.listdata)
+console.log("List",listState)
+
+const [snackData,setSnackData]=useState('')
+const [snackVis,setSnackVis]=useState(false)
+const [lastData,setLastData]=useState(listState?.listdata)
+
+const addItem=(data,)=>{
+
+}
+
 
     return <View style={styles.dashContainer}>
         <View>
@@ -14,19 +34,41 @@ const GroceryList=(props)=>{
  </View>
  <FlatList
         style={{paddingTop:20,color:'#6200EE'}}
-          data={[
-            { key: 'Tomatoes' },
-            { key: 'Potatoes' },
-            { key: 'Butter' },
-            { key: 'Milk' },
-   
-          ]}
+          data={listState}
           renderItem={({ item }) => {
             return (
                 <View>
-              <View style={{ flexDirection:'row',alignItems: 'center',paddingTop:10,paddingBottom:10}}>
-                <Button  labelStyle={{fontSize:30}} icon={'plus-circle-outline'}></Button>
-                <Text style={{ fontSize: 20 }}>{item.key}</Text>
+              <View style={{ flexDirection:'row',justifyContent:'flex-start',alignItems: 'center',paddingTop:10,paddingBottom:10}}>
+                <Button  onPress={()=>{
+                  navigation.navigate('EditGList',{obj:item})
+                }} labelStyle={{fontSize:30}} icon={'plus-circle-outline'}></Button>
+                <Text style={{ fontSize: 20 }}>{item.item_name}</Text>
+                <Button  onPress={()=>{
+     
+                  var list=[...listState]
+                  setLastData(list)
+                  list=list.filter((obj)=>{
+                    console.log(obj)
+                    if(obj.item_name===item.item_name)
+                    {
+                      return false
+                    }
+                    return true
+                  })
+                
+                  axios.delete('/user-food-items/',{
+                    data:{food_items:[item.id]}
+                  }).then((response) => {
+                    dispatch(modify({listdata:list}))
+                    setSnackData(`${item.item_name} was deleted`)
+                    setSnackVis(true)
+                  }).catch((error) =>{
+                    console.log(error)
+                    setSnackData(`Unable to delete item`)
+                    setSnackVis(true)
+                  })
+                
+                }} labelStyle={{fontSize:30}} icon={'delete'}></Button>
               </View>
               <Divider/>
               </View>
@@ -36,11 +78,26 @@ const GroceryList=(props)=>{
           <FAB
     icon="plus"
     style={styles.fab}
-    onPress={() => console.log('Pressed')}
+    onPress={() => {
+      navigation.navigate('EditGList',{listdata:listState})
+    }}
     label={'ADD ITEM'}
     size={'small'}
 
   />
+  <Snackbar
+        visible={snackVis}
+        onDismiss={()=>{setSnackVis(false)}}
+        action={{
+          label: 'Undo',
+          onPress: () => {
+
+            dispatch(modify({listdata:lastData}))
+        setSnackVis(false)
+          },
+        }}>
+        {snackData}
+      </Snackbar>
     </View>
 }
 

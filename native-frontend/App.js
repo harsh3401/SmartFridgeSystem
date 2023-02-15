@@ -1,40 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import 'react-native-gesture-handler';
-import store from './src/store/store.js';
+
 import { Provider } from "react-redux";
+import Main from "./Main"
+import store from "./src/store/store";
+import axios from "axios";
+// import {BACKEND_URL} from 'react-native-dotenv';
+axios.defaults.baseURL = 'http://192.168.1.16:8000/api/';
 
-import LoginForm from './src/components/auth/LoginForm.js'
-import SignUpForm from './src/components/auth/SignUpForm.js';
-import Dashboard from './src/screens/Dashboard/Dashboard.js';
-import GroceryList from './src/screens/GroceryList/GroceryList.js';
-import EditItem from './src/screens/GroceryList/EditGroceryItem.js';
-import Recipes from './src/screens/recipe/recipes.js';
-import Settings from './src/screens/Settings/Settings.js';
-import Auth from './src/screens/auth/auth.js';
-import RecipeDetail from './src/screens/recipe/recipe-detail.js';
-import Notifications from './src/screens/notification/notifications.js';
+let refresh = false;
 
+axios.interceptors.response.use(
+  (resp) => resp,
+  async (error) => {
+    if (error.response.status === 401 && !refresh) {
+      refresh = true;
 
-const Drawer=createDrawerNavigator()
+      // const token = getAccessToken();
+      // const response = await axios.post("api/refresh-token/", {
+      //   username: "pdf",
+      //   token: token,
+      // });
+
+      // // if (response.status === 200) {
+      // //   axios.defaults.headers.common[
+      // //     "Authorization"
+      // //   ] = `Token ${response.data["token"]}`;
+      // //   setAccessToken(response.data["token"]);
+      // //   return axios(error.config);
+      // // }
+      // // console.log(response);
+    }
+    console.log(error);
+    refresh = false;
+    return Promise.reject(error.response);
+  }
+);
+
 
 export default function App() {
    
+
+
   return (
     <Provider store={store}>
-    <NavigationContainer>
-      <Drawer.Navigator initialRouteName='Home'>
-        <Drawer.Group>
-        <Drawer.Screen name="Auth" component={Auth} />
-        <Drawer.Screen name="Dashboard" component={Dashboard} />
-        </Drawer.Group>
-      
-      </Drawer.Navigator>
-
-    </NavigationContainer>
+    <Main/>
     </Provider>
   )
 };
