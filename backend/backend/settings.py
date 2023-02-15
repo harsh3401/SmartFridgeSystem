@@ -175,9 +175,8 @@ SWAGGER_SETTINGS = {
 }
 
 # csrf
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*','192.168.1.57']
 
 
 # crontab config

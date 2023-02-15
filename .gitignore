@@ -10,3 +10,4 @@ backend/backend/.env
 */ly-project-8891c-firebase-adminsdk-e7ien-f03f6f6cc8.json
 __pycache__/
 backend/logs/scheduled_jobs.log
+*.sqlite3
