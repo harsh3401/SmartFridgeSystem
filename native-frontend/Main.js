@@ -1,6 +1,6 @@
 
 import { NavigationContainer } from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import 'react-native-gesture-handler';
 import {useSelector} from "react-redux"
 import { useEffect } from 'react';
@@ -9,9 +9,9 @@ import Dashboard from './src/screens/Dashboard/Dashboard.js';
 import Auth from './src/screens/auth/auth.js';
 import GroceryList from './src/screens/GroceryList/GroceryList.js';
 import EditGroceryList from './src/screens/GroceryList/EditGroceryItem.js';
+import Settings from './src/screens/Settings/Settings.js';
 
-
-const Stack=createStackNavigator()
+const Drawer=createDrawerNavigator()
 
 
 export default function Main() {
@@ -21,41 +21,37 @@ export default function Main() {
   return (
 
     <NavigationContainer>
-      <Stack.Navigator >
+      <Drawer.Navigator >
 
         {authState.token ==null?       
         <>
-        <Stack.Screen name="Auth" component={Auth}        
+            
+        <Drawer.Screen name="Auth" component={Auth}        
          options={{
           title: 'Auth',
           headerShown:false,
          animationTypeForReplace: !authState.isLoggedIn ? 'pop' : 'push',
         }}/>
-        <Stack.Screen name="Dashboard" component={Dashboard} />
-        <Stack.Screen   options={{
-          
-          headerShown:false,
-       
-        }}
-        name="GList" component={GroceryList} />
-        <Stack.Screen name="EditGList"  options={{
-       
-          headerShown:false,
-      
-        }}component={EditGroceryList} />
+        <Drawer.Screen name="Dashboard" component={Dashboard} />
+        <Drawer.Screen   
+        name="EGList" component={GroceryList} />
+        <Drawer.Screen name="EditGList"component={EditGroceryList} />
         </>:  <>
-        <Stack.Screen name="GList" component={GroceryList} />
-        <Stack.Screen name="Dashboard" component={Dashboard} />
-        <Stack.Screen name="EditGList" options={{
+        
+
+        <Drawer.Screen name="Dashboard" component={Dashboard} />
+        <Drawer.Screen name="Grocery List" component={GroceryList} />
+        <Drawer.Screen name="EditGList" options={{
        
        headerShown:false,
    
-     }} component={EditGroceryList} /></>
+     }} component={EditGroceryList} />
+     <Drawer.Screen name="Settings" component={Settings} /></>
         }
        
 
       
-      </Stack.Navigator>
+      </Drawer.Navigator>
 
     </NavigationContainer>
 

@@ -9,13 +9,13 @@ import axios from "axios"
 const EditItem=(route)=>{
 
     const dispatch=useDispatch()
-    
-    const [itemName,setItemName] = useState(route.route.params.hasOwnProperty('obj')?route.route.params.obj.key:"")
+    console.log(route)
+    const [itemName,setItemName] = useState(route.route.params?.hasOwnProperty('obj')?route.route.params.obj.key:"")
     const navigation=useNavigation()
     return <View style={styles.dashContainer}> 
     <View style={styles.topHalf}>
         <View style={styles.buttonContainer}>
-        <Button textColor={'#e7e7f9'} title="Done" onPress={()=>{  navigation.navigate('GList')}}>Cancel</Button>
+        <Button textColor={'#e7e7f9'} title="Done" onPress={()=>{  navigation.navigate('Grocery List')}}>Cancel</Button>
         <Button textColor={'#e7e7f9'} onPress={()=>{
             console.log(route.route.params)
             var data=[...route.route.params.listdata]
@@ -39,7 +39,7 @@ const EditItem=(route)=>{
           
             
         }   
-            navigation.navigate('GList')
+            navigation.navigate('Grocery List')
 
         }} title="Done">Done</Button>
         </View>
@@ -63,14 +63,14 @@ const EditItem=(route)=>{
                 <Text style={{  color:"#999999"}}>Qty</Text>
                 <Text  style={{  marginLeft:'10%'}}>5</Text>
                <View style={{marginLeft:'50%',flexDirection:'row',width:'100%'}}>
-                <View  style={{borderWidth:1,borderColor:"#a1a0e8",width:"15%",borderRadius:"3 "}}>
+                <View  style={{borderWidth:1,borderColor:"#a1a0e8",width:"15%",borderRadius:2}}>
                    <Button
                     title="+"
                     color='#a1a0e8'
                     style={{ fontSize:10}}
                     />
                 </View>
-                <View  style={{borderWidth:1,borderColor:"#a1a0e8",width:"15%",borderRadius:"3 "}}>
+                <View  style={{borderWidth:1,borderColor:"#a1a0e8",width:"15%",borderRadius:3}}>
                    <Button
                     title="-"
                     color='#a1a0e8'

@@ -8,7 +8,7 @@ const Card=(props)=>{
   const navigation = useNavigation();
   const listdata = useSelector((state)=>state.glist.listdata)
 
-    return <Pressable onPress={()=>{navigation.navigate("GList")}}><View style={{...styles.card,height:props.height}}>
+    return <Pressable onPress={()=>{navigation.navigate("Grocery List")}}><View style={{...styles.card,height:props.height}}>
 
 <Text style={styles.cardTitle}>{props.titleText}</Text>
 {props.data.graphData && <VictoryChart 

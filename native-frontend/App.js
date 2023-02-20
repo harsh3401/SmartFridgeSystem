@@ -4,7 +4,7 @@ import Main from "./Main"
 import store from "./src/store/store";
 import axios from "axios";
 // import {BACKEND_URL} from 'react-native-dotenv';
-axios.defaults.baseURL = 'http://192.168.1.16:8000/api/';
+axios.defaults.baseURL = 'http://192.168.233.165:8000/api/';
 
 let refresh = false;
 

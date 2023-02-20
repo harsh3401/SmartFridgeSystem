@@ -25,7 +25,7 @@ const addItem=(data,)=>{
 
     return <View style={styles.dashContainer}>
         <View>
- <Text style={styles.titleText}>Grocery List</Text>
+ {/* <Text style={styles.titleText}>Grocery List</Text> */}
  </View>
  <View style={styles.chipDrawer}>
  <Chip style ={styles.categoryChip}icon="food" onPress={() => console.log('Pressed')}>Snacks</Chip>
@@ -110,7 +110,7 @@ const styles=StyleSheet.create({
 
       },
       dashContainer:{
-        paddingTop:'15%',
+
         paddingLeft:'5%',
         paddingRight:'5%',
         height:'95%',
