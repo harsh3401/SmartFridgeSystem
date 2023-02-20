@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "android-dev": "adb reverse tcp:8081 tcp:8081"
+    "android-dev": "adb reverse tcp:8081 tcp:8081",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@react-native-community/checkbox": "^0.5.14",
@@ -46,6 +47,7 @@
     "react-native-svg": "13.4.0",
     "react-navigation-drawer": "^2.7.2",
     "react-redux": "^8.0.5",
+    "react-scripts": "^5.0.1",
     "redux": "^4.2.1",
     "victory-native": "^36.6.8"
   },
