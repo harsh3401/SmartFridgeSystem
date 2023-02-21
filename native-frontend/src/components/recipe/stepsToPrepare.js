@@ -2,7 +2,7 @@ import React from 'react'
 import {View, FlatList, Text, Pressable, Image} from 'react-native'
 import { ListItem, Avatar, Flex, Spacer} from "@react-native-material/core";
 import { Entypo, Octicons } from '@expo/vector-icons';
-const StepsToPrepare = () => {
+const StepsToPrepare = ({stepstocook}) => {
     stepstocook = ['sjflsjflsj asfjl asldfjf qheo','adoof asodufofen dshasohf oho8u','flajf dsljfosfu hasoho fpea;jfohj ','sjfsjflsjflsj fjspajdf johfoawo dlvosjfefu']
   return (
     <View>

@@ -2,7 +2,7 @@ import React from 'react'
 import {View, Image} from 'react-native'
 import { ListItem, Avatar, Text } from "@react-native-material/core";
 
-const RecipeNotification = ({imageSrc, titleText, subText }) => {
+const RecipeNotification = ({imageSrc, titleText, subText, created_at }) => {
   return (
     <View >
         <ListItem
@@ -12,6 +12,9 @@ const RecipeNotification = ({imageSrc, titleText, subText }) => {
             }
             title={titleText}
             secondaryText={subText}
+            trailing={
+              <Text style={{fontSize:10}}>{created_at}</Text>
+            }
         />
     </View>
   )

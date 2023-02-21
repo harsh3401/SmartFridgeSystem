@@ -2,8 +2,8 @@ import React from 'react'
 import {View, FlatList, Text, Pressable, Image} from 'react-native'
 import { ListItem, Avatar, Flex} from "@react-native-material/core";
 import { Entypo, Octicons } from '@expo/vector-icons'; 
-const IngredientList = () => {
-  ingredients = ['asldjflj','sjaslfjsljfsl','slfjsdlj','sjfsjflsjflsj']
+const IngredientList = ({ingredients}) => {
+  //ingredients = ['asldjflj','sjaslfjsljfsl','slfjsdlj','sjfsjflsjflsj']
   return (
     <View>
       <View style={{marginTop:30, marginBottom:10}}>

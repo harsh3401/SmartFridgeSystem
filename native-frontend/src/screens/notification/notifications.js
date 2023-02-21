@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import {View, FlatList, Text, Pressable, Image} from 'react-native'
 import { Flex, Box, Spacer, Avatar } from "@react-native-material/core";
 import { Ionicons } from '@expo/vector-icons'; 
@@ -7,27 +7,38 @@ import RecipeNotification from '../../components/notification/recipeNotification
 import WarningNotification from '../../components/notification/warningNotification';
 
 const Notifications = () => {
-    //const [error, notificationList] = useFetch('', []);
-    notificationList = [
-        {
-            img:'',
-            type:'',
-            title:'',
-            subtitle:'',
-        },
-        {
-            img:'',
-            type:'',
-            title:'',
-            subtitle:''
-        },
-        {
-            img:'',
-            type:'',
-            title:'',
-            subtitle:''
-        }
-    ]
+    const [notifications, setNotifications] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    useEffect(()=>{
+        axios.get('/user-notifications/')
+        .then(response=>{
+            setNotifications(response.data)
+            setIsLoading(false)
+        })
+        .catch(error=>{
+            console.error(error)
+        })
+    },[])
+    // notificationList = [
+    //     {
+    //         img:'',
+    //         type:'',
+    //         title:'',
+    //         subtitle:'',
+    //     },
+    //     {
+    //         img:'',
+    //         type:'',
+    //         title:'',
+    //         subtitle:''
+    //     },
+    //     {
+    //         img:'',
+    //         type:'',
+    //         title:'',
+    //         subtitle:''
+    //     }
+    // ]
   return (
     <View style={{marginTop:50}}>
         <Pressable>
@@ -41,14 +52,14 @@ const Notifications = () => {
                 <Image style={{height:50, width:50}} source={{ uri: "https://freeiconshop.com/wp-content/uploads/edd/notification-flat.png" }} />
         </Flex>
         <FlatList 
-            data = {notificationList}
+            data = {notifications}
             renderItem = {notification=>{
-                if(notification.type=='recipe notification'){
-                    return <RecipeNotification imageSrc={notification.img} titleText={notification.title} subText={notification.subtitle} />
-                }else if(notification.type=='warning notification'){
-                    return <WarningNotification warningTitle={notification.title} warningDesc={notification.subtitle} />
-                }else{
+                if(isLoading){
                     return <View></View>
+                }else if(notification.imgSrc!=""){
+                    return <RecipeNotification imageSrc={notification.img} titleText={notification.item.notification_title} subText={notification.item.notification_body} created_at={notification.item.created_at} />
+                }else{
+                    return <WarningNotification warningTitle={notification.item.notification_title} warningDesc={notification.item.notification_body} created_at={notification.item.created_at}/>
                 }
             }}
         />

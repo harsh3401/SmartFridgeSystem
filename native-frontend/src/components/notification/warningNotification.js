@@ -1,7 +1,7 @@
 import React from 'react'
 import {View} from 'react-native'
 import { List } from 'react-native-paper';
-const WarningNotification = ({warningTitle, warningDesc}) => {
+const WarningNotification = ({warningTitle, warningDesc, created_at}) => {
   return (
     <View>
         <List.Item
@@ -9,6 +9,7 @@ const WarningNotification = ({warningTitle, warningDesc}) => {
         titleStyle={{color:'red'}}
         description={warningDesc}
         descriptionStyle={{color:'grey'}}
+        right={props => <Text style={{fontSize:10}}>{created_at}</Text>}
         />
     </View>
   )

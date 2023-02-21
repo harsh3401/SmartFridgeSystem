@@ -10,6 +10,9 @@ import Auth from './src/screens/auth/auth.js';
 import GroceryList from './src/screens/GroceryList/GroceryList.js';
 import EditGroceryList from './src/screens/GroceryList/EditGroceryItem.js';
 import Settings from './src/screens/Settings/Settings.js';
+import Recipes from './src/screens/recipe/recipes.js';
+import RecipeDetail from './src/screens/recipe/recipe-detail.js';
+import Notifications from './src/screens/notification/notifications.js';
 
 const Drawer=createDrawerNavigator()
 
@@ -43,9 +46,12 @@ export default function Main() {
         <Drawer.Screen name="Grocery List" component={GroceryList} />
         <Drawer.Screen name="EditGList" options={{
        
-       headerShown:false,
-   
-     }} component={EditGroceryList} />
+          headerShown:false,
+      
+        }} component={EditGroceryList} />
+        <Drawer.Screen name="Recipes" component={Recipes} />
+        <Drawer.Screen name="RecipeDetail" component={RecipeDetail} />
+        <Drawer.Screen name="Notifications" component={Notifications} />
      <Drawer.Screen name="Settings" component={Settings} /></>
         }
        

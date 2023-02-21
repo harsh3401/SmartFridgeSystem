@@ -2,21 +2,21 @@ import React from 'react'
 import {View, FlatList, Text, Pressable, Image} from 'react-native'
 import { ListItem, Avatar, Flex, Spacer} from "@react-native-material/core";
 import { Entypo, Octicons } from '@expo/vector-icons';
-const NutritionMetric = () => {
-    const nutritiondetails = [
-        {
-            'key':'Sugar',
-            'value':'22 g'
-        },
-        {
-            'key':'Calories',
-            'value':'220 kcal'
-        },
-        {
-            'key':'Protein',
-            'value':'18 g'
-        }
-    ]
+const NutritionMetric = ({nutritiondetails}) => {
+    // const nutritiondetails = [
+    //     {
+    //         'key':'Sugar',
+    //         'value':'22 g'
+    //     },
+    //     {
+    //         'key':'Calories',
+    //         'value':'220 kcal'
+    //     },
+    //     {
+    //         'key':'Protein',
+    //         'value':'18 g'
+    //     }
+    // ]
   return (
     <View>
         <View style={{marginTop:30, marginBottom:10}}>
