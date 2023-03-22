@@ -1,3 +1,15 @@
+/*********
+  Rui Santos
+  Complete project details at https://RandomNerdTutorials.com/esp32-cam-take-photo-display-web-server/
+  
+  IMPORTANT!!! 
+   - Select Board "AI Thinker ESP32-CAM"
+   - GPIO 0 must be connected to GND to upload a sketch
+   - After connecting GPIO 0 to GND, press the ESP32-CAM on-board RESET button to put your board in flashing mode
+  
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+*********/
 
 #include "WiFi.h"
 #include "esp_camera.h"
@@ -13,8 +25,8 @@
 #include <FS.h>
 
 // Replace with your network credentials
-const char* ssid = "REPLACE_WITH_YOUR_SSID";
-const char* password = "REPLACE_WITH_YOUR_PASSWORD";
+const char* ssid = "Daksh";
+const char* password = "SHANEWATSON#1981";
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -82,8 +94,13 @@ const char index_html[] PROGMEM = R"rawliteral(
 </script>
 </html>)rawliteral";
 
+const int PIN_TO_SENSOR = 16; // GIOP16 pin connected to OUTPUT pin of sensor
+int pinStateCurrent   = LOW;  // current state of pin
+int pinStatePrevious  = LOW;  // previous state of pin
+
 void setup() {
   // Serial port for debugging purposes
+  pinMode(PIN_TO_SENSOR, INPUT);
   Serial.begin(115200);
 
   // Connect to Wi-Fi
@@ -167,11 +184,28 @@ void setup() {
 }
 
 void loop() {
+  //motion detection
+  pinStatePrevious = pinStateCurrent; // store old state
+  pinStateCurrent = digitalRead(PIN_TO_SENSOR);   // read new state
+
+  if (pinStatePrevious == LOW && pinStateCurrent == HIGH) {   // pin state change: LOW -> HIGH
+  //api call here
+    Serial.println("Motion detected!");
+    // TODO: turn on alarm, light or activate a device ... here
+  }
+  else
+  if (pinStatePrevious == HIGH && pinStateCurrent == LOW) {   // pin state change: HIGH -> LOW
+    Serial.println("Motion stopped!");
+    // TODO: turn off alarm, light or deactivate a device ... here
+  }
+  //image capture 
   if (takeNewPhoto) {
     capturePhotoSaveSpiffs();
     takeNewPhoto = false;
   }
   delay(1);
+
+  
 }
 
 // Check if photo capture was successful
