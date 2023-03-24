@@ -1,5 +1,4 @@
 import React,{useEffect, useState} from 'react'
-import useEffect from '../../hooks/useFetch.js'
 import { useNavigation } from "@react-navigation/native";
 import {View, FlatList, Text, Pressable, Image} from 'react-native'
 import { Flex, Box, Spacer, Avatar } from "@react-native-material/core";
