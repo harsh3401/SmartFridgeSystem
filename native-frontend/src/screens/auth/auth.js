@@ -7,6 +7,7 @@ import LoginForm from '../../components/auth/LoginForm.js'
 import { Stack, HStack, VStack, Spacer } from 'react-native-flex-layout';
 import { Button } from 'react-native-paper';
 const Auth = (props) => {
+    
     const [isUserRegistered, setIsUserRegistered] = useState(true);
 
   return <>{isUserRegistered ?

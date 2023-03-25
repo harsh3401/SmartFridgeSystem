@@ -24,6 +24,7 @@ const LoginForm = () => {
   const handleLogin = () =>{
     //Email Redux storage
     const requestData={email:email,password:password}
+    console.log(requestData);
     axios.post('signin/',
       requestData
 
