@@ -3,22 +3,20 @@ const styles=StyleSheet.create({
     card:
       {
         flex:1,
-        justifyContent: 'flex-start',
         shadowColor: '#000',
-        backgroundColor: 'white',
-        shadowOffset: {width: 0, height: 0},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.5,
-        shadowRadius: 3,
+        shadowRadius: 2,
+        elevation: 2,
+        backgroundColor: 'white',
+        borderRadius: 10,
         margin:"1%",
-  
-   
-        
+
       },
     cardTitle:
       {
-        paddingLeft:"10%",
-        paddingTop:"10%",
-        paddingRight:"10%",
+          paddingLeft:"5%",
+          paddingTop:"5%",
         fontSize: 11,
         color:'#6f6f6f'
       },

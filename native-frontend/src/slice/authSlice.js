@@ -4,28 +4,22 @@ const authSlice = createSlice({
     name:'auth',
     initialState:
     {
-        loggedIn: false,
-        privilege:null,
-        name:null,
+        email:null,
         token:null,
-        expires:null,
+        uid:null,
     },
     reducers:
     {
         login:(state,action)=>{
-            state.loggedIn = action.payload.loggedIn;
-            state.privilege = action.payload.privilege;
-            state.name = action.payload.name;
+            state.email = action.payload.email
             state.token = action.payload.token;
-            state.expires = action.payload.expires
+            state.uid = action.payload.uid
         } ,
            logOut: (state) => {
-            state.loggedIn = false;
-            state.privilege = null;
-            state.name = null;
+ 
             state.token = null;
-            state.username = null;
-            state.expires = null;
+            state.email = null;
+            state.uid = null;
           },
           updateToken: (state, action) => {
             state.token = action.payload;

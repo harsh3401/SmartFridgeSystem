@@ -8,12 +8,13 @@ const Card=(props)=>{
   const navigation = useNavigation();
   const listdata = useSelector((state)=>state.glist.listdata)
 
-    return <Pressable onPress={()=>{navigation.navigate("Grocery List")}}><View style={{...styles.card,height:props.height}}>
+    return <Pressable style={{...styles.card,height:props.height}}  onPress={()=>{navigation.navigate("Grocery List")}}><View >
 
 <Text style={styles.cardTitle}>{props.titleText}</Text>
 {props.data.graphData && <VictoryChart 
 horizontal={props.data.graphOrientation==='horizontal'}
-height={200} width={200} theme={VictoryTheme.material}>
+//TODO change
+height={180} width={180} theme={VictoryTheme.material}>
           <VictoryBar    barRatio={1.6} style={{data: { fill: "#6200EE" }}}data={props.data.graphData} x="quarter" y="earnings" />
           <VictoryAxis   style={ {    axis: { stroke: 'none' },
     ticks: { stroke: 'none' },

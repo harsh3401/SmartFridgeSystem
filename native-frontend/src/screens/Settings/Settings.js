@@ -1,14 +1,18 @@
 import {View,StyleSheet,Text,FlatList, ScrollView} from 'react-native'
+import { Button } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import Tile from "../../components/Tile";
+import { signOut } from '../../services/firebase/signOut';
 
 const Settings = ()=>{
 return <View style={styles.dashContainer}>
 <View style={styles.topContainer}>
 {/* <Text style={styles.titleText}>Settings</Text> */}
 <View
-style={{flexDirection:'row'}}><Avatar.Image size={60} source={require('../../../assets/avatar.png')} />
+style={{flexDirection:'row',justifyContent: 'space-between'}}><Avatar.Image size={60} source={require('../../../assets/avatar.png')} />
 <View style={styles.headerContent}><Text style={styles.proftext}>Student</Text><Text >student@somaiya.edu</Text></View>
+<Button onPress={()=>{signOut();
+}}><Text style={{color:'purple',margin:10}}>Sign out</Text></Button>
 </View>
 </View>
 <View>
@@ -31,6 +35,7 @@ style={{flexDirection:'row'}}><Avatar.Image size={60} source={require('../../../
     <Tile content={'Change Password'}/>
     <Tile content={'Send staleness Updates'} switch/>
     <Tile content={'Clear user data'}/>
+
  
     </View>
     </ScrollView>

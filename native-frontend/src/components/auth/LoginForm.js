@@ -1,12 +1,14 @@
 import { useState, useEffect} from 'react';
-import {View, Pressable,Touchable} from 'react-native'
+import {View, Pressable,Touchable,StyleSheet} from 'react-native'
 import CheckBox from 'expo-checkbox';
 import { TextInput, Text } from "@react-native-material/core";
 import { Stack, Spacer } from 'react-native-flex-layout';
 import { FontAwesome5 } from '@expo/vector-icons';
 import TextDivider from '../general/TextDivider.js';
-import { signInWithFacebook } from '../../services/firebase/facebook/facebook-signin.js';
+
 import { signInWithGoogle } from '../../services/firebase/google/google-signin.js';
+import { signInWithEmailAccount} from '../../services/firebase/email/email-password-auth.js';
+
 import { Button } from 'react-native-paper';
 import { login,updateToken} from '../../slice/authSlice.js';
 import { useDispatch } from "react-redux";
@@ -21,31 +23,39 @@ const LoginForm = () => {
   const authState=useSelector((state)=>state.auth)
   const navigation = useNavigation();
 
-  const handleLogin = () =>{
+  const handleLogin = async () =>{
     //Email Redux storage
-    const requestData={email:email,password:password}
-    console.log(requestData);
-    axios.post('signin/',
-      requestData
+    // const requestData={email:email,password:password}
+    // console.log(requestData);
+    // axios.post('signin/',
+    //   requestData
 
-    ).then((response) =>{
-      console.log('User logged in', response.data)
-      dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Token ${response.data["token"]}`;
-      navigation.navigate("Dashboard")
-    }).catch((error)=>{
-      console.log(error)
-    })
+    // ).then((response) =>{
+    //   console.log('User logged in', response.data)
+    //   dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
+    //   axios.defaults.headers.common[
+    //     "Authorization"
+    //   ] = `Token ${response.data["token"]}`;
+    //   navigation.navigate("Dashboard")
+    // }).catch((error)=>{
+    //   console.log(error)
+    // })
     //Firebase authentication
+    const user= await signInWithEmailAccount(email,password);
+    // let token=await user.getIdToken();
+    // dispatch(login({uid:user.uid,email:user.email,token:token}))
   }
-  const handleGoogleLogin = () =>{
-    signInWithGoogle();
+  const handleGoogleLogin = async() =>{
+   const user= await signInWithGoogle();
+  //  let token=await user.getIdToken();
+  //  dispatch(login({uid:user.uid,email:user.email,token:token}))
+
   }
-  const handleFacebookLogin = async ()=>{
-    signInWithFacebook();
-  }
+  // const handleFacebookLogin = async ()=>{
+  //   const user= await signInWithFacebook();
+  //   // let token=await user.getIdToken();
+  //   // dispatch(login({uid:user.uid,email:user.email,token:token}))
+  // }
   return (
     <View >
           <View style={styles.inputdiv}>
@@ -63,16 +73,16 @@ const LoginForm = () => {
           <Spacer />
 
           <View style={styles.horizontalcontainer1}>
-            <View style={styles.checkboxcontainer}>
+            {/* <View style={styles.checkboxcontainer}>
               <CheckBox
                   disabled={false}
                   value={remember}
                   onValueChange={(remember)=>setRemember(!remember)}
               />
-              <Text style={{margin:2}}>Remember me</Text>
-            </View>
+                  <Text style={{margin:2}}>Remember me</Text>
+            </View> */}
             <View>
-              <Pressable onPress={()=>{console.log("Press")}}><Text style={{color:'red'}}>forgot password</Text></Pressable>
+              <Pressable onPress={()=>{console.log("Press")}}><Text style={{color:'purple'}}>Forgot password</Text></Pressable>
             </View>
           </View>
 
@@ -80,20 +90,37 @@ const LoginForm = () => {
 
           <View>
         
-            <Button onPress={handleLogin}  title="Login" >Login </Button>
-            {/* <Button 
- style={{ backgroundColor: '#4285F4', marginTop: 20 }}
- onPress={() => handleGoogleLogin()}
+
+            <Button 
+ style={{ backgroundColor: 'purple', marginTop: 20 }}
+ onPress={() =>handleLogin()}
+ mode="contained"
+ icon="mail"
+>
+Login 
+</Button>
+            <Button 
+ style={{ backgroundColor: 'purple', marginTop: 20 }}
+ onPress={() => handleGoogleLogin().then(() => console.log('Signed in with Google!'))}
  mode="contained"
  icon="google"
 >
 Login with Google
+</Button>
+{/* <Button 
+ style={{ backgroundColor: 'purple', marginTop: 20 }}
+ onPress={() => handleFacebookLogin().then(() => console.log('Signed in with Facebook!'))}
+ mode="contained"
+ icon="facebook"
+>
+Login with Facebook
 </Button> */}
+
           </View>
 
-          {/* <Spacer />
+          <Spacer />
 
-          <View>
+          {/* <View>
             <TextDivider text="Or With"/>
           </View>
 
@@ -116,13 +143,13 @@ Login with Google
                 leading={props => <FontAwesome5 name="google" size={24} color="" {...props}/>}
               />
             
-          </View> */}
-
+          </View>
+ */}
     </View>
   )
 }
 
-styles = {
+styles = StyleSheet.create({
   'horizontalcontainer1':{
     flexDirection:'row',
     justifyContent: 'space-between',
@@ -150,8 +177,8 @@ styles = {
   'inputdiv':{
    height: 100,
    marginVertical: 5
-  }
+  },
   
-}
+})
 
 export default LoginForm

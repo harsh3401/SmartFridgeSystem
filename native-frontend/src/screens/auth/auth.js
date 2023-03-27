@@ -12,7 +12,7 @@ const Auth = (props) => {
 
   return <>{isUserRegistered ?
     (
-    <Stack style={{marginLeft:20,marginRight:20,marginTop:'20%'}}>
+    <View style={{marginLeft:20,marginRight:20,marginTop:'20%'}}>
         <View>
             <Text variant="h4" style={{ marginTop: 16, marginHorizontal:16 }}>
                 Hi, Welcome Back!
@@ -24,15 +24,17 @@ const Auth = (props) => {
             <LoginForm {...props} />
         </View>
         <Spacer />
+        <Spacer />
+        <Spacer />
         <View style={styles.registerStatusChange}>
-            <Text >Don't have an account?</Text>
+            <Text style={{marginRight:10}}>Don't have an account?</Text>
             <Pressable onPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple'}}>SignUp</Text></Pressable>
         </View>
-    </Stack>
+    </View>
     )
     :
     (
-    <Stack>
+    <View>
         <View>
             <Text variant="h4" style={{ marginLeft:20,marginRight:20,marginTop:'20%'}}>
                 Create an account
@@ -45,10 +47,10 @@ const Auth = (props) => {
         </View>
         <Spacer />
         <View style={styles.registerStatusChange}>
-            <Text  style={{margin:10,color:'grey'}}>Already have an account</Text>
+            <Text  style={{marginRight:5,color:'grey'}}>Already have an account</Text>
             <Button onPress={()=>setIsUserRegistered(!isUserRegistered)}><Text style={{color:'purple',margin:10}}>Login</Text></Button>
         </View>
-    </Stack>
+    </View>
    )}
   
    </>
@@ -57,8 +59,7 @@ const Auth = (props) => {
 styles = {
     'registerStatusChange':{
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 5
+
     }
 }
 

@@ -1,4 +1,4 @@
-import { View,Text,StyleSheet,Image } from "react-native"
+import { View,Text,StyleSheet,Image,TouchableOpacity} from "react-native"
 import Card from "../../components/Card";
 import { useEffect ,useState} from "react";
 import axios from "axios";
@@ -6,23 +6,31 @@ import { useDispatch } from "react-redux";
 import { modify } from "../../slice/listSlice";
 
 const Dashboard=()=>{
+
   const dispatch=useDispatch()
   const [grocerydata,setGroceryData]=useState([])
+  const [imageUrl,setImageUrl]=useState("")
   useEffect(()=>{
     axios.get('user-food-items/').then((response)=>{
       dispatch(modify({listdata:response.data.food_items}))
-      
-
     }).catch((error)=>{
       console.log(error)
     })
+    axios.get('image').then((response)=>{
+      setImageUrl({uri:response.data[response.data.length-1].image})
+    }).catch((error)=>{
+      console.log("Unable to fetch image")
+    });
+
   },[])
  
    
     return <View style={styles.dashContainer}>
         {/* <Text style={styles.titleText}>Dashboard</Text> */}
-        <Image source={require('../../../assets/Dashboard/camera-feed-mockup.jpeg')} style={styles.cameraFeed}/>
-   
+        <TouchableOpacity style={styles.touchableArea} onPress={()=>{console.log("Image detail view")}}>
+
+        <Image source={imageUrl}  style={styles.cameraFeed}/>
+    </TouchableOpacity>
         <View style={styles.graphContainer}>
         <Card data={{graphData:[
     { quarter: 1, earnings: 20 },
@@ -52,8 +60,9 @@ const Dashboard=()=>{
         </View>
     
             {/* <Card  height={'50%'} titleText={"Recipes Ready to Prepare"} indicator={11} image={true}/> */}
+            <TouchableOpacity style={styles.touchableArea} onPress={()=>{console.log("Recipe detail view")}}>
             <Image source={require('../../../assets/Dashboard/Pasta.png')} style={styles.cameraFeed}/>
-   
+              </TouchableOpacity>
  
     
     </View>
@@ -74,20 +83,23 @@ const styles=StyleSheet.create({
         fontWeight: 'bold',
   
       },
-      cameraFeed:{
-        marginTop:10,
-        width: '100%',
+      touchableArea:{
         height: '20%',
-    
+        marginTop:10,
+      },
+      cameraFeed:{
+        borderWidth:2,
+  
+        width: '100%',
+        height:'100%'
+
+  
       },
       graphContainer:{
-   
+
         flexDirection:'row',
         paddingTop:'1%',
-        justifyContent:'space-between',
         height: '30%',
-
-   
       }
    ,
       smallContainer:{

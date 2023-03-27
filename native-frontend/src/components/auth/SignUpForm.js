@@ -8,6 +8,7 @@ import TextDivider from '../general/TextDivider.js';
 import { FontAwesome5 } from '@expo/vector-icons';
 import useFetch from '../../hooks/useFetch.js';
 import { useDispatch } from 'react-redux';
+import { createEmailAccount } from '../../services/firebase/email/email-password-auth.js';
 import axios from 'axios';
 import { login} from '../../slice/authSlice.js';
 const SignUpForm = (props) => {
@@ -34,42 +35,42 @@ const [snackVis,setSnackVis]=useState(false)
 
     const requestData={email:email,password1:password,password2:passwordC}
     
-        axios.post('signup/',
+    //     axios.post('signup/',
       
-      requestData
+    //   requestData
       
-    ).then((response) =>{
-      console.log('User created', {email:requestData.email,password:requestData.password2})
+    // ).then((response) =>{
+    //   console.log('User created', {email:requestData.email,password:requestData.password2})
 
-    setSnackData('Account Created Successfully')
-    setSnackVis(true)
-      axios.post('signin/',
-      {email:requestData.email,password:requestData.password2}
+    // setSnackData('Account Created Successfully')
+    // setSnackVis(true)
+    //   axios.post('signin/',
+    //   {email:requestData.email,password:requestData.password2}
 
-    ).then((response) =>{
+    // ).then((response) =>{
    
-      dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
-      navigation.navigate("Dashboard")
+    //   dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
+    //   navigation.navigate("Dashboard")
 
-    setSnackData('Welcome')
-     setSnackVis(true)
-    }).catch((error)=>{
-      console.log(error)
-    })
-    }).catch((error)=>{
-      console.log(error)
-    })
-
-
+    // setSnackData('Welcome')
+    //  setSnackVis(true)
+    // }).catch((error)=>{
+    //   console.log(error)
+    // })
+    // }).catch((error)=>{
+    //   console.log(error)
+    // })
+   console.log(email,password)
+   createEmailAccount(email,password);
     //Email Redux storage
     //Firebase authentication
   }
-  const handleGoogleSignUp = async () =>{
-    //call appropriate method from services
-  }
-  const handleFacebookSignUp = async ()=>{
-    //call appropriate method from services
-  }
+  // const handleGoogleSignUp = async () =>{
+  //   //call appropriate method from services
+  // }
+  // const handleFacebookSignUp = async ()=>{
+  //   //call appropriate method from services
+  // }
   return (
     <View style={{padding:20}}>
         <Stack>
