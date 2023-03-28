@@ -1,4 +1,7 @@
 from rest_framework.views import APIView, Response
+import subprocess
+import shutil
+import os
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_400_BAD_REQUEST,
@@ -10,6 +13,7 @@ from rest_framework.status import (
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from ..models import Image, Temperature, OpenCount
+from food_module.models import  UserFoodItem, FoodItem
 from .serializers import ImageSerializer, TemperatureSerializer, OpenCountSerializer
 import datetime
 from firebase_admin import messaging
@@ -157,18 +161,69 @@ class ArduinoListenerAPIView(APIView):
         user = request.data.get("user")
         user = CustomUser.objects.filter(email=user)
 
+
         # in the case that the user or user's FCM token is deleted, we don't want to send a notification
-        if not user or user[0].fcm_token is None:
+        # if not user or user[0].fcm_token is None:
+        if not user:
             return Response(status=HTTP_204_NO_CONTENT)
 
         user = user[0]
         if type == "image":
-            # save the image and then send notification
-            obj = Image.objects.create(user=user, image=request.FILES["image"])
-            fb_notif_obj = send_notification(
-                type, image_url=obj.image.url, token=user.fcm_token
-            )
-            messaging.send(fb_notif_obj)
+            # print(request.FILES["image"])
+            # # save the image and then send notification
+            # obj = Image.objects.create(user=user, image=request.FILES["image"])
+            #save image to temp path for the prediction
+          
+            #call model and save the prediction
+            # TODO : modify yolo path 
+            wd = os.getcwd()
+            os.chdir("../Yolo/yolov5/")
+            subprocess.run("python detect.py --weights runs/train/exp/weights/best.pt --img 416 --conf 0.1 --source pred_images --save-txt",shell=True)
+            
+            #After the results are stored retrieve label from txt and push them to the db for recipe module
+            #preprocess the labels for each txt file
+            os.chdir("runs/detect/exp/labels")
+            text_files= os.listdir('.')
+            labels=[]
+            #dictionary to store class mappings to yolo indexes
+            class_mappings={'0':'Fresh Tomatoe','1':'Stale Tomatoe','2':'Fresh Cabbage','3':'Stale Cabbage','4':'Fresh Apple','5':'Stale Apple'}
+            for file in text_files:
+                 with open(file,'r') as f:
+                     for line in f.readlines():
+                        if line[0] not in labels: 
+                            labels.append(line[0])
+            print(labels)
+            os.chdir("../../")
+            if os.path.exists(os.getcwd()+'/exp'):
+                shutil.rmtree(os.getcwd()+'/exp')
+            os.chdir(wd)
+
+
+            #save the items identified
+            item_names=[]
+            for label in labels:
+                item_names.append(class_mappings[label])
+            print(item_names)
+            
+            for item in item_names:
+                food_item_objs=[]
+                qs = FoodItem.objects.filter(item_name=item)
+                if not qs.exists():
+                    tmp = FoodItem.objects.create(
+                        # TODO modify expire according to item
+                        item_name=item, expiry_time=7
+                    )
+                    food_item_objs.append(tmp)
+                else:
+                    food_item_objs.append(qs.first())
+
+                for i in food_item_objs:
+                    obj = UserFoodItem.objects.create(user=user, food_item=i)
+                    print(obj)
+                # fb_notif_obj = send_notification(
+                #     type, image_url=obj.image.url, token=user.fcm_token
+                # )
+                # messaging.send(fb_notif_obj)
 
         elif type == "temperature":
             # save the temperature and then send notification

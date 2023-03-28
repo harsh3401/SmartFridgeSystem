@@ -72,8 +72,8 @@ class UserFoodItemAPI(APIView):
 
             for i in food_item_objs:
                 obj = UserFoodItem.objects.create(user=request.user, food_item=i)
-
-        return Response(status=HTTP_201_CREATED)
+                print(obj)
+        return Response(obj,status=HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Delete food items from a user based on id (also delete stale food items)",
