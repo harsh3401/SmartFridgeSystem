@@ -4,9 +4,11 @@ import Main from "./Main"
 import store from "./src/store/store";
 import axios from "axios";
 import messaging from '@react-native-firebase/messaging';
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
+import { updateFCMToken } from "./src/slice/authSlice";
+import { useDispatch } from "react-redux";
 // import {BACKEND_URL} from 'react-native-dotenv';
-axios.defaults.baseURL = 'http://192.168.1.11:8000/api/';
+axios.defaults.baseURL = 'http://192.168.1.33:8000/api/';
 
 let refresh = false;
 
@@ -41,6 +43,7 @@ axios.interceptors.response.use(
 
 
 export default function App() {
+  const [fcm,setFCM]=useState();
   const requestUserPermission = async () => {
     /**
      * On iOS, messaging permission must be requested by
@@ -62,7 +65,12 @@ export default function App() {
       messaging()
         .getToken()
         .then((fcmToken) => {
-          console.log('FCM Token -> ', fcmToken);
+          setFCM(fcmToken);
+          // console.log('FCM Token -> ', fcmToken);
+
+          // axios.post("fcm_token/",{fcm_token:fcmToken}).then(()=>{
+          //   console.log("Posted FCM token")
+          // }).catch((err) => {console.log("Could not post fcm token")})
         });
     } else console.log('Not Authorization status:', authStatus);
   
@@ -164,7 +172,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-    <Main/>
+    <Main fcm={fcm}/>
     </Provider>
   )
 };

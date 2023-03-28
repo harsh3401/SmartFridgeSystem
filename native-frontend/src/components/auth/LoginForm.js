@@ -15,7 +15,9 @@ import { useDispatch } from "react-redux";
 import {useSelector} from 'react-redux'
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+
 const LoginForm = () => {
+  const auth=useSelector(state=>state.auth)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -42,11 +44,28 @@ const LoginForm = () => {
     // })
     //Firebase authentication
     const user= await signInWithEmailAccount(email,password);
-    // let token=await user.getIdToken();
-    // dispatch(login({uid:user.uid,email:user.email,token:token}))
+    console.log("User",user)
+    let token=await user.getIdToken();
+    console.log("token",token)
+    dispatch(login({uid:user.uid,email:user.email,token:token}))
+    axios.defaults.headers.common[
+  "Authorization"
+] = token;
+  axios.post("fcm_token/",{fcm_token:auth.fcmtoken}).then(()=>{
+            console.log("Posted FCM token")
+          }).catch((err) => {console.log("Could not post fcm token")})
   }
   const handleGoogleLogin = async() =>{
    const user= await signInWithGoogle();
+   console.log("User",user)
+   let token=await user.user.getIdToken();
+   dispatch(login({uid:user.uid,email:user.email,token:token}))
+   axios.post("fcm_token/",{fcm_token:auth.fcmtoken}).then(()=>{
+            console.log("Posted FCM token")
+          }).catch((err) => {console.log("Could not post fcm token")})
+axios.defaults.headers.common[
+  "Authorization"
+] = token;
   //  let token=await user.getIdToken();
   //  dispatch(login({uid:user.uid,email:user.email,token:token}))
 

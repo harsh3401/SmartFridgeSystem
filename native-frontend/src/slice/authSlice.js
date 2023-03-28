@@ -6,6 +6,7 @@ const authSlice = createSlice({
     {
         email:null,
         token:null,
+        fcmtoken:null,
         uid:null,
     },
     reducers:
@@ -24,8 +25,12 @@ const authSlice = createSlice({
           updateToken: (state, action) => {
             state.token = action.payload;
           },
+          updateFCMToken: (state, action) => {
+            state.fcmtoken = action.payload;
+          },
+          
     }
 })
 
-export const { login, logOut, updateToken } = authSlice.actions;
+export const { login, logOut, updateToken,updateFCMToken } = authSlice.actions;
 export default authSlice.reducer;
