@@ -65,7 +65,7 @@ def send_image_request_task():
     print("these are the users: ", users)
     for user in users:
         print("sending image request to arduino")
-        response = requests.get(f"http://localhost:5000/api/image/?user={user.email}")
+        response = requests.get(f"http://ml:5000/api/image/?user={user.email}")
 
         # 200 means that arduino is available
         if response.status_code == 200:
@@ -82,7 +82,7 @@ def send_temperature_request_task():
     for user in users:
         print("sending temperature request to arduino")
         response = requests.get(
-            f"http://localhost:5000/api/temperature/?user={user.email}"
+            f"http://ml:5000/api/backend/temperature/?user={user.email}"
         )
 
         # 200 means that arduino is available

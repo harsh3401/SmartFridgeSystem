@@ -10,10 +10,10 @@ from .views import (
 
 
 urlpatterns = [
-    path("api/image/", ImageAPIView.as_view()),
-    path("api/temperature/", TemperatureAPIView.as_view()),
-    path("api/open-count/", OpenCountAPIView.as_view()),
-    path("api/hardware-image/", HardwareImageAPIView.as_view()),
-    path("api/hardware-temperature/", HardwareTemperatureAPIView.as_view()),
-    path("api/arduino-listener/", ArduinoListenerAPIView.as_view()),
+    path("image/", ImageAPIView.as_view()),
+    path("temperature/", TemperatureAPIView.as_view()),
+    path("open-count/", OpenCountAPIView.as_view()),
+    path("hardware-image/", HardwareImageAPIView.as_view()),
+    path("hardware-temperature/", HardwareTemperatureAPIView.as_view()),
+    path("arduino-listener/", ArduinoListenerAPIView.as_view()),
 ]

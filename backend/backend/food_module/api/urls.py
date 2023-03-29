@@ -8,9 +8,9 @@ from .views import (
 )
 
 urlpatterns = [
-    path("api/prev-recipes/", PastRecipeRecommendAPI.as_view()),
-    path("api/user-food-items/", UserFoodItemAPI.as_view()),
-    path("api/get-recommendation/", GetRecommendations.as_view()),
-    path("api/nutrition/", NutritionalDetailsAPIView.as_view()),
-    path("api/stale-food/", StaleFoodAPIView.as_view()),
+    path("prev-recipes/", PastRecipeRecommendAPI.as_view()),
+    path("user-food-items/", UserFoodItemAPI.as_view()),
+    path("get-recommendation/", GetRecommendations.as_view()),
+    path("nutrition/", NutritionalDetailsAPIView.as_view()),
+    path("stale-food/", StaleFoodAPIView.as_view()),
 ]
