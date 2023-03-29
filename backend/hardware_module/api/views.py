@@ -91,8 +91,9 @@ class HardwareImageAPIView(APIView):
         operation_summary="Request the arduino to take a picture of the fridge"
     )
     def get(self, request):
+        ip=os.getenv("ESP_IP")
         response = requests.get(
-            "http://<arduino_ip>/api/image", data={"user": request.user.email}
+            f"http://{ip}/capture", 
         )
         # 200 means that arduino is available
         if response.status_code == 200:
@@ -220,10 +221,11 @@ class ArduinoListenerAPIView(APIView):
                 for i in food_item_objs:
                     obj = UserFoodItem.objects.create(user=user, food_item=i)
                     print(obj)
-                # fb_notif_obj = send_notification(
-                #     type, image_url=obj.image.url, token=user.fcm_token
-                # )
-                # messaging.send(fb_notif_obj)
+                print(user.email)
+                fb_notif_obj = send_notification(
+                    type, image_url="https://5.imimg.com/data5/WA/NV/LI/SELLER-52971039/apple-indian-500x500.jpg", token=user.fcm_token
+                )
+                messaging.send(fb_notif_obj)
 
         elif type == "temperature":
             # save the temperature and then send notification

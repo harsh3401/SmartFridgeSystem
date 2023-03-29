@@ -7,6 +7,7 @@ from .serializers import (
     UserFoodItemUpdateSerializer,
 )
 from rest_framework.views import APIView, Response
+from django.forms.models import model_to_dict
 from rest_framework.status import (
     HTTP_200_OK,
     HTTP_400_BAD_REQUEST,
@@ -71,9 +72,13 @@ class UserFoodItemAPI(APIView):
                 food_item_objs.append(qs.first())
 
             for i in food_item_objs:
-                obj = UserFoodItem.objects.create(user=request.user, food_item=i)
-                print(obj)
-        return Response(obj,status=HTTP_201_CREATED)
+                qs = UserFoodItem.objects.filter(user=request.user, food_item=i)
+                if not qs.exists():
+                    obj = UserFoodItem.objects.create(user=request.user, food_item=i)
+                # else
+                # dict_obj = model_to_dict( obj )
+             
+        return Response(status=HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Delete food items from a user based on id (also delete stale food items)",

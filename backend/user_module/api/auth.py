@@ -26,7 +26,7 @@
 #     return is_expired, token
 
 
-from django.contrib.auth.models import User
+
 from rest_framework import authentication
 from rest_framework import exceptions
 import firebase_admin as admin
@@ -45,18 +45,20 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
 
         try:
             decoded_token = auth.verify_id_token(token)
-            # print(decoded_token)
+            print("decode token",decoded_token)
             uid = decoded_token["uid"]
             email = decoded_token["email"]
             print(uid,email)
             push_notification = True
 
         except:
+            print("Token not decoded")
             return None
             
         try:
             User = get_user_model()
             user = User.objects.get_or_create(email=email,push_notification=push_notification,uid=uid)
+            print("User created",user)
             return user
 
         except ObjectDoesNotExist:

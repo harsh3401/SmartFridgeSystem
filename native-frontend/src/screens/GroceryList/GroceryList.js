@@ -35,9 +35,11 @@ const addItem=(data,)=>{
  <FlatList
         style={{paddingTop:20,color:'#6200EE'}}
           data={listState}
-          renderItem={({ item }) => {
+    
+          renderItem={({ item}) => {
+
             return (
-                <View>
+                <View  >
               <View style={{ flexDirection:'row',justifyContent:'flex-start',alignItems: 'center',paddingTop:10,paddingBottom:10}}>
                 <Button  onPress={()=>{
                   navigation.navigate('EditGList',{obj:item})

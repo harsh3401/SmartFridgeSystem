@@ -6,6 +6,7 @@ import axios from "axios";
 import messaging from '@react-native-firebase/messaging';
 import { useEffect,useState } from "react";
 import { updateFCMToken } from "./src/slice/authSlice";
+import {Alert, Modal, StyleSheet, Text, Pressable, View,Image} from 'react-native';
 import { useDispatch } from "react-redux";
 // import {BACKEND_URL} from 'react-native-dotenv';
 axios.defaults.baseURL = 'http://192.168.1.33:8000/api/';
@@ -43,6 +44,8 @@ axios.interceptors.response.use(
 
 
 export default function App() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalData,setModalData]=useState();
   const [fcm,setFCM]=useState();
   const requestUserPermission = async () => {
     /**
@@ -65,6 +68,8 @@ export default function App() {
       messaging()
         .getToken()
         .then((fcmToken) => {
+          
+          console.log("setting fcm token as ",fcmToken);
           setFCM(fcmToken);
           // console.log('FCM Token -> ', fcmToken);
 
@@ -139,7 +144,9 @@ export default function App() {
      */
     const unsubscribe = messaging().onMessage(
       async (remoteMessage) => {
-        alert('A new FCM message arrived!');
+        console.log(remoteMessage.notification.android.imageUrl)
+        setModalData(remoteMessage);
+      setModalVisible(true);
         console.log(
           'A new FCM message arrived!',
           JSON.stringify(remoteMessage)
@@ -172,7 +179,77 @@ export default function App() {
 
   return (
     <Provider store={store}>
-    <Main fcm={fcm}/>
+     {modalVisible&& <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}> {modalData.notification.title}</Text>
+            <Text style={styles.modalText}> {modalData.notification.body}</Text>
+            <Text style={styles.modalText}> {modalData.notification.android.imageUrl}</Text>
+            <Image source={{uri:modalData.notification.android.imageUrl.trim()}}  style={{width:"30", height:"30"}}/>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+          
+        </View>
+      </Modal>
+
+    </View>}
+    {!modalVisible&&<Main fcm={fcm}/>}
+    {/* <Main fcm={fcm}/> */}
     </Provider>
   )
 };
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});

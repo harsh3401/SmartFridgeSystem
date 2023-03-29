@@ -5,6 +5,8 @@ import { Flex, Box, Spacer, Avatar } from "@react-native-material/core";
 import { Ionicons } from '@expo/vector-icons'; 
 import RecipeTile from '../../components/recipe/recipeTile.js'
 import {useDispatch} from 'react-redux'
+import axios from 'axios';
+
 const Recipes = () => {
 
     const dispatch = useDispatch()

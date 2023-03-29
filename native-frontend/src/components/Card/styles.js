@@ -5,9 +5,9 @@ const styles=StyleSheet.create({
         flex:1,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.5,
+        shadowOpacity: 0.9,
         shadowRadius: 2,
-        elevation: 2,
+        elevation: 5,
         backgroundColor: 'white',
         borderRadius: 10,
         margin:"1%",
@@ -15,6 +15,7 @@ const styles=StyleSheet.create({
       },
     cardTitle:
       {
+
           paddingLeft:"5%",
           paddingTop:"5%",
         fontSize: 11,
@@ -22,6 +23,7 @@ const styles=StyleSheet.create({
       },
       indicator:
       {  paddingLeft:"10%",
+      
       paddingTop:"10%",
         fontSize: 31,
       },

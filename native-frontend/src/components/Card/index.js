@@ -26,7 +26,7 @@ height={180} width={180} theme={VictoryTheme.material}>
     grid: { stroke: 'transparent' }}}/>
         </VictoryChart>}
     
-        <Text style={styles.indicator}>{props?.indicator}</Text>
+        {props?.indicator&&<Text style={styles.indicator}>{props?.indicator}</Text>}
  
         {props?.image&&<Image style={styles.foodItem} source={require('../../../assets/Dashboard/Pasta.png')}/>}
         {props.list&&<FlatList

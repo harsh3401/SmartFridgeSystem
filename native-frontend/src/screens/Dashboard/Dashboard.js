@@ -4,12 +4,13 @@ import { useEffect ,useState} from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { modify } from "../../slice/listSlice";
-
+import { useNavigation } from '@react-navigation/native';
 const Dashboard=()=>{
 
   const dispatch=useDispatch()
+  const navigation = useNavigation();
   const [grocerydata,setGroceryData]=useState([])
-  const [imageUrl,setImageUrl]=useState("")
+  const [imageUrl,setImageUrl]=useState()
   useEffect(()=>{
     axios.get('user-food-items/').then((response)=>{
       dispatch(modify({listdata:response.data.food_items}))
@@ -27,9 +28,9 @@ const Dashboard=()=>{
    
     return <View style={styles.dashContainer}>
         {/* <Text style={styles.titleText}>Dashboard</Text> */}
-        <TouchableOpacity style={styles.touchableArea} onPress={()=>{console.log("Image detail view")}}>
+        <TouchableOpacity style={styles.touchableArea} onPress={()=>{navigation.navigate("FridgeDetail")}}>
 
-        <Image source={imageUrl}  style={styles.cameraFeed}/>
+        {imageUrl?<Image source={imageUrl}  style={styles.cameraFeed}/>: <Image source={require('../../../assets/Dashboard/camera-feed-mockup.jpeg')} style={styles.cameraFeed}/>}
     </TouchableOpacity>
         <View style={styles.graphContainer}>
         <Card data={{graphData:[
@@ -60,7 +61,7 @@ const Dashboard=()=>{
         </View>
     
             {/* <Card  height={'50%'} titleText={"Recipes Ready to Prepare"} indicator={11} image={true}/> */}
-            <TouchableOpacity style={styles.touchableArea} onPress={()=>{console.log("Recipe detail view")}}>
+            <TouchableOpacity style={styles.touchableArea} onPress={()=>{ navigation.navigate("Recipes")}}>
             <Image source={require('../../../assets/Dashboard/Pasta.png')} style={styles.cameraFeed}/>
               </TouchableOpacity>
  
@@ -88,7 +89,7 @@ const styles=StyleSheet.create({
         marginTop:10,
       },
       cameraFeed:{
-        borderWidth:2,
+
   
         width: '100%',
         height:'100%'

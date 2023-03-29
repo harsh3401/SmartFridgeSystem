@@ -3,14 +3,16 @@ import { Button } from 'react-native-paper';
 import { Avatar } from 'react-native-paper';
 import Tile from "../../components/Tile";
 import { signOut } from '../../services/firebase/signOut';
+import {useSelector} from "react-redux"
 
 const Settings = ()=>{
+  const auth=useSelector(state=>state.auth)
 return <View style={styles.dashContainer}>
 <View style={styles.topContainer}>
 {/* <Text style={styles.titleText}>Settings</Text> */}
 <View
 style={{flexDirection:'row',justifyContent: 'space-between'}}><Avatar.Image size={60} source={require('../../../assets/avatar.png')} />
-<View style={styles.headerContent}><Text style={styles.proftext}>Student</Text><Text >student@somaiya.edu</Text></View>
+<View style={styles.headerContent}><Text style={styles.proftext}>{auth.email.split('@')[0].toUpperCase()}</Text><Text >{auth.email}</Text></View>
 <Button onPress={()=>{signOut();
 }}><Text style={{color:'purple',margin:10}}>Sign out</Text></Button>
 </View>

@@ -28,8 +28,8 @@ const EditItem=(route)=>{
             axios.post('/user-food-items/',{
                 food_item:[{item_name:  itemName,expiry_time:0}]
               }).then((response) => {
-                // console.log(response.data);
-                data.push({item_name:  itemName,expiry_time:0})
+                console.log(response.data);
+                data.push({item_name:  itemName,...response.data})
                 dispatch(modify({listdata:data}))
              
               }).catch((error) =>{
