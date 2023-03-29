@@ -1,0 +1,10 @@
+version: '3.0'
+
+services:
+  ml:
+    build: ml
+    restart: always
+    ports:
+      - 8081:8000
+  # backend:
+  # nginx:
