@@ -54,7 +54,7 @@ class CustomUser(TimeStampedModel, AbstractBaseUser, PermissionsMixin):
     )
     last_login = models.DateTimeField(null=True, blank=True)
     fcm_token = models.CharField(max_length=1024, null=True, blank=True)
-
+    uid=models.TextField(null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 

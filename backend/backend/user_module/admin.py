@@ -17,6 +17,7 @@ class CustomUserAdmin(ModelAdmin):
                     "mobile_number",
                     "last_login",
                     "fcm_token",
+                    "uid"
                 )
             },
         ),

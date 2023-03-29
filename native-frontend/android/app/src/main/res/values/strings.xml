@@ -1,0 +1,8 @@
+<resources>
+  <string name="app_name">native-frontend</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="facebook_app_id">4143226195901613</string>
+  <string name="facebook_client_token">cae855ee17fbc5c635906dae5fc1e15b</string>
+  <string name="fb_login_protocol_scheme">fb4143226195901613</string>
+</resources>

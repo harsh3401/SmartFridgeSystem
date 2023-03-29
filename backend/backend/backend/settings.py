@@ -33,7 +33,7 @@ os.environ[
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -162,9 +162,10 @@ AUTH_USER_MODEL = "user_module.CustomUser"
 # Token Authentication
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.TokenAuthentication",
+        "user_module.api.auth.FirebaseAuthentication",
     ],
 }
+
 
 # swagger UI config for token auth
 SWAGGER_SETTINGS = {
@@ -175,9 +176,8 @@ SWAGGER_SETTINGS = {
 }
 
 # csrf
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*','192.168.1.57']
 
 
 # crontab config
@@ -215,3 +215,12 @@ STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/"
 STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+
+
+
+import firebase_admin
+from firebase_admin import credentials
+
+cred = credentials.Certificate(os.path.join(BASE_DIR, "serviceAccountKey.json"))
+firebase_admin.initialize_app(cred)
