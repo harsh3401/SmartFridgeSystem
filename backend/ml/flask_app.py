@@ -9,6 +9,14 @@ import pandas as pd
 import ast
 import uuid
 
+from flask import Blueprint
+
+blueprint = Blueprint(
+      'blueprint',
+    __name__,
+    url_prefix='/api/ml',
+)
+
 # Set All Recommendation Model Parameters
 N_topics = 50             # Number of Topics to Extract from corpora
 N_top_docs = 200          # Number of top documents within each topic to extract keywords
@@ -100,7 +108,7 @@ def Search_Recipes(query, query_ranked=False, recipe_range=(0,3)):
 
 
 
-@app.route('/api/recommend/',methods = ['POST'])
+@blueprint.route('/recommend',methods = ['POST'])
 def recommend():
    if request.method == 'POST':
        
@@ -114,7 +122,7 @@ def recommend():
             return {"error": "Invalid input"},400
 
 
-@app.route('/api/classify/', methods = ['POST'])
+@blueprint.route('/classify', methods = ['POST'])
 def classify():
     ''' 
     Classify the image and send the results to the backend server
@@ -131,11 +139,12 @@ def classify():
         return {"data": "success"}
 
 
-@app.route('/api/image/', methods = ['GET'])
+@blueprint.route('/image', methods = ['GET'])
 def image():
     # temporary route to test image upload
     print(request.query_string)
     return {"data": "success"}
 
 def create_app():
+    app.register_blueprint(blueprint)
     return app

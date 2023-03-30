@@ -13,4 +13,6 @@ RUN apt-get update && apt-get install -y python3 python3-pip
 RUN pip3 install -r requirements.txt
 
 #Run the command
-CMD gunicorn backend.wsgi
+CMD ["gunicorn"  , "--bind", "0.0.0.0:8000", "backend.wsgi"]
+
+EXPOSE 8000
