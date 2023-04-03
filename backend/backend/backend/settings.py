@@ -89,6 +89,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "backend.wsgi.application"
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 
 
 # Database
