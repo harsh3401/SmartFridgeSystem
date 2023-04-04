@@ -21,6 +21,7 @@ from user_module.models import CustomUser
 import firebase_admin
 from drf_yasg import openapi
 import requests
+from user_module.models import UserNotification
 
 # initialize firebase app if not already initialized
 if not firebase_admin._apps:
@@ -222,10 +223,15 @@ class ArduinoListenerAPIView(APIView):
                     obj = UserFoodItem.objects.create(user=user, food_item=i)
                     print(obj)
                 print(user.email)
+                # TODO: remove hard coded image url
                 fb_notif_obj = send_notification(
                     type, image_url="https://5.imimg.com/data5/WA/NV/LI/SELLER-52971039/apple-indian-500x500.jpg", token=user.fcm_token
                 )
                 messaging.send(fb_notif_obj)
+                # create user notification object
+                UserNotification.objects.create(
+                    user=user, notification_title="Current image of your fridge", description="Click to view", notification_image='https://5.imimg.com/data5/WA/NV/LI/SELLER-52971039/apple-indian-500x500.jpg'
+                )
 
         elif type == "temperature":
             # save the temperature and then send notification
@@ -236,5 +242,9 @@ class ArduinoListenerAPIView(APIView):
                 type, description=obj.temperature, token=user.fcm_token
             )
             messaging.send(fb_notif_obj)
+
+            UserNotification.objects.create(
+                user=user, notification_title="Current temperature of your fridge", description="Click to view", notification_image='#'
+            )
 
         return Response(status=HTTP_200_OK)

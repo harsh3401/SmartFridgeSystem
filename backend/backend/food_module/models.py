@@ -23,6 +23,12 @@ class UserFoodItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+    def save(self):
+        # dont create new object if food item for user exists
+        if UserFoodItem.objects.filter(user=self.user, food_item=self.food_item).exists():
+            return
+        super().save()
+
 class RecipeRecommendation(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     ingredients = models.ManyToManyField(FoodItem)
