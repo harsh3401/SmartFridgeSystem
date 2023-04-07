@@ -1,5 +1,6 @@
 from rest_framework.views import APIView, Response
 import subprocess
+from django.core.files import File
 import shutil
 import os
 from rest_framework.status import (
@@ -159,9 +160,12 @@ class ArduinoListenerAPIView(APIView):
         operation_summary="Arduino listener for image and temperature (internal use only)"
     )
     def post(self, request):
-        type = request.data.get("type")
-        user = request.data.get("user")
+        print(request.data.get("name"))
+        #hardcoded for now
+        type = "image"
+        user = "harshjain3401@gmail.com"
         user = CustomUser.objects.filter(email=user)
+        name=request.FILES["image"].name
 
 
         # in the case that the user or user's FCM token is deleted, we don't want to send a notification
@@ -171,21 +175,34 @@ class ArduinoListenerAPIView(APIView):
 
         user = user[0]
         if type == "image":
-            # print(request.FILES["image"])
-            # # save the image and then send notification
-            # obj = Image.objects.create(user=user, image=request.FILES["image"])
+            # #TODO save both images to the db and folder 
+            wd = os.getcwd()
+            os.chdir("../../Yolo/yolov5/")
+            # save the image and then send notification
+            with open(f'pred_images/{name}', 'wb+') as destination:
+                for chunk in request.FILES["image"].chunks():
+                    destination.write(chunk)
+
             #save image to temp path for the prediction
-          
+
             #call model and save the prediction
             # TODO : modify yolo path 
-            wd = os.getcwd()
-            os.chdir("../Yolo/yolov5/")
+        
             subprocess.run("python detect.py --weights runs/train/exp/weights/best.pt --img 416 --conf 0.1 --source pred_images --save-txt",shell=True)
             
             #After the results are stored retrieve label from txt and push them to the db for recipe module
             #preprocess the labels for each txt file
-            os.chdir("runs/detect/exp/labels")
+            os.chdir("runs/detect/exp/")
+            try:
+                with open(name, 'rb') as fi:
+                        print("here")
+                        img= Image.objects.create(user=user, image=request.FILES["image"],image_identified=File(fi))
+            except:
+                print("here 2")
+                img = Image.objects.create(user=user, image=request.FILES["image"],image_identified=request.FILES["image"])
+            os.chdir("labels")
             text_files= os.listdir('.')
+            print(text_files)
             labels=[]
             #dictionary to store class mappings to yolo indexes
             class_mappings={'0':'Fresh Tomatoe','1':'Stale Tomatoe','2':'Fresh Cabbage','3':'Stale Cabbage','4':'Fresh Apple','5':'Stale Apple'}
@@ -219,13 +236,17 @@ class ArduinoListenerAPIView(APIView):
                 else:
                     food_item_objs.append(qs.first())
 
-                for i in food_item_objs:
-                    obj = UserFoodItem.objects.create(user=user, food_item=i)
-                    print(obj)
-                print(user.email)
-                # TODO: remove hard coded image url
+                for i in food_item_objs:    
+                    stale=False
+                    if "Stale" in item:
+                        stale=True
+                    obj = UserFoodItem.objects.create(user=user, food_item=i,is_stale=stale)
+                
+ 
+                #TODO S3 uri
+          
                 fb_notif_obj = send_notification(
-                    type, image_url="https://5.imimg.com/data5/WA/NV/LI/SELLER-52971039/apple-indian-500x500.jpg", token=user.fcm_token
+                    type, image_url=img.image_identified.url, token=user.fcm_token
                 )
                 messaging.send(fb_notif_obj)
                 # create user notification object

@@ -70,15 +70,18 @@ class UserFoodItemAPI(APIView):
                 food_item_objs.append(tmp)
             else:
                 food_item_objs.append(qs.first())
-
+            print("here")
             for i in food_item_objs:
                 qs = UserFoodItem.objects.filter(user=request.user, food_item=i)
                 if not qs.exists():
                     obj = UserFoodItem.objects.create(user=request.user, food_item=i)
+
                 # else
                 # dict_obj = model_to_dict( obj )
-             
-        return Response(status=HTTP_201_CREATED)
+                print("here")
+        food_items = UserFoodItem.objects.filter(user=request.user)
+        ser = UserFoodItemSerializer(food_items, many=True)
+        return Response({"food_items": ser.data},status=HTTP_201_CREATED)
 
     @swagger_auto_schema(
         operation_summary="Delete food items from a user based on id (also delete stale food items)",

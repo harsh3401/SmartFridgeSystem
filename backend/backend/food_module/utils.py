@@ -11,8 +11,9 @@ def get_recommendation(food_items: List) -> Dict:
     data = {"ingredients": food_items}
     # print(data)
     response = requests.post(
-        DL_SERVER_BASE_URL + "api/recommend/", data=json.dumps(data), headers=headers
+        DL_SERVER_BASE_URL + "api/ml/recommend", data=json.dumps(data), headers=headers
     )
+
     # print(response.status_code)
-    # print(response.content)
+    print(response.content)
     return response.json()

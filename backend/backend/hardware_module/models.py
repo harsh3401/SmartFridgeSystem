@@ -6,7 +6,7 @@ from datetime import datetime
 class Image(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="hardware_images/")
-
+    image_identified=models.ImageField(upload_to="identified_images/",default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

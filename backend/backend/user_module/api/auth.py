@@ -58,7 +58,6 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
         try:
             User = get_user_model()
             user = User.objects.get_or_create(email=email,push_notification=push_notification,uid=uid)
-            print("User created",user)
             return user
 
         except ObjectDoesNotExist:

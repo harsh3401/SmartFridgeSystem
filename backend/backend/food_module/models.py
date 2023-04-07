@@ -23,7 +23,7 @@ class UserFoodItem(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-    def save(self):
+    def save(self,*args, **kwargs):
         # dont create new object if food item for user exists
         if UserFoodItem.objects.filter(user=self.user, food_item=self.food_item).exists():
             return
