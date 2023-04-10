@@ -11,7 +11,7 @@
 4.Detect whether the fridge’s state is open or closed to save electricity by alerting the user
 5.Determine food calorific values and calculate other nutritional metrics of the food items present in the fridge.
 
--A frontend made via the PWA standard for easy integration in devices of all sizes.
+-Frontend made with React native for easy integration in devices of all types.
 
 UI 
 
