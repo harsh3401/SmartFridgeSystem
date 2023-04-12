@@ -1,6 +1,7 @@
 from django.db import models
 from user_module.models import CustomUser
 from django.contrib.postgres.fields import ArrayField
+from .utils import get_recipe_image_url, get_recipe_video_url
 
 
 class FoodItem(models.Model):
@@ -44,8 +45,19 @@ class RecipeRecommendation(models.Model):
     steps = models.CharField(max_length=10024, null=True, blank=True)
     time_to_make = models.IntegerField(null=True, blank=True)
 
+    # scraped 
+    recipe_image_url = models.CharField(max_length=255, null=True, blank=True)
+    recipe_video_url = models.CharField(max_length=255, null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.recipe_name
+
+    def save(self, *args, **kwargs):
+        if not self.recipe_image_url:
+            self.recipe_image_url = get_recipe_image_url(self.recipe_name + "recipe")
+        if not self.recipe_video_url:
+            self.recipe_video_url = get_recipe_video_url(self.recipe_name + "recipe") 
+        super().save(*args, **kwargs)
