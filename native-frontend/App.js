@@ -1,22 +1,19 @@
-
 import { Provider } from "react-redux";
-import Main from "./Main"
+import Main from "./Main";
 import store from "./src/store/store";
 import axios from "axios";
-import messaging from '@react-native-firebase/messaging';
-import { useEffect,useState } from "react";
-import { updateFCMToken } from "./src/slice/authSlice";
-import {Alert, Modal, StyleSheet, Text, Pressable, View,Image} from 'react-native';
+import messaging from "@react-native-firebase/messaging";
+import { useEffect, useState } from "react";
+import { Alert } from "react-native";
+
 import { useDispatch } from "react-redux";
 // import {BACKEND_URL} from 'react-native-dotenv';
-axios.defaults.baseURL = 'http://192.168.1.33:8000/api/';
+axios.defaults.baseURL = "http://192.168.1.33:8080/api/backend/";
 
 let refresh = false;
 
-
-
 axios.interceptors.response.use(
-  (resp) => resp,
+  (resp) => resp
   // async (error) => {
   //   if (error.response.status === 401 && !refresh) {
   //     refresh = true;
@@ -42,11 +39,8 @@ axios.interceptors.response.use(
   // }
 );
 
-
 export default function App() {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [modalData,setModalData]=useState();
-  const [fcm,setFCM]=useState();
+  const [fcm, setFCM] = useState();
   const requestUserPermission = async () => {
     /**
      * On iOS, messaging permission must be requested by
@@ -54,7 +48,7 @@ export default function App() {
      * received or sent
      */
     const authStatus = await messaging().requestPermission();
-    console.log('Authorization status(authStatus):', authStatus);
+    console.log("Authorization status(authStatus):", authStatus);
     return (
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL
@@ -68,8 +62,7 @@ export default function App() {
       messaging()
         .getToken()
         .then((fcmToken) => {
-          
-          console.log("setting fcm token as ",fcmToken);
+          console.log("setting fcm token as ", fcmToken);
           setFCM(fcmToken);
           // console.log('FCM Token -> ', fcmToken);
 
@@ -77,8 +70,8 @@ export default function App() {
           //   console.log("Posted FCM token")
           // }).catch((err) => {console.log("Could not post fcm token")})
         });
-    } else console.log('Not Authorization status:', authStatus);
-  
+    } else console.log("Not Authorization status:", authStatus);
+
     /**
      * When a notification from FCM has triggered the application
      * to open from a quit state, this method will return a
@@ -90,17 +83,17 @@ export default function App() {
       .then(async (remoteMessage) => {
         if (remoteMessage) {
           console.log(
-            'getInitialNotification:' +
-              'Notification caused app to open from quit state',
+            "getInitialNotification:" +
+              "Notification caused app to open from quit state"
           );
           console.log(remoteMessage);
           alert(
-            'getInitialNotification: Notification caused app to' +
-            ' open from quit state',
+            "getInitialNotification: Notification caused app to" +
+              " open from quit state"
           );
         }
       });
-  
+
     /**
      * When the user presses a notification displayed via FCM,
      * this listener will be called if the app has opened from
@@ -111,17 +104,17 @@ export default function App() {
     messaging().onNotificationOpenedApp(async (remoteMessage) => {
       if (remoteMessage) {
         console.log(
-          'onNotificationOpenedApp: ' +
-            'Notification caused app to open from background state',
+          "onNotificationOpenedApp: " +
+            "Notification caused app to open from background state"
         );
         console.log(remoteMessage);
         alert(
-          'onNotificationOpenedApp: Notification caused app to' +
-          ' open from background state',
+          "onNotificationOpenedApp: Notification caused app to" +
+            " open from background state"
         );
       }
     });
-  
+
     /**
      * Set a message handler function which is called when
      * the app is in the background or terminated. In Android,
@@ -129,31 +122,30 @@ export default function App() {
      * React Native environment to perform tasks such as updating
      * local storage, or sending a network request.
      */
-    messaging().setBackgroundMessageHandler(
-      async (remoteMessage) => {
-        console.log(
-          'Message handled in the background!',
-          remoteMessage
-        );
+    messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+      console.log("Message handled in the background!", remoteMessage);
     });
-  
+
     /**
      * When any FCM payload is received, the listener callback
      * is called with a `RemoteMessage`. Returns an unsubscribe
      * function to stop listening for new messages.
      */
-    const unsubscribe = messaging().onMessage(
-      async (remoteMessage) => {
-        console.log(remoteMessage.notification.android.imageUrl)
-        setModalData(remoteMessage);
-      setModalVisible(true);
-        console.log(
-          'A new FCM message arrived!',
-          JSON.stringify(remoteMessage)
-        );
-      }
-    );
-  
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      Alert.alert(
+        remoteMessage.notification.title,
+        remoteMessage.notification.body,
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]
+      );
+    });
+
     /**
      * Apps can subscribe to a topic, which allows the FCM
      * server to send targeted messages to only those devices
@@ -164,7 +156,7 @@ export default function App() {
     //   .then(() => {
     //     console.log(`Topic: ${TOPIC} Suscribed`);
     //   });
-  
+
     return () => {
       unsubscribe;
       /**
@@ -174,82 +166,9 @@ export default function App() {
     };
   }, []);
 
-  
-
-
   return (
     <Provider store={store}>
-     {modalVisible&& <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}> {modalData.notification.title}</Text>
-            <Text style={styles.modalText}> {modalData.notification.body}</Text>
-            <Text style={styles.modalText}> {modalData.notification.android.imageUrl}</Text>
-            <Image source={{uri:modalData.notification.android.imageUrl.trim()}}  style={{width:"30", height:"30"}}/>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Close</Text>
-            </Pressable>
-          </View>
-          
-        </View>
-      </Modal>
-
-    </View>}
-    {!modalVisible&&<Main fcm={fcm}/>}
-    {/* <Main fcm={fcm}/> */}
+      <Main fcm={fcm} />
     </Provider>
-  )
-};
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF',
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3',
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-});
+  );
+}

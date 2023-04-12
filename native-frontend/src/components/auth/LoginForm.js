@@ -1,31 +1,31 @@
-import { useState, useEffect} from 'react';
-import {View, Pressable,Touchable,StyleSheet} from 'react-native'
-import CheckBox from 'expo-checkbox';
+import { useState, useEffect } from "react";
+import { View, Pressable, Touchable, StyleSheet } from "react-native";
+import CheckBox from "expo-checkbox";
 import { TextInput, Text } from "@react-native-material/core";
-import { Stack, Spacer } from 'react-native-flex-layout';
-import { FontAwesome5 } from '@expo/vector-icons';
-import TextDivider from '../general/TextDivider.js';
+import { Stack, Spacer } from "react-native-flex-layout";
+import { FontAwesome5 } from "@expo/vector-icons";
+import TextDivider from "../general/TextDivider.js";
 
-import { signInWithGoogle } from '../../services/firebase/google/google-signin.js';
-import { signInWithEmailAccount} from '../../services/firebase/email/email-password-auth.js';
+import { signInWithGoogle } from "../../services/firebase/google/google-signin.js";
+import { signInWithEmailAccount } from "../../services/firebase/email/email-password-auth.js";
 
-import { Button } from 'react-native-paper';
-import { login,updateToken} from '../../slice/authSlice.js';
+import { Button } from "react-native-paper";
+import { login, updateToken } from "../../slice/authSlice.js";
 import { useDispatch } from "react-redux";
-import {useSelector} from 'react-redux'
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 
 const LoginForm = () => {
-  const auth=useSelector(state=>state.auth)
+  const auth = useSelector((state) => state.auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
-  const dispatch=useDispatch()
-  const authState=useSelector((state)=>state.auth)
+  const dispatch = useDispatch();
+  const authState = useSelector((state) => state.auth);
   const navigation = useNavigation();
 
-  const handleLogin = async () =>{
+  const handleLogin = async () => {
     //Email Redux storage
     // const requestData={email:email,password:password}
     // console.log(requestData);
@@ -43,56 +43,79 @@ const LoginForm = () => {
     //   console.log(error)
     // })
     //Firebase authentication
-    const user= await signInWithEmailAccount(email,password);
-    console.log("User",user)
-    let token=await user.getIdToken();
-    console.log("token",token)
-    dispatch(login({uid:user.uid,email:user.email,token:token}))
-    axios.defaults.headers.common[
-  "Authorization"
-] = token;
-  axios.post("fcm_token/",{fcm_token:auth.fcmtoken}).then(()=>{
-            console.log("Posted FCM token")
-          }).catch((err) => {console.log("Could not post fcm token")})
-  }
-  const handleGoogleLogin = async() =>{
-   const user= await signInWithGoogle();
-   console.log("User",user)
-   let token=await user.user.getIdToken();
-   dispatch(login({uid:user.uid,email:user.email,token:token}))
-   axios.post("fcm_token/",{fcm_token:auth.fcmtoken}).then(()=>{
-            console.log("Posted FCM token")
-          }).catch((err) => {console.log("Could not post fcm token")})
-axios.defaults.headers.common[
-  "Authorization"
-] = token;
-  //  let token=await user.getIdToken();
-  //  dispatch(login({uid:user.uid,email:user.email,token:token}))
+    const user = await signInWithEmailAccount(email, password);
+    console.log("User", user);
+    let token = await user.getIdToken();
+    console.log("token", token);
+    dispatch(login({ uid: user.uid, email: user.email, token: token }));
+    axios.defaults.headers.common["Authorization"] = token;
+    axios
+      .post("fcm_token/", { fcm_token: auth.fcmtoken })
+      .then(() => {
+        console.log("Posted FCM token");
+      })
+      .catch((err) => {
+        console.log("Could not post fcm token");
+      });
+  };
+  const handleGoogleLogin = async () => {
+    const user = await signInWithGoogle();
+    console.log("User", user);
+    console.log("Eamil", user.email);
 
-  }
+    let token = await user.user.getIdToken();
+    console.log(token);
+    dispatch(
+      login({ uid: user.user.uid, email: user.user.email, token: token })
+    );
+    axios
+      .post("fcm_token/", { fcm_token: auth.fcmtoken })
+      .then(() => {
+        console.log("Posted FCM token");
+      })
+      .catch((err) => {
+        console.log("Could not post fcm token");
+      });
+    axios.defaults.headers.common["Authorization"] = token;
+    //  let token=await user.getIdToken();
+    //  dispatch(login({uid:user.uid,email:user.email,token:token}))
+  };
   // const handleFacebookLogin = async ()=>{
   //   const user= await signInWithFacebook();
   //   // let token=await user.getIdToken();
   //   // dispatch(login({uid:user.uid,email:user.email,token:token}))
   // }
   return (
-    <View >
-          <View style={styles.inputdiv}>
-            <Text style={styles.inputHelperStyle}>Email Address</Text>
-            <TextInput autoCapitalize='none' onChangeText={(data)=>setEmail(data)} variant="outlined" placeholder="Enter your email" style={styles.textInputStyle} />
-          </View>
+    <View>
+      <View style={styles.inputdiv}>
+        <Text style={styles.inputHelperStyle}>Email Address</Text>
+        <TextInput
+          autoCapitalize="none"
+          onChangeText={(data) => setEmail(data)}
+          variant="outlined"
+          placeholder="Enter your email"
+          style={styles.textInputStyle}
+        />
+      </View>
 
-          <Spacer />
+      <Spacer />
 
-          <View style={styles.inputdiv}>
-            <Text style={styles.inputHelperStyle}>Password</Text>
-            <TextInput autoCapitalize='none' onChangeText={(data)=>setPassword(data)} secureTextEntry={true} variant="outlined" placeholder="Enter password" style={styles.textInputStyle} />
-          </View>
+      <View style={styles.inputdiv}>
+        <Text style={styles.inputHelperStyle}>Password</Text>
+        <TextInput
+          autoCapitalize="none"
+          onChangeText={(data) => setPassword(data)}
+          secureTextEntry={true}
+          variant="outlined"
+          placeholder="Enter password"
+          style={styles.textInputStyle}
+        />
+      </View>
 
-          <Spacer />
+      <Spacer />
 
-          <View style={styles.horizontalcontainer1}>
-            {/* <View style={styles.checkboxcontainer}>
+      <View style={styles.horizontalcontainer1}>
+        {/* <View style={styles.checkboxcontainer}>
               <CheckBox
                   disabled={false}
                   value={remember}
@@ -100,33 +123,41 @@ axios.defaults.headers.common[
               />
                   <Text style={{margin:2}}>Remember me</Text>
             </View> */}
-            <View>
-              <Pressable onPress={()=>{console.log("Press")}}><Text style={{color:'purple'}}>Forgot password</Text></Pressable>
-            </View>
-          </View>
+        <View>
+          <Pressable
+            onPress={() => {
+              console.log("Press");
+            }}
+          >
+            <Text style={{ color: "purple" }}>Forgot password</Text>
+          </Pressable>
+        </View>
+      </View>
 
-          <Spacer />
+      <Spacer />
 
-          <View>
-        
-
-            <Button 
- style={{ backgroundColor: 'purple', marginTop: 20 }}
- onPress={() =>handleLogin()}
- mode="contained"
- icon="mail"
->
-Login 
-</Button>
-            <Button 
- style={{ backgroundColor: 'purple', marginTop: 20 }}
- onPress={() => handleGoogleLogin().then(() => console.log('Signed in with Google!'))}
- mode="contained"
- icon="google"
->
-Login with Google
-</Button>
-{/* <Button 
+      <View>
+        <Button
+          style={{ backgroundColor: "purple", marginTop: 20 }}
+          onPress={() => handleLogin()}
+          mode="contained"
+          icon="mail"
+        >
+          Login
+        </Button>
+        <Button
+          style={{ backgroundColor: "purple", marginTop: 20 }}
+          onPress={() =>
+            handleGoogleLogin().then(() =>
+              console.log("Signed in with Google!")
+            )
+          }
+          mode="contained"
+          icon="google"
+        >
+          Login with Google
+        </Button>
+        {/* <Button 
  style={{ backgroundColor: 'purple', marginTop: 20 }}
  onPress={() => handleFacebookLogin().then(() => console.log('Signed in with Facebook!'))}
  mode="contained"
@@ -134,12 +165,11 @@ Login with Google
 >
 Login with Facebook
 </Button> */}
+      </View>
 
-          </View>
+      <Spacer />
 
-          <Spacer />
-
-          {/* <View>
+      {/* <View>
             <TextDivider text="Or With"/>
           </View>
 
@@ -165,39 +195,39 @@ Login with Facebook
           </View>
  */}
     </View>
-  )
-}
+  );
+};
 
 styles = StyleSheet.create({
-  'horizontalcontainer1':{
-    flexDirection:'row',
-    justifyContent: 'space-between',
-    marginBottom:30
+  horizontalcontainer1: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 30,
   },
-  'checkboxcontainer':{
-    flexDirection:'row'
+  checkboxcontainer: {
+    flexDirection: "row",
   },
-  'buttonStyle':{
-    flexDirection:'row', justifyContent:'center', alignSelf: 'stretch',
-  
+  buttonStyle: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignSelf: "stretch",
   },
-  'inputHelperStyle':{
-    color:'purple', 
-    marginBottom:5
+  inputHelperStyle: {
+    color: "purple",
+    marginBottom: 5,
   },
-  'textInputStyle':{
-    height:20, 
-    borderRadius:20
+  textInputStyle: {
+    height: 20,
+    borderRadius: 20,
   },
-  'horizontalcontainer2':{
-    flexDirection:'row',
-    justifyContent: 'space-between'
+  horizontalcontainer2: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
-  'inputdiv':{
-   height: 100,
-   marginVertical: 5
+  inputdiv: {
+    height: 100,
+    marginVertical: 5,
   },
-  
-})
+});
 
-export default LoginForm
+export default LoginForm;
