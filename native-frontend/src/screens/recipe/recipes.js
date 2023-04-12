@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import {
-  View,
-  FlatList,
-  Text,
-  Pressable,
-  Image,
-  StyleSheet,
-} from "react-native";
-import { Flex, Box, Spacer, Avatar } from "@react-native-material/core";
-import { Ionicons } from "@expo/vector-icons";
+import { View, FlatList, Pressable, Image, StyleSheet } from "react-native";
+// import { Pressable } from "@react-native-material/core";
 import RecipeTile from "../../components/recipe/recipeTile.js";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -26,7 +18,7 @@ const Recipes = () => {
       axios
         .get("/get-recommendation/")
         .then((response) => {
-          console.log(response.data.recommendations.length);
+          console.log(response.data.recommendations);
           setRecipeList(response.data.recommendations);
           setIsLoading(false);
         })
@@ -36,8 +28,9 @@ const Recipes = () => {
     }
   }, [isFocused]);
 
-  const getRecipeDetails = (recipe) => {
-    navigation.navigate("RecipeDetail", recipe);
+  const getRecipeDetails = () => {
+    console.log("here");
+    // navigation.navigate("RecipeDetail", recipe);
   };
   // recipeList = [
   //     {
@@ -70,14 +63,15 @@ const Recipes = () => {
   renderVar = !isLoading ? (
     <FlatList
       style={styles.flatView}
-      data={recipeList}
+      data={recipeList.map((object, index) => {
+        return { ...object, id: index };
+      })}
       renderItem={(recipe) => {
         return (
-          <Pressable
-            style={styles.card}
-            onPress={() => getRecipeDetails(recipe.item)}
-          >
+          <Pressable onPress={getRecipeDetails} style={styles.card}>
             <RecipeTile
+              recipe={recipe.item}
+              id={recipe.item.id}
               imageSrc={recipe.item.imgurl}
               recipeName={recipe.item.recipe_name}
               recipeIngredients={recipe.item.ingredients}
@@ -96,6 +90,7 @@ const Recipes = () => {
 
 const styles = StyleSheet.create({
   card: {
+    zIndex: 1,
     overflow: "hidden",
     flex: 1,
     shadowColor: "#000",
@@ -106,6 +101,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 10,
     margin: "1%",
+    position: "relative",
+
+    zIndex: 1,
   },
 });
 

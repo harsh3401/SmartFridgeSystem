@@ -12,9 +12,20 @@ import axios from "axios";
 const FridgeDetail = () => {
   const [ogimage, setOgImage] = useState();
   const [dtimage, setDtImage] = useState();
+  const [fetch, setFetch] = useState(0);
   const isFocused = useIsFocused();
   const fetchImage = () => {
-    axios.get("/");
+    console.log("here");
+    axios
+      .get("hardware-image")
+      .then(() => {
+        setFetch((fetch) => {
+          return fetch + 1;
+        });
+      })
+      .catch((err) => {
+        console.log("Unable to capture image arduino unavailable");
+      });
   };
   useEffect(() => {
     if (isFocused) {
@@ -31,7 +42,7 @@ const FridgeDetail = () => {
           console.log("Unable to fetch image");
         });
     }
-  }, [isFocused]);
+  }, [isFocused, fetch]);
   return (
     <View>
       <Text style={styles.titleText}>Actual Image</Text>
@@ -44,10 +55,10 @@ const FridgeDetail = () => {
       </TouchableOpacity>
       <View style={[{ width: "90%", marginLeft: "5%", marginLeft: "5%" }]}>
         <Button
-          onClick={fetchImage}
+          onPress={fetchImage}
           color={"purple"}
           title={"Get Latest Image"}
-        ></Button>
+        />
       </View>
     </View>
   );

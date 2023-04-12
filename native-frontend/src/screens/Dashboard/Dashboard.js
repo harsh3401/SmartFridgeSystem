@@ -17,31 +17,39 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [grocerydata, setGroceryData] = useState([]);
+  const [staleItems, setStaleItems] = useState(1);
   const [imageUrl, setImageUrl] = useState();
   useEffect(() => {
-    console.log(
-      "In use effect",
-      axios.defaults.headers.common["Authorization"]
-    );
-    axios
-      .get("user-food-items/")
-      .then((response) => {
-        dispatch(modify({ listdata: response.data.food_items }));
-      })
-      .catch((error) => {
-        console.log("Unable to fetch recipes");
-        console.log(error.response);
-      });
-    axios
-      .get("image")
-      .then((response) => {
-        console.log(response.data[response.data.length - 1].imagea);
-        setImageUrl({ uri: response.data[response.data.length - 1].image });
-      })
-      .catch((error) => {
-        console.log("Unable to fetch image");
-      });
-  }, [auth]);
+    if (isFocused) {
+      axios
+        .get("stale-food")
+        .then((response) => {
+          setStaleItems(Number(response.data.length));
+        })
+        .catch((error) => {
+          console.log("Unable to fetch stale items");
+          console.log(error.response);
+        });
+      axios
+        .get("user-food-items/")
+        .then((response) => {
+          dispatch(modify({ listdata: response.data.food_items }));
+        })
+        .catch((error) => {
+          console.log("Unable to fetch recipes");
+          console.log(error.response);
+        });
+      axios
+        .get("image")
+        .then((response) => {
+          console.log(response.data[response.data.length - 1].imagea);
+          setImageUrl({ uri: response.data[response.data.length - 1].image });
+        })
+        .catch((error) => {
+          console.log("Unable to fetch image");
+        });
+    }
+  }, [auth, isFocused]);
 
   return (
     <View style={styles.dashContainer}>
@@ -90,7 +98,11 @@ const Dashboard = () => {
         <View style={styles.smallContainer}>
           {/* TODO : API Integration for value */}
           <Card height={"50%"} titleText={"No of times Opened"} indicator={5} />
-          <Card height={"50%"} indicator={5} titleText={"Stale Items Found"} />
+          <Card
+            height={"50%"}
+            indicator={staleItems}
+            titleText={"Stale Items Found"}
+          />
         </View>
         <Card list titleText={"Grocery List"} />
       </View>

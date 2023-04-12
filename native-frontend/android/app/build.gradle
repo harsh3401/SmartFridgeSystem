@@ -1,5 +1,6 @@
 apply plugin: "com.android.application"
-apply plugin: 'com.google.gms.google-services'
+apply plugin: "com.google.gms.google-services"
+
 
 import com.android.build.OutputFile
 
@@ -91,7 +92,7 @@ project.ext.react = [
 ]
 
 apply from: new File(reactNativeRoot, "react.gradle")
-
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -143,7 +144,6 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        manifestPlaceholders = [appAuthRedirectScheme: 'dev.expo.app']
         applicationId 'host.exp.exponent'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -277,12 +277,12 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.gms:play-services-base:15.0.0"
-    implementation "com.google.firebase:firebase-core:17.2.0"
-    implementation "com.google.firebase:firebase-messaging:17.2.0"
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
+    implementation "com.google.android.gms:play-services-base:15.0.0"
+    implementation "com.google.firebase:firebase-core:17.2.0"
+    implementation "com.google.firebase:firebase-messaging:17.2.0"
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
@@ -365,3 +365,5 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Pressable, Touchable, StyleSheet } from "react-native";
-import CheckBox from "expo-checkbox";
 import { TextInput, Text } from "@react-native-material/core";
 import { Stack, Spacer } from "react-native-flex-layout";
-import { FontAwesome5 } from "@expo/vector-icons";
-import TextDivider from "../general/TextDivider.js";
 
 import { signInWithGoogle } from "../../services/firebase/google/google-signin.js";
 import { signInWithEmailAccount } from "../../services/firebase/email/email-password-auth.js";
@@ -45,9 +42,12 @@ const LoginForm = () => {
     //Firebase authentication
     const user = await signInWithEmailAccount(email, password);
     console.log("User", user);
-    let token = await user.getIdToken();
+    let token = await user.user.getIdToken();
+
     console.log("token", token);
-    dispatch(login({ uid: user.uid, email: user.email, token: token }));
+    dispatch(
+      login({ uid: user.user.uid, email: user.user.email, token: token })
+    );
     axios.defaults.headers.common["Authorization"] = token;
     axios
       .post("fcm_token/", { fcm_token: auth.fcmtoken })

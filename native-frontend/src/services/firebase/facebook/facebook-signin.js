@@ -1,7 +1,7 @@
 // // import { getAuth, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
 // import {auth} from '../firebase';
 // // import {provider} from './facebook-provider'
-// import * as Facebook from 'expo-facebook';
+
 // import {LoginManager, AccessToken, SignInWithCredential} from 'react-native-fbsdk-next'
 // import { FacebookAuthProvider } from 'firebase/auth';
 // export const signInWithFacebook = async () => {

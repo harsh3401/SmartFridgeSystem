@@ -165,7 +165,8 @@ class GetRecommendations(APIView):
         items = [i.food_item.item_name for i in food_items]
         recommendations = get_recommendation(items)
         # save the recommendations to db
-        for i in recommendations["data"][0:3]:
+        print(len(recommendations["data"]))
+        for i in recommendations["data"]:
             # get or create the food item
             food_item_objects = []
             for j in i["ingredients"]:
@@ -192,7 +193,7 @@ class GetRecommendations(APIView):
             obj.save()
 
         return Response(
-            {"recommendations": recommendations["data"][:3]}, status=HTTP_200_OK
+            {"recommendations": recommendations["data"]}, status=HTTP_200_OK
         )
 
 

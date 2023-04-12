@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { View, Text } from "react-native";
-import "react-native-gesture-handler";
+
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
