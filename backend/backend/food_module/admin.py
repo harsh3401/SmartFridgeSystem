@@ -16,6 +16,8 @@ class CustomRecipeRecommendationAdmin(ModelAdmin):
         "protein",
         "steps",
         "time_to_make",
+        "recipe_image_url",
+        "recipe_video_url",
         "created_at",
         "updated_at",
     ]
