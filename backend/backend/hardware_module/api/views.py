@@ -163,7 +163,7 @@ class ArduinoListenerAPIView(APIView):
         print(request.data.get("name"))
         #hardcoded for now
         type = "image"
-        user = "harshjain3401@gmail.com"
+        user = "hjain123@gmail.com"
         user = CustomUser.objects.filter(email=user)
         name=request.FILES["image"].name
 
@@ -216,8 +216,15 @@ class ArduinoListenerAPIView(APIView):
             if os.path.exists(os.getcwd()+'/exp'):
                 shutil.rmtree(os.getcwd()+'/exp')
             os.chdir(wd)
+            os.chdir("../../Yolo/yolov5/pred_images")
+            path=os.getcwd()
 
-
+            for file_name in os.listdir(path):
+              file = path + "/"+file_name
+              if os.path.isfile(file):
+                print('Deleting file:', file)
+                os.remove(file)
+            os.chdir(wd)
             #save the items identified
             item_names=[]
             for label in labels:
@@ -250,8 +257,9 @@ class ArduinoListenerAPIView(APIView):
                 )
                 messaging.send(fb_notif_obj)
                 # create user notification object
+         
                 UserNotification.objects.create(
-                    user=user, notification_title="Current image of your fridge", description="Click to view", notification_image='https://5.imimg.com/data5/WA/NV/LI/SELLER-52971039/apple-indian-500x500.jpg'
+                    user=user, notification_title="Current image of your fridge",     notification_url=img.image_identified.url
                 )
 
         elif type == "temperature":

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import YoutubePlayer from "react-native-youtube-iframe";
 import {
   ScrollView,
   View,
@@ -20,20 +21,52 @@ let imageSrc =
 let prepTime = "15 min";
 const RecipeDetail = ({ route }) => {
   const navigation = useNavigation();
+  const arr = route.params.recipe_name.split(" ");
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+  }
+  const Heading = arr.join(" ");
   return (
-    <ScrollView style={{ margin: 15, marginTop: 40 }}>
+    <ScrollView style={{ margin: 15 }}>
       <View>
-        <Text style={{ fontSize: 30, marginRight: 20 }}>
-          {route.params.recipe_name}
+        <Text
+          style={{
+            fontSize: 30,
+            marginRight: 20,
+            marginLeft: 20,
+            textAlign: "center",
+            fontWeight: "bold",
+          }}
+        >
+          {Heading}
         </Text>
       </View>
       <View style={{ marginTop: 20 }}>
         <Image
           style={{ height: 200, width: "auto" }}
-          source={{ uri: imageSrc }}
+          source={{
+            uri: route.params.recipe_image_url
+              ? route.params.recipe_image_url
+              : "https://en.xn--icne-wqa.com/images/icones/7/1/oval-blue.png",
+          }}
         />
       </View>
       <View style={{ marginTop: 20 }}>
+        <YoutubePlayer height={200} play={true} videoId={"84WIaK3bl_s"} />
+      </View>
+      <View style={{ marginTop: 20 }}>
+        <Text
+          style={{
+            fontSize: 25,
+            marginBottom: 10,
+            textDecorationLine: "underline",
+            marginLeft: 12,
+            textShadowRadius: 5,
+            textShadowColor: "rgba(0, 0, 0, 0.75)",
+          }}
+        >
+          Ingredients
+        </Text>
         <IngredientList ingredients={route.params.ingredients} />
       </View>
       <View style={{ marginTop: 20 }}>
@@ -78,11 +111,11 @@ const RecipeDetail = ({ route }) => {
           </ImageBackground>
         </View>
       </View>
-      <View style={{ marginTop: 20 }}>
+      {/* <View style={{ marginTop: 20 }}>
         <NutritionMetric nutritiondetails={route.params.nutrition_data} />
-      </View>
+      </View> */}
       <View style={{ marginTop: 20 }}>
-        <StepsToPrepare stepstocook={route.params.steps_to_make} />
+        <StepsToPrepare stepstocook={route.params.steps} />
       </View>
     </ScrollView>
   );

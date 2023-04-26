@@ -6,20 +6,27 @@ import RecipeTile from "../../components/recipe/recipeTile.js";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
+import { LogBox } from "react-native";
+import { Button } from "react-native-paper";
+import { Facebook } from "react-content-loader/native";
 
 const Recipes = () => {
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const [recipeList, setRecipeList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(false);
   const navigation = useNavigation();
   useEffect(() => {
     if (isFocused) {
       axios
-        .get("/get-recommendation/")
+        .get("prev-recipes/")
         .then((response) => {
-          console.log(response.data.recommendations);
-          setRecipeList(response.data.recommendations);
+          console.log(response.data);
+          setRecipeList(response.data);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -31,6 +38,19 @@ const Recipes = () => {
   const getRecipeDetails = () => {
     console.log("here");
     // navigation.navigate("RecipeDetail", recipe);
+  };
+  const getNewRecipes = () => {
+    setIsFetching(true);
+    axios
+      .get("get-recommendation/")
+      .then((response) => {
+        console.log(response.data.recommendations);
+        setRecipeList(response.data.recommendations);
+        setIsFetching(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   // recipeList = [
   //     {
@@ -61,28 +81,47 @@ const Recipes = () => {
 
   let renderVar;
   renderVar = !isLoading ? (
-    <FlatList
-      style={styles.flatView}
-      data={recipeList.map((object, index) => {
-        return { ...object, id: index };
-      })}
-      renderItem={(recipe) => {
-        return (
-          <Pressable onPress={getRecipeDetails} style={styles.card}>
-            <RecipeTile
-              recipe={recipe.item}
-              id={recipe.item.id}
-              imageSrc={recipe.item.imgurl}
-              recipeName={recipe.item.recipe_name}
-              recipeIngredients={recipe.item.ingredients}
-              prepTime={recipe.item.time_to_make}
-            />
-          </Pressable>
-        );
-      }}
-    />
+    <View style={{ backgroundColor: "white", padding: 10, height: "100%" }}>
+      <Button onPress={getNewRecipes}>Get new Recipes</Button>
+      {!isFetching ? (
+        <FlatList
+          style={styles.flatView}
+          data={recipeList.map((object, index) => {
+            return { ...object, id: index };
+          })}
+          renderItem={(recipe) => {
+            return (
+              <Pressable onPress={getRecipeDetails} style={styles.card}>
+                <RecipeTile
+                  recipe={recipe.item}
+                  id={recipe.item.id}
+                  imageSrc={recipe.item.recipe_image_url}
+                  recipeName={recipe.item.recipe_name}
+                  recipeIngredients={recipe.item.ingredients}
+                  prepTime={recipe.item.time_to_make}
+                />
+              </Pressable>
+            );
+          }}
+        />
+      ) : (
+        <View>
+          <Facebook />
+          <Facebook />
+          <Facebook />
+          <Facebook />
+          <Facebook />
+        </View>
+      )}
+    </View>
   ) : (
-    <View></View>
+    <View>
+      <Facebook />
+      <Facebook />
+      <Facebook />
+      <Facebook />
+      <Facebook />
+    </View>
   );
 
   return <View>{renderVar}</View>;
@@ -104,6 +143,9 @@ const styles = StyleSheet.create({
     position: "relative",
 
     zIndex: 1,
+  },
+  flatView: {
+    horizontal: true,
   },
 });
 

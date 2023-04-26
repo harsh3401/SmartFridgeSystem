@@ -165,7 +165,7 @@ class GetRecommendations(APIView):
         items = [i.food_item.item_name for i in food_items]
         recommendations = get_recommendation(items)
         # save the recommendations to db
-        print(len(recommendations["data"]))
+
         for i in recommendations["data"]:
             # get or create the food item
             food_item_objects = []
@@ -176,24 +176,32 @@ class GetRecommendations(APIView):
 
             # print("creating recipe recommendation: ", i)
             # print("steps: ", i['steps'])
-            obj = RecipeRecommendation.objects.create(
+            obj = RecipeRecommendation.objects.filter(
                 user=user,
-                recipe_name=i["recipe_name"],
-                calories=i["nutrition_data"]["calories (kcal)"],
-                total_fat=i["nutrition_data"]["total fat (PDV)"],
-                sugar=i["nutrition_data"]["sugar (PDV)"],
-                sodium=i["nutrition_data"]["sodium (PDV)"],
-                protein=i["nutrition_data"]["protein (PDV)"],
-                saturated_fat=i["nutrition_data"]["saturated fat (PDV)"],
-                carbohydrates=i["nutrition_data"]["carbohydrates (PDV)"],
-                time_to_make=i["time_to_make"],
-                steps=i["steps"],
-            )
-            [obj.ingredients.add(i) for i in food_item_objects]
-            obj.save()
+                recipe_name=i["recipe_name"])
+          
+            if not obj.exists():
+                obj = RecipeRecommendation.objects.create(
+                    user=user,
+                    recipe_name=i["recipe_name"],
+                    calories=i["nutrition_data"]["calories (kcal)"],
+                    total_fat=i["nutrition_data"]["total fat (PDV)"],
+                    sugar=i["nutrition_data"]["sugar (PDV)"],
+                    sodium=i["nutrition_data"]["sodium (PDV)"],
+                    protein=i["nutrition_data"]["protein (PDV)"],
+                    saturated_fat=i["nutrition_data"]["saturated fat (PDV)"],
+                    carbohydrates=i["nutrition_data"]["carbohydrates (PDV)"],
+                    time_to_make=i["time_to_make"],
+                    steps=i["steps"],)
+                [obj.ingredients.add(i) for i in food_item_objects]
+                obj.save()
+            
+        qs=RecipeRecommendation.objects.filter(
+                user=user)
+        ser = RecipeRecommendationSerializer(qs, many=True)
 
         return Response(
-            {"recommendations": recommendations["data"]}, status=HTTP_200_OK
+            {"recommendations":ser.data }, status=HTTP_200_OK
         )
 
 

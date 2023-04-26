@@ -8,7 +8,7 @@ import { Alert } from "react-native";
 
 import { useDispatch } from "react-redux";
 // import {BACKEND_URL} from 'react-native-dotenv';
-axios.defaults.baseURL = "http://192.168.1.33:8080/api/backend/";
+axios.defaults.baseURL = "http://192.168.1.2:8000/api/backend";
 
 let refresh = false;
 
@@ -87,10 +87,10 @@ export default function App() {
               "Notification caused app to open from quit state"
           );
           console.log(remoteMessage);
-          alert(
-            "getInitialNotification: Notification caused app to" +
-              " open from quit state"
-          );
+          // alert(
+          //   "getInitialNotification: Notification caused app to" +
+          //     " open from quit state"
+          // );
         }
       });
 
@@ -108,10 +108,10 @@ export default function App() {
             "Notification caused app to open from background state"
         );
         console.log(remoteMessage);
-        alert(
-          "onNotificationOpenedApp: Notification caused app to" +
-            " open from background state"
-        );
+        // alert(
+        //   "onNotificationOpenedApp: Notification caused app to" +
+        //     " open from background state"
+        // );
       }
     });
 

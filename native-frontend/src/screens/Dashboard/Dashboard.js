@@ -116,7 +116,7 @@ const Dashboard = () => {
       >
         <Image
           source={require("../../../assets/Dashboard/Pasta.png")}
-          style={styles.cameraFeed}
+          style={styles.cameraFeedBottom}
         />
       </TouchableOpacity>
     </View>
@@ -143,6 +143,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "contain",
+  },
+  cameraFeedBottom: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
   },
   graphContainer: {
     flexDirection: "row",

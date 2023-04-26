@@ -3,12 +3,14 @@ import { View, FlatList, Text, Pressable, Image } from "react-native";
 import { ListItem, Avatar, Flex, Spacer } from "@react-native-material/core";
 // import { Entypo, Octicons } from '@expo/vector-icons';
 const StepsToPrepare = ({ stepstocook }) => {
-  stepstocook = [
-    "sjflsjflsj asfjl asldfjf qheo",
-    "adoof asodufofen dshasohf oho8u",
-    "flajf dsljfosfu hasoho fpea;jfohj ",
-    "sjfsjflsjflsj fjspajdf johfoawo dlvosjfefu",
-  ];
+  stepstocook = stepstocook
+    ? stepstocook
+    : [
+        "sjflsjflsj asfjl asldfjf qheo",
+        "adoof asodufofen dshasohf oho8u",
+        "flajf dsljfosfu hasoho fpea;jfohj ",
+        "sjfsjflsjflsj fjspajdf johfoawo dlvosjfefu",
+      ];
   return (
     <View>
       <View style={{ marginTop: 30, marginBottom: 10 }}>
@@ -33,9 +35,15 @@ const StepsToPrepare = ({ stepstocook }) => {
           return (
             <Flex
               inline
-              style={{ minHeight: 40, marginLeft: 20, elevation: 4 }}
+              style={{
+                minHeight: 40,
+                marginLeft: 20,
+                elevation: 4,
+                alignItems: "center",
+              }}
             >
               {/* <Octicons name="dot-fill" size={24} color="black" /> */}
+              <Text>{"\u2B24"}</Text>
               <Text
                 style={{
                   fontSize: 20,
@@ -45,7 +53,7 @@ const StepsToPrepare = ({ stepstocook }) => {
                   textShadowRadius: 10,
                 }}
               >
-                {step.item}
+                {step.item.charAt(0).toUpperCase() + step.item.slice(1)}
               </Text>
             </Flex>
           );

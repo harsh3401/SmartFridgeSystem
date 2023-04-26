@@ -78,8 +78,15 @@ const Card = (props) => {
             })}
             renderItem={({ item }) => {
               return (
-                <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 20 }}>{item.key}</Text>
+                <View
+                  style={{
+                    marginBottom: 10,
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text>{"\u2B24"}</Text>
+                  <Text style={{ fontSize: 20 }}>{" " + item.key + " "}</Text>
                 </View>
               );
             }}

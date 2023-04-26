@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, FlatList, Text, Pressable, Image } from "react-native";
 import { Flex, Box, Spacer, Avatar } from "@react-native-material/core";
-
+import { useIsFocused } from "@react-navigation/native";
 import axios from "axios";
 import useFetch from "../../hooks/useFetch";
 import RecipeNotification from "../../components/notification/recipeNotification";
@@ -10,17 +10,21 @@ import WarningNotification from "../../components/notification/warningNotificati
 const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isFocused = useIsFocused();
   useEffect(() => {
-    axios
-      .get("/user-notifications/")
-      .then((response) => {
-        setNotifications(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    if (isFocused) {
+      axios
+        .get("/user-notifications/")
+        .then((response) => {
+          console.log(response.data);
+          setNotifications(response.data);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+  }, [isFocused]);
   const notificationList = [
     {
       img: "",
@@ -42,7 +46,7 @@ const Notifications = () => {
     },
   ];
   return (
-    <View style={{ marginTop: 50 }}>
+    <View style={{ marginTop: 5 }}>
       <Pressable>
         {/* <Flex inline style={{height:40, width:50}}>
                 <Ionicons style={{fontSize:25,color:'blue'}} name="chevron-back" /> 
@@ -56,12 +60,13 @@ const Notifications = () => {
       <FlatList
         data={notifications}
         renderItem={(notification) => {
+          console.log(notification.item.notification_url);
           if (isLoading) {
             return <View></View>;
-          } else if (notification.imgSrc != "") {
+          } else if (notification.item.notification_url != "") {
             return (
               <RecipeNotification
-                imageSrc={notification.img}
+                imageSrc={notification.item.notification_url}
                 titleText={notification.item.notification_title}
                 subText={notification.item.notification_body}
                 created_at={notification.item.created_at}

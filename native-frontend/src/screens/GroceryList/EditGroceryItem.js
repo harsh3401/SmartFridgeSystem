@@ -14,13 +14,19 @@ const EditItem = (route) => {
   const [itemName, setItemName] = useState("");
   useEffect(() => {
     if (isFocused) {
+      console.log("Focused");
+      console.log(
+        route.route.params?.hasOwnProperty("obj")
+          ? route.route.params.obj.key
+          : ""
+      );
       setItemName(
         route.route.params?.hasOwnProperty("obj")
           ? route.route.params.obj.key
           : ""
       );
     }
-  }, []);
+  }, [isFocused]);
 
   const navigation = useNavigation();
   return (

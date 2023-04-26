@@ -16,8 +16,16 @@ const IngredientList = ({ ingredients }) => {
         data={ingredients}
         renderItem={(ingredient) => {
           return (
-            <Flex inline style={{ height: 40, marginLeft: 20, elevation: 4 }}>
+            <Flex
+              inline
+              style={{
+                marginLeft: 20,
+                elevation: 4,
+                alignItems: "center",
+              }}
+            >
               {/* <Octicons name="dot-fill" size={24} color="black" /> */}
+              <Text>{"\u2B24"}</Text>
               <Text
                 style={{
                   fontSize: 20,
@@ -27,7 +35,8 @@ const IngredientList = ({ ingredients }) => {
                   textShadowRadius: 10,
                 }}
               >
-                {ingredient.item}
+                {ingredient.item.charAt(0).toUpperCase() +
+                  ingredient.item.slice(1)}
               </Text>
             </Flex>
           );

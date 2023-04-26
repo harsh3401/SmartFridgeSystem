@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Image } from "react-native";
-import { Button } from "react-native-paper";
+// import { Button } from "react-native-paper";
 import { ListItem, Avatar, Text } from "@react-native-material/core";
+import { Button } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 const RecipeTile = ({
   imageSrc,
@@ -19,20 +20,25 @@ const RecipeTile = ({
         leading={
           <Image style={{ height: 55, width: 55 }} source={{ uri: imageSrc }} />
         }
-        title={recipeName}
-        secondaryText={recipeIngredients}
+        title={recipeName.charAt(0).toUpperCase() + recipeName.slice(1)}
+        secondaryText={recipeIngredients.map((element, index) => {
+          if (index == recipeIngredients.length - 1) {
+            return element.charAt(0).toUpperCase() + element.slice(1) + ".";
+          } else {
+            return element.charAt(0).toUpperCase() + element.slice(1) + " , ";
+          }
+        })}
         trailing={
-          <View>
-            <Text style={{ fontSize: 10 }}>{prepTime}</Text>
+          <View style={{ width: 40, height: 40 }}>
+            <Text style={{ fontSize: 10 }}>{prepTime + "M"}</Text>
             <Button
-              style={{ backgroundColor: "purple" }}
+              style={{ backgroundColor: "purple", width: 40, fontSize: 5 }}
               onPress={() => {
                 console.log(recipe);
                 navigation.navigate("RecipeDetail", recipe);
               }}
-            >
-              G
-            </Button>
+              title="->"
+            />
           </View>
         }
       />

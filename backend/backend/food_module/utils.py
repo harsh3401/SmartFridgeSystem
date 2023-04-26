@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 
 
-DL_SERVER_BASE_URL = "http://localhost:5000/"
+DL_SERVER_BASE_URL = "http://localhost:3000/"
 headers = {"Content-type": "application/json"}
 
 
@@ -18,7 +18,6 @@ def get_recommendation(food_items: List) -> Dict:
     )
 
     # print(response.status_code)
-    print(response.content)
     return response.json()
 
 
