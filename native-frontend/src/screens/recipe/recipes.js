@@ -39,6 +39,8 @@ const Recipes = () => {
     console.log("here");
     // navigation.navigate("RecipeDetail", recipe);
   };
+  const filterMenu = () => {};
+  const sortMenu = () => {};
   const getNewRecipes = () => {
     setIsFetching(true);
     axios
@@ -82,7 +84,24 @@ const Recipes = () => {
   let renderVar;
   renderVar = !isLoading ? (
     <View style={{ backgroundColor: "white", padding: 10, height: "100%" }}>
-      <Button onPress={getNewRecipes}>Get new Recipes</Button>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          width: "100%",
+        }}
+      >
+        <Button onPress={getNewRecipes} icon={"refresh"}>
+          Get new Recipes
+        </Button>
+        <Button onPress={filterMenu} icon={"filter"}>
+          Filter
+        </Button>
+        <Button onPress={sortMenu} icon={"sort"}>
+          Sort
+        </Button>
+      </View>
+
       {!isFetching ? (
         <FlatList
           style={styles.flatView}

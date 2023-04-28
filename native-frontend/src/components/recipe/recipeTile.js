@@ -32,7 +32,8 @@ const RecipeTile = ({
           <View style={{ width: 40, height: 40 }}>
             <Text style={{ fontSize: 10 }}>{prepTime + "M"}</Text>
             <Button
-              style={{ backgroundColor: "purple", width: 40, fontSize: 5 }}
+              color={"purple"}
+              style={{ width: 40, fontSize: 5 }}
               onPress={() => {
                 console.log(recipe);
                 navigation.navigate("RecipeDetail", recipe);

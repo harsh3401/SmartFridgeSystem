@@ -19,6 +19,7 @@ const Dashboard = () => {
   const [grocerydata, setGroceryData] = useState([]);
   const [staleItems, setStaleItems] = useState(1);
   const [imageUrl, setImageUrl] = useState();
+  const [recipeImageUrl, setRecipeImageUrl] = useState();
   useEffect(() => {
     if (isFocused) {
       axios
@@ -47,6 +48,15 @@ const Dashboard = () => {
         })
         .catch((error) => {
           console.log("Unable to fetch image");
+        });
+      axios
+        .get("prev-recipes/")
+        .then((response) => {
+          console.log(response.data);
+          setRecipeImageUrl(response.data[0].recipe_image_url);
+        })
+        .catch((error) => {
+          console.error(error);
         });
     }
   }, [auth, isFocused]);
@@ -114,9 +124,14 @@ const Dashboard = () => {
           navigation.navigate("Recipes");
         }}
       >
-        <Image
+        {/* <Image
+        
           source={require("../../../assets/Dashboard/Pasta.png")}
+          
+        /> */}
+        <Image
           style={styles.cameraFeedBottom}
+          source={{ uri: recipeImageUrl }}
         />
       </TouchableOpacity>
     </View>

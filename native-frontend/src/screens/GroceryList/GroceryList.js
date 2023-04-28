@@ -72,7 +72,27 @@ const GroceryList = (props) => {
                   labelStyle={{ fontSize: 30 }}
                   icon={"plus-circle-outline"}
                 ></Button>
-                <Text style={{ fontSize: 20 }}>{item.item_name}</Text>
+
+                {item.item_name.toLowerCase().includes("stale") ? (
+                  <Text style={{ fontSize: 20, color: "red" }}>
+                    {item.item_name
+                      .toLowerCase()
+                      .split("stale")[1]
+                      .trim()
+                      .charAt(0)
+                      .toUpperCase() +
+                      item.item_name
+                        .toLowerCase()
+                        .split("stale")[1]
+                        .trim()
+                        .slice(1)}
+                  </Text>
+                ) : (
+                  <Text style={{ fontSize: 20, color: "green" }}>
+                    {item.item_name}
+                  </Text>
+                )}
+
                 <Button
                   onPress={() => {
                     var list = [...listState];
