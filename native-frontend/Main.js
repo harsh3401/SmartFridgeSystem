@@ -14,12 +14,14 @@ import Settings from "./src/screens/Settings/Settings.js";
 import Recipes from "./src/screens/recipe/recipes.js";
 import RecipeDetail from "./src/screens/recipe/recipe-detail.js";
 import Notifications from "./src/screens/notification/notifications.js";
+import Filters from "./src/screens/Filter/filters.js";
 import auth from "@react-native-firebase/auth";
 import React from "react";
 import FridgeDetail from "./src/screens/FridgeDetail/FridgeDetail.js";
 import { updateFCMToken } from "./src/slice/authSlice.js";
 import { useDispatch } from "react-redux";
 import { login } from "./src/slice/authSlice.js";
+import FilterOptions from "./src/components/filter/filterOptions.js";
 
 const Drawer = createDrawerNavigator();
 
@@ -107,6 +109,10 @@ export default function Main(props) {
               options={{
                 drawerItemStyle: { height: 0 },
               }}
+            />
+            <Drawer.Screen
+              name="FilterPage"
+              component={Filters}
             />
             <Drawer.Screen
               name="Fridge Preview"
