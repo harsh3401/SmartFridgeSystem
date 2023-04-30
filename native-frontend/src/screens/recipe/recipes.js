@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, FlatList, Pressable, Image, StyleSheet } from "react-native";
+import { Button } from "@react-native-material/core";
+import { Button as PaperButton } from "react-native-paper";
+
 // import { Pressable } from "@react-native-material/core";
 import RecipeTile from "../../components/recipe/recipeTile.js";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useIsFocused } from "@react-navigation/native";
 import { LogBox } from "react-native";
-import { Button } from "react-native-paper";
 import { Facebook } from "react-content-loader/native";
+import { Dropdown } from "react-native-element-dropdown";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Recipes = () => {
   useEffect(() => {
@@ -17,9 +22,15 @@ const Recipes = () => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const [recipeList, setRecipeList] = useState([]);
+  const [prevRecipeList, setPrevRecipeList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
+  const [sortValue, setSortValue] = useState("none");
   const navigation = useNavigation();
+  const filterDetails = useSelector((data) => data.filter.filterdata);
+  const isfilterthere = useSelector((data) => data.filter.filtersApplied);
+  console.log("The data received by recipes:", filterDetails);
+  console.log("Activeness :", isfilterthere);
   useEffect(() => {
     if (isFocused) {
       axios
@@ -34,6 +45,26 @@ const Recipes = () => {
         });
     }
   }, [isFocused]);
+
+  useEffect(() => {
+    console.log(sortValue);
+    if (sortValue == "preparationTime") {
+      setPrevRecipeList(recipeList);
+      let currentRecipeList = [];
+      recipeList.map((recipe) => {
+        currentRecipeList = [...currentRecipeList, recipe];
+      });
+      currentRecipeList.sort((a, b) => {
+        return a.time_to_make - b.time_to_make;
+      });
+      console.log("Recipe array modified ie sorted");
+      setRecipeList(currentRecipeList);
+      console.log("List successfully updated");
+    } else if (sortValue == "None") {
+      setRecipeList(setPrevRecipeList);
+      console.log("Restored list back to normal");
+    }
+  }, [sortValue]);
 
   const getRecipeDetails = () => {
     console.log("here");
@@ -53,6 +84,24 @@ const Recipes = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+  const getFilteredRecipes = () => {
+    setIsFetching(true);
+    axios
+      .post("get-filtered-recommendation/", {
+        filters: filterDetails,
+      })
+      .then((response) => {
+        console.log(response.data.recommendation);
+        setRecipeList(response.data.recommendation);
+        setIsFetching(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const directToFilterPage = () => {
+    navigation.navigate("FilterPage");
   };
   // recipeList = [
   //     {
@@ -84,7 +133,7 @@ const Recipes = () => {
   let renderVar;
   renderVar = !isLoading ? (
     <View style={{ backgroundColor: "white", padding: 10, height: "100%" }}>
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           justifyContent: "center",
@@ -100,7 +149,7 @@ const Recipes = () => {
         <Button onPress={sortMenu} icon={"sort"}>
           Sort
         </Button>
-      </View>
+      </View> */}
 
       {!isFetching ? (
         <FlatList
@@ -143,7 +192,49 @@ const Recipes = () => {
     </View>
   );
 
-  return <View>{renderVar}</View>;
+  return (
+    <View>
+      <View style={styles.topContainer}>
+        <View style={{ flex: 0.5, width: "auto", height: "auto" }}>
+          {/* <Button
+            trailing={(props) => <Icon name="filter" {...props} />}
+            onPress={directToFilterPage}
+            variant="outlined"
+            title="Filters"
+            color="black"
+          /> */}
+          <PaperButton onPress={getNewRecipes} icon={"refresh"}>
+            Get new Recipes
+          </PaperButton>
+          <PaperButton onPress={directToFilterPage} icon={"filter"}>
+            Filter
+          </PaperButton>
+          {/* <PaperButton onPress={sortMenu} icon={"sort"}>
+            Sort
+          </PaperButton> */}
+        </View>
+        <View style={{ flex: 0.5, width: "auto" }}>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="Sort By"
+            searchPlaceholder="Search..."
+            value={sortValue}
+            onChange={(item) => setSortValue(item.value)}
+          />
+        </View>
+      </View>
+      <View>{renderVar}</View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -166,6 +257,40 @@ const styles = StyleSheet.create({
   flatView: {
     horizontal: true,
   },
+  topContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+  dropdown: {
+    margin: 16,
+    height: 50,
+    borderBottomColor: "gray",
+    borderBottomWidth: 0.5,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
 });
+
+const data = [
+  { label: "Preparation Time", value: "preparationTime" },
+  // { label: "Sort by", value: "None" },
+];
 
 export default Recipes;

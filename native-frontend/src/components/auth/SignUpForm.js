@@ -114,7 +114,7 @@ const SignUpForm = (props) => {
         </View>
 
         <Spacer />
-
+        {/* 
         <View style={styles.horizontalcontainer1}>
           <View style={styles.checkboxcontainer}>
             <Text style={{ marginLeft: 5 }}>Remember me</Text>
@@ -124,17 +124,18 @@ const SignUpForm = (props) => {
               <Text style={{ color: "red" }}>forgot password</Text>
             </Pressable>
           </View>
-        </View>
+        </View> */}
 
         <Spacer />
 
         <View>
           <Button
+            style={{ backgroundColor: "purple", marginTop: 20 }}
             onPress={handleSignUp}
-            style={styles.buttonStyle}
-            title="Sign Up"
+            mode="contained"
+            icon="mail"
           >
-            Sign Up{" "}
+            Sign Up
           </Button>
         </View>
 

@@ -6,7 +6,7 @@ import urllib.request
 import os
 
 
-DL_SERVER_BASE_URL = "http://localhost:5000/"
+DL_SERVER_BASE_URL = "http://localhost:3000/"
 headers = {"Content-type": "application/json"}
 
 

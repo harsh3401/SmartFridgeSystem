@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "1036148748900",
+    "project_id": "socialauth-fc814",
+    "storage_bucket": "socialauth-fc814.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036148748900:android:79a1ba77a715a70ff4e571",
+        "android_client_info": {
+          "package_name": "com.example.rentofy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036148748900-3nhbscar4qoo8r7k296flcq8lhbui435.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rentofy",
+            "certificate_hash": "d5f324d61f1eb80fd6d10f337a114b92ef9d8b6e"
+          }
+        },
+        {
+          "client_id": "1036148748900-0jjsufm5bu5iprqeu6lekrfb7hq2lm3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7WTCN_HXgyy8j-K9JVimtWr7ULBcdVW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036148748900-0jjsufm5bu5iprqeu6lekrfb7hq2lm3o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1036148748900-4kpppiqeqcan85mu0kp8slbfajjqih4a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.native-frontend.smartfridgesystem"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036148748900:android:69074f21de82972cf4e571",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036148748900-19mb37e0jsvti4m6crdosttjd8ac8002.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "host.exp.exponent",
+            "certificate_hash": "d5f324d61f1eb80fd6d10f337a114b92ef9d8b6e"
+          }
+        },
+        {
+          "client_id": "1036148748900-0jjsufm5bu5iprqeu6lekrfb7hq2lm3o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7WTCN_HXgyy8j-K9JVimtWr7ULBcdVW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036148748900-0jjsufm5bu5iprqeu6lekrfb7hq2lm3o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1036148748900-4kpppiqeqcan85mu0kp8slbfajjqih4a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.native-frontend.smartfridgesystem"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
