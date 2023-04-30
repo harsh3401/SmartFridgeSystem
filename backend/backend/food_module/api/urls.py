@@ -5,6 +5,7 @@ from .views import (
     UserFoodItemAPI,
     GetRecommendations,
     NutritionalDetailsAPIView,
+    FilteredRecipesAPIView
 )
 
 urlpatterns = [
@@ -13,4 +14,5 @@ urlpatterns = [
     path("get-recommendation/", GetRecommendations.as_view()),
     path("nutrition/", NutritionalDetailsAPIView.as_view()),
     path("stale-food/", StaleFoodAPIView.as_view()),
+    path("filtered-recipes/", FilteredRecipesAPIView.as_view()),
 ]

@@ -97,3 +97,29 @@ class RecommendationsResponseSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["recommendations"]
+
+
+nutrition_choices = (
+    ("High in Protein", "high_protein"),
+    ("Low in sugar", "low_sugar"),
+    ("Low in Calories", "low_calories"),
+    ("High in Carbs", "high_carbs"),
+)
+
+class FilteredRecipeSerializer(serializers.Serializer):
+    preperation_time = serializers.CharField()
+    nutrition = serializers.ChoiceField(choices=nutrition_choices)
+
+    class Meta:
+        fields = ["preperation_time", "nutrition"]
+
+    def validate(self, data):
+        if "preperation_time" in data:
+            data["preperation_time"] = int(data["preperation_time"].split("min")[0])
+        return data
+
+
+class GlobalRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecipeRecommendation
+        fields = "__all__"

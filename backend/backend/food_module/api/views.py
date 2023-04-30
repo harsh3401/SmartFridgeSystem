@@ -1,10 +1,12 @@
 from .serializers import (
+    GlobalRecipeSerializer,
     NutritionSerializer,
     RecommendationsResponseSerializer,
     UserFoodItemListSerializer,
     UserFoodItemSerializer,
     RecipeRecommendationSerializer,
     UserFoodItemUpdateSerializer,
+    FilteredRecipeSerializer
 )
 from rest_framework.views import APIView, Response
 from django.forms.models import model_to_dict
@@ -277,4 +279,40 @@ class StaleFoodAPIView(APIView):
         user = request.user
         qs = UserFoodItem.objects.filter(user=user, is_stale=True)
         ser = UserFoodItemSerializer(qs, many=True)
+        return Response(ser.data, status=HTTP_200_OK)
+
+
+class FilteredRecipesAPIView(APIView):
+    # permission_classes = [IsAuthenticated]
+    serializer_class = FilteredRecipeSerializer
+
+    @swagger_auto_schema(operation_summary = "Get filtered recipes")
+    def post(self, request):
+        ser = FilteredRecipeSerializer(data=request.data)
+        if not ser.is_valid():
+            return Response(ser.errors, status=HTTP_400_BAD_REQUEST)
+        
+        data = ser.data
+        # keys along with values
+        tmp = {
+            "high_protein": 20,
+            "low_sugar": 20,
+            "low_cal": 100,
+            "high_carbs": 200
+        }
+        print(data)
+        if "high_protein" in data:
+            qs = RecipeRecommendation.objects.filter(protein__gte=tmp['high_protein'], time_to_make=data['preperation_time'])
+        elif "low_sugar" in data:
+            qs = RecipeRecommendation.objects.filter(sugar__lte=tmp['low_sugar'], time_to_make=data['preperation_time'])
+        elif "low_cal" in data:
+            qs = RecipeRecommendation.objects.filter(calories__lte=tmp['low_cal'], time_to_make=data['preperation_time'])
+        elif "high_carbs" in data:
+            qs = RecipeRecommendation.objects.filter(carbohydrates__gte=tmp['high_carbs'], time_to_make=data['preperation_time'])
+        else: 
+            qs = RecipeRecommendation.objects.filter(time_to_make=data['preperation_time'])
+
+        # print(qs)
+        ser = GlobalRecipeSerializer(qs, many=True)
+        # print(ser.is_valid())
         return Response(ser.data, status=HTTP_200_OK)
