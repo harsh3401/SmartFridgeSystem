@@ -113,6 +113,9 @@ export default function Main(props) {
             <Drawer.Screen
               name="FilterPage"
               component={Filters}
+              options={{
+                drawerItemStyle: { height: 0 },
+              }}
             />
             <Drawer.Screen
               name="Fridge Preview"

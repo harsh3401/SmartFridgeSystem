@@ -43,7 +43,6 @@ const Dashboard = () => {
       axios
         .get("image")
         .then((response) => {
-          console.log(response.data[response.data.length - 1].imagea);
           setImageUrl({ uri: response.data[response.data.length - 1].image });
         })
         .catch((error) => {
@@ -56,7 +55,7 @@ const Dashboard = () => {
           setRecipeImageUrl(response.data[0].recipe_image_url);
         })
         .catch((error) => {
-          console.error(error);
+          console.log(error);
         });
     }
   }, [auth, isFocused]);

@@ -39,16 +39,16 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request):
 
         token = request.headers.get('Authorization')
-        print(token)
+
         if not token:
             return None
 
         try:
             decoded_token = auth.verify_id_token(token)
-            print("decode token",decoded_token)
+
             uid = decoded_token["uid"]
             email = decoded_token["email"]
-            print(uid,email)
+
             push_notification = True
 
         except:

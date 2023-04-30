@@ -106,7 +106,7 @@ const RecipeDetail = ({ route }) => {
                 marginTop: 20,
               }}
             >
-              {route.params.time_to_make}
+              {route.params.time_to_make + " mins "}
             </Text>
           </ImageBackground>
         </View>
