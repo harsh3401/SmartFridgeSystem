@@ -31,6 +31,7 @@
     "react": "18.1.0",
     "react-content-loader": "^6.2.1",
     "react-native": "0.70.8",
+    "react-native-a11y-slider": "^1.2.0",
     "react-native-dotenv": "^3.4.7",
     "react-native-element-dropdown": "^2.9.0",
     "react-native-gesture-handler": "^2.9.0",

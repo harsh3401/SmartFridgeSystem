@@ -10693,6 +10693,11 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-a11y-slider@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-a11y-slider/-/react-native-a11y-slider-1.2.0.tgz#927c79c5239cd1f444c09a94eae403c887d4458e"
+  integrity sha512-MVnQ85r794Ae4AjlSpSWa2NI4Bh8sRwvBktsAxEjionthxUmburtKm9RorkEUntzphrTT23iwD9+3oJt1MiPGg==
+
 react-native-codegen@^0.70.6:
   version "0.70.6"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.70.6.tgz#2ce17d1faad02ad4562345f8ee7cbe6397eda5cb"

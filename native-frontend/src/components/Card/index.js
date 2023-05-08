@@ -4,6 +4,7 @@ import {
   VictoryBar,
   VictoryChart,
   VictoryTheme,
+  VictoryLabel,
 } from "victory-native";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
@@ -27,42 +28,48 @@ const Card = (props) => {
       <View>
         <Text style={styles.cardTitle}>{props.titleText}</Text>
         {props.data.graphData && (
-          <VictoryChart
-            horizontal={props.data.graphOrientation === "horizontal"}
-            //TODO change
-            height={180}
-            width={180}
-            theme={VictoryTheme.material}
-          >
-            <VictoryBar
-              barRatio={1.6}
-              style={{ data: { fill: "#6200EE" } }}
-              data={props.data.graphData}
-              x="quarter"
-              y="earnings"
-            />
-            <VictoryAxis
-              style={{
-                axis: { stroke: "none" },
-                ticks: { stroke: "none" },
-                tickLabels: { fill: "none" },
-                grid: { stroke: "transparent" },
-              }}
-            />
-            <VictoryAxis
-              style={{
-                axis: { stroke: "none" },
-                ticks: { stroke: "none" },
-                tickLabels: { fill: "none" },
-                grid: { stroke: "transparent" },
-              }}
-            />
-          </VictoryChart>
+          <View>
+            <VictoryChart
+              horizontal={props.data.graphOrientation === "horizontal"}
+              //TODO change
+              height={180}
+              width={180}
+              theme={VictoryTheme.material}
+            >
+              <VictoryBar
+                barRatio={1.6}
+                style={{ data: { fill: "#6200EE" } }}
+                data={props.data.graphData}
+                x="quarter"
+                y="earnings"
+                labels={({ datum }) => datum.y}
+                labelComponent={<VictoryLabel dy={30} />}
+              />
+
+              <VictoryAxis
+                style={{
+                  axis: { stroke: "none" },
+                  ticks: { stroke: "none" },
+                  tickLabels: { fill: "none" },
+                  grid: { stroke: "transparent" },
+                }}
+              />
+              <VictoryAxis
+                style={{
+                  axis: { stroke: "none" },
+                  ticks: { stroke: "none" },
+                  tickLabels: { fill: "none" },
+                  grid: { stroke: "transparent" },
+                }}
+              />
+            </VictoryChart>
+          </View>
         )}
 
         {props?.indicator >= 0 ? (
           <Text style={styles.indicator}>{props?.indicator}</Text>
         ) : null}
+        {props?.descriptor ? <Text style={styles.indicator}>Hello</Text> : null}
 
         {props?.image && (
           <Image

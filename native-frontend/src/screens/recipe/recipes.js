@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, FlatList, Pressable, Image, StyleSheet } from "react-native";
+import {
+  View,
+  FlatList,
+  Pressable,
+  Image,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { Button } from "@react-native-material/core";
-import { Button as PaperButton } from "react-native-paper";
+import { IconButton, Button as PaperButton } from "react-native-paper";
 
 // import { Pressable } from "@react-native-material/core";
 import RecipeTile from "../../components/recipe/recipeTile.js";
@@ -27,28 +34,33 @@ const Recipes = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [sortValue, setSortValue] = useState("none");
   const navigation = useNavigation();
+  const [noResults, setNoResults] = useState(false);
   const filterDetails = useSelector((data) => data.filter.filterdata);
   const isfilterthere = useSelector((data) => data.filter.filtersApplied);
   console.log("The data received by recipes:", filterDetails);
   console.log("Activeness :", isfilterthere);
+  useEffect(() => {}, []);
   useEffect(() => {
     if (isFocused) {
-      axios
-        .get("prev-recipes/")
-        .then((response) => {
-          console.log(response.data);
-          setRecipeList(response.data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if (isfilterthere) {
+        getFilteredRecipes();
+      } else {
+        axios
+          .get("prev-recipes/")
+          .then((response) => {
+            setNoResults(false);
+            setRecipeList(response.data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
     }
   }, [isFocused]);
 
   useEffect(() => {
-    console.log(sortValue);
-    if (sortValue == "preparationTime") {
+    if (sortValue.value == "preparationTime" && !sortValue.asc) {
       setPrevRecipeList(recipeList);
       let currentRecipeList = [];
       recipeList.map((recipe) => {
@@ -60,6 +72,17 @@ const Recipes = () => {
       console.log("Recipe array modified ie sorted");
       setRecipeList(currentRecipeList);
       console.log("List successfully updated");
+    } else if (sortValue.value == "preparationTime" && sortValue.asc) {
+      setPrevRecipeList(recipeList);
+      let currentRecipeList = [];
+      recipeList.map((recipe) => {
+        currentRecipeList = [...currentRecipeList, recipe];
+      });
+      currentRecipeList.sort((a, b) => {
+        return b.time_to_make - a.time_to_make;
+      });
+      console.log("Recipe array modified ie sorted");
+      setRecipeList(currentRecipeList);
     } else if (sortValue == "None") {
       setRecipeList(setPrevRecipeList);
       console.log("Restored list back to normal");
@@ -77,7 +100,8 @@ const Recipes = () => {
     axios
       .get("get-recommendation/")
       .then((response) => {
-        console.log(response.data.recommendations);
+        console.log(response.data.recommendations[0]);
+        setNoResults(false);
         setRecipeList(response.data.recommendations);
         setIsFetching(false);
       })
@@ -87,22 +111,73 @@ const Recipes = () => {
   };
   const getFilteredRecipes = () => {
     setIsFetching(true);
-    axios
-      .post("get-filtered-recommendation/", {
-        filters: filterDetails,
-      })
-      .then((response) => {
-        console.log(response.data.recommendation);
-        setRecipeList(response.data.recommendation);
-        setIsFetching(false);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // console.log(filterDetails);
+    var control = true;
+    // if (filterDetails.hasOwnProperty("nutrition")) {
+    //   console.log(filterDetails.nutrition);
+    //   if (Array.isArray(filterDetails.nutrition)) {
+    //     if (filterDetails.nutrition.length > 0) {
+    //       if (filterDetails.preparationTime) {
+    //         if (Array.isrray(filterDetails.preparationTime)) {
+    //           if (filterDetails[preparationTime].length > 0) {
+    //             control = true;
+    //           }
+    //         }
+    //       }
+    //     } else if (filterDetails.hasOwnProperty("preparationTime")) {
+    //       if (filterDetails.preparationTime) {
+    //         if (Array.isArray(filterDetails.preparationTime)) {
+    //           if (filterDetails[preparationTime].length > 0) {
+    //             control = true;
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    if (control) {
+      var requestData = filterDetails.preparationTime
+        ? filterDetails.nutrition
+          ? filterDetails.nutrition.length > 0
+            ? {
+                preperation_time_min: filterDetails.preparationTime[0],
+                preperation_time_max: filterDetails.preparationTime[1],
+                nutrition: filterDetails.nutrition[0],
+              }
+            : {
+                preperation_time_min: filterDetails.preparationTime[0],
+                preperation_time_max: filterDetails.preparationTime[1],
+              }
+          : {
+              preperation_time_min: filterDetails.preparationTime[0],
+              preperation_time_max: filterDetails.preparationTime[1],
+            }
+        : { nutrition: filterDetails.nutrition[0] };
+      console.log("Data", requestData);
+
+      axios
+        .post("filtered-recipes/", requestData)
+        .then((response) => {
+          if (response.data.length == 0) {
+            setNoResults(false);
+            setIsFetching(false);
+            setNoResults(true);
+          } else {
+            setRecipeList(response.data);
+            setIsFetching(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      setIsFetching(false);
+    }
   };
   const directToFilterPage = () => {
     navigation.navigate("FilterPage");
   };
+
   // recipeList = [
   //     {
   //         imgurl:"https://pipingpotcurry.com/wp-content/uploads/2020/12/Poha-Recipe-indori-Piping-Pot-Curry.jpg",
@@ -152,26 +227,39 @@ const Recipes = () => {
       </View> */}
 
       {!isFetching ? (
-        <FlatList
-          style={styles.flatView}
-          data={recipeList.map((object, index) => {
-            return { ...object, id: index };
-          })}
-          renderItem={(recipe) => {
-            return (
-              <Pressable onPress={getRecipeDetails} style={styles.card}>
-                <RecipeTile
-                  recipe={recipe.item}
-                  id={recipe.item.id}
-                  imageSrc={recipe.item.recipe_image_url}
-                  recipeName={recipe.item.recipe_name}
-                  recipeIngredients={recipe.item.ingredients}
-                  prepTime={recipe.item.time_to_make}
-                />
-              </Pressable>
-            );
-          }}
-        />
+        noResults ? (
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              height: "70%",
+              fontWeight: "bold",
+            }}
+          >
+            <Text>Sorry no results were returned for that filter.</Text>
+          </View>
+        ) : (
+          <FlatList
+            style={styles.flatView}
+            data={recipeList.map((object, index) => {
+              return { ...object, id: index };
+            })}
+            renderItem={(recipe) => {
+              return (
+                <Pressable onPress={getRecipeDetails} style={styles.card}>
+                  <RecipeTile
+                    recipe={recipe.item}
+                    id={recipe.item.id}
+                    imageSrc={recipe.item.recipe_image_url}
+                    recipeName={recipe.item.recipe_name}
+                    recipeIngredients={recipe.item.ingredients}
+                    prepTime={recipe.item.time_to_make}
+                  />
+                </Pressable>
+              );
+            }}
+          />
+        )
       ) : (
         <View>
           <Facebook />
@@ -226,9 +314,20 @@ const Recipes = () => {
             labelField="label"
             valueField="value"
             placeholder="Sort By"
+            renderItem={(item) => {
+              console.log(item);
+              return (
+                <View style={{ flexDirection: "row" }}>
+                  <IconButton
+                    icon={item.asc ? "sort-ascending" : "sort-descending"}
+                  />
+                  <Text>{item.label}</Text>
+                </View>
+              );
+            }}
             searchPlaceholder="Search..."
             value={sortValue}
-            onChange={(item) => setSortValue(item.value)}
+            onChange={(item) => setSortValue(item)}
           />
         </View>
       </View>
@@ -289,7 +388,8 @@ const styles = StyleSheet.create({
 });
 
 const data = [
-  { label: "Preparation Time", value: "preparationTime" },
+  { label: "Preparation Time", value: "preparationTime", asc: true },
+  { label: "Preparation Time", value: "preparationTime", asc: false },
   // { label: "Sort by", value: "None" },
 ];
 

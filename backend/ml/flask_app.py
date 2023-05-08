@@ -117,6 +117,7 @@ def recommend():
             if len(ingredients) <1:
                 return {"error": "Invalid input"},400
             op = Search_Recipes(ingredients, query_ranked=True, recipe_range=(0,10))
+            print(op)
             return {"data": op}
         else:   
             return {"error": "Invalid input"},400

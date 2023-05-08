@@ -9,6 +9,7 @@ import {
   Button,
 } from "react-native";
 import FiltersList from "../../components/filter/filterList";
+import Slider from "react-native-a11y-slider";
 import FilterOptions from "../../components/filter/filterOptions";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
@@ -67,17 +68,7 @@ const Filters = () => {
 };
 
 const filters = {
-  preparationTime: [
-    "5min",
-    "10min",
-    "15min",
-    "20min",
-    "25min",
-    "30min",
-    "35min",
-    "40min",
-    "45min",
-  ],
+  preparationTime: [1, 100],
   nutrition: [
     "High in Protein",
     "Low in sugar",

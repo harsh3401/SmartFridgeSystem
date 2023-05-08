@@ -13,6 +13,9 @@ class FoodItem(models.Model):
     def __str__(self) -> str:
         return self.item_name
 
+# class Category(models.Model):
+#     category = models.CharField(max_length=128, null=False, blank=False,unique=True)
+
 
 class UserFoodItem(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -57,6 +60,7 @@ class RecipeRecommendation(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.recipe_image_url:
+            print("here")
             self.recipe_image_url = get_recipe_image_url(self.recipe_name + "recipe")
         if not self.recipe_video_url:
             self.recipe_video_url = get_recipe_video_url(self.recipe_name + "recipe") 

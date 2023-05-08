@@ -15,17 +15,19 @@ const SignUpForm = (props) => {
   const [email, setEmail] = useState("");
   const [passwordC, setPasswordC] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
-
+  const [emailBorder, setEmailBorder] = useState(false);
+  const [passwordBorder, setPasswordBorder] = useState(false);
+  const [emailHelper, setEmailHelper] = useState("");
+  const [passwordHelper, setPasswordHelper] = useState("");
   const [snackData, setSnackData] = useState("");
   const [snackVis, setSnackVis] = useState(false);
   const dispatch = useDispatch();
   const validateData = (data) => {
     //validation logic
+
     if (data.password1 === data.password2) {
-      return true;
+      createEmailAccount(email, password);
     } else {
-      return false;
     }
   };
   const handleSignUp = () => {
@@ -34,43 +36,12 @@ const SignUpForm = (props) => {
       password1: password,
       password2: passwordC,
     };
+    validateData(requestData);
 
-    //     axios.post('signup/',
-
-    //   requestData
-
-    // ).then((response) =>{
-    //   console.log('User created', {email:requestData.email,password:requestData.password2})
-
-    // setSnackData('Account Created Successfully')
-    // setSnackVis(true)
-    //   axios.post('signin/',
-    //   {email:requestData.email,password:requestData.password2}
-
-    // ).then((response) =>{
-
-    //   dispatch(login({loggedIn:true,expires:response.data.expires_in,name:response.data.user,privilege:response.data.is_superuser?0:1,token:response.data.token}))
-    //   navigation.navigate("Dashboard")
-
-    // setSnackData('Welcome')
-    //  setSnackVis(true)
-    // }).catch((error)=>{
-    //   console.log(error)
-    // })
-    // }).catch((error)=>{
-    //   console.log(error)
-    // })
-    console.log(email, password);
-    createEmailAccount(email, password);
     //Email Redux storage
     //Firebase authentication
   };
-  // const handleGoogleSignUp = async () =>{
-  //   //call appropriate method from services
-  // }
-  // const handleFacebookSignUp = async ()=>{
-  //   //call appropriate method from services
-  // }
+
   return (
     <View style={{ padding: 20 }}>
       <Stack>
@@ -78,28 +49,44 @@ const SignUpForm = (props) => {
           <Text style={styles.inputHelperStyle}>Email Address</Text>
           <TextInput
             autoCapitalize="none"
-            onChangeText={(data) => setEmail(data)}
             variant="outlined"
             placeholder="Enter your email"
             style={styles.textInputStyle}
+            inputContainerStyle={
+              emailBorder && {
+                borderWidth: 2,
+                borderColor: "red",
+              }
+            }
+            onChangeText={(data) => {
+              setEmailHelper("");
+              setEmail(data);
+              setEmailBorder(false);
+            }}
           />
         </View>
-
-        <Spacer />
 
         <View style={styles.inputdiv}>
           <Text style={styles.inputHelperStyle}>Password</Text>
           <TextInput
             autoCapitalize="none"
-            onChangeText={(data) => setPassword(data)}
             variant="outlined"
             secureTextEntry={true}
             placeholder="Enter your password"
             style={styles.textInputStyle}
+            inputContainerStyle={
+              passwordBorder && {
+                borderWidth: 2,
+                borderColor: "red",
+              }
+            }
+            onChangeText={(data) => {
+              setPasswordHelper("");
+              setPassword(data);
+              setPasswordBorder(false);
+            }}
           />
         </View>
-
-        <Spacer />
 
         <View style={styles.inputdiv}>
           <Text style={styles.inputHelperStyle}>Password Confirmation</Text>
@@ -113,7 +100,6 @@ const SignUpForm = (props) => {
           />
         </View>
 
-        <Spacer />
         {/* 
         <View style={styles.horizontalcontainer1}>
           <View style={styles.checkboxcontainer}>
@@ -125,8 +111,6 @@ const SignUpForm = (props) => {
             </Pressable>
           </View>
         </View> */}
-
-        <Spacer />
 
         <View>
           <Button
@@ -185,7 +169,7 @@ const SignUpForm = (props) => {
   );
 };
 
-styles = {
+var styles = {
   horizontalcontainer1: {
     flexDirection: "row",
     justifyContent: "space-between",

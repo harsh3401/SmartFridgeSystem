@@ -6,7 +6,8 @@ from .serializers import (
     UserFoodItemSerializer,
     RecipeRecommendationSerializer,
     UserFoodItemUpdateSerializer,
-    FilteredRecipeSerializer
+    FilteredRecipeSerializer,
+
 )
 from rest_framework.views import APIView, Response
 from django.forms.models import model_to_dict
@@ -23,6 +24,7 @@ from drf_yasg.utils import swagger_auto_schema
 from ..models import RecipeRecommendation, UserFoodItem, FoodItem
 from ..utils import get_recommendation
 from drf_yasg import openapi
+from rest_framework.generics import GenericAPIView
 
 
 class UserFoodItemAPI(APIView):
@@ -199,7 +201,7 @@ class GetRecommendations(APIView):
                 obj.save()
             
         qs=RecipeRecommendation.objects.filter(
-                user=user)
+                user=user).order_by("-created_at")
         ser = RecipeRecommendationSerializer(qs, many=True)
 
         return Response(
@@ -281,9 +283,27 @@ class StaleFoodAPIView(APIView):
         ser = UserFoodItemSerializer(qs, many=True)
         return Response(ser.data, status=HTTP_200_OK)
 
+# class CategoryView(GenericAPIView):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = CategorySerializer
+#     queryset = Category.objects.all()
+#     @swagger_auto_schema(operation_summary = "Get Food Categories")
+#     def get(self, request, *args, **kwargs):
+#         instance = self.get_object()
+#         serializer = self.get_serializer(instance)
+#         return Response(serializer.data)
+#     def post(self, request, format=None):
+#         serializer = CategorySerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data,
+#                             status=HTTP_201_CREATED)
+#         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+  
+    
 
 class FilteredRecipesAPIView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = []
     serializer_class = FilteredRecipeSerializer
 
     @swagger_auto_schema(operation_summary = "Get filtered recipes")
@@ -301,16 +321,17 @@ class FilteredRecipesAPIView(APIView):
             "high_carbs": 200
         }
         print(data)
-        if "high_protein" in data:
-            qs = RecipeRecommendation.objects.filter(protein__gte=tmp['high_protein'], time_to_make=data['preperation_time'])
-        elif "low_sugar" in data:
-            qs = RecipeRecommendation.objects.filter(sugar__lte=tmp['low_sugar'], time_to_make=data['preperation_time'])
-        elif "low_cal" in data:
-            qs = RecipeRecommendation.objects.filter(calories__lte=tmp['low_cal'], time_to_make=data['preperation_time'])
-        elif "high_carbs" in data:
-            qs = RecipeRecommendation.objects.filter(carbohydrates__gte=tmp['high_carbs'], time_to_make=data['preperation_time'])
-        else: 
-            qs = RecipeRecommendation.objects.filter(time_to_make=data['preperation_time'])
+        if "preperation_time_min" in data:
+            if "high_protein" in data:
+                qs = RecipeRecommendation.objects.filter(protein__gte=tmp['high_protein'], time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'])
+            elif "low_sugar" in data:
+                qs = RecipeRecommendation.objects.filter(sugar__lte=tmp['low_sugar'], time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'])
+            elif "low_cal" in data:
+                qs = RecipeRecommendation.objects.filter(calories__lte=tmp['low_cal'],time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'] )
+            elif "high_carbs" in data:
+                qs = RecipeRecommendation.objects.filter(carbohydrates__gte=tmp['high_carbs'], time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'])
+            else: 
+                qs = RecipeRecommendation.objects.filter(time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'])
 
         # print(qs)
         ser = GlobalRecipeSerializer(qs, many=True)

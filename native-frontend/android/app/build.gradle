@@ -280,6 +280,7 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     //noinspection GradleDynamicVersion
+    implementation platform('com.google.firebase:firebase-bom:31.5.0')
     implementation "com.google.android.gms:play-services-base:15.0.0"
     implementation "com.google.firebase:firebase-core:17.2.0"
     implementation "com.google.firebase:firebase-messaging:17.2.0"
@@ -365,5 +366,5 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
-
+apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'

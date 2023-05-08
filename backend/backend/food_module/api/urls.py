@@ -15,4 +15,5 @@ urlpatterns = [
     path("nutrition/", NutritionalDetailsAPIView.as_view()),
     path("stale-food/", StaleFoodAPIView.as_view()),
     path("filtered-recipes/", FilteredRecipesAPIView.as_view()),
+
 ]

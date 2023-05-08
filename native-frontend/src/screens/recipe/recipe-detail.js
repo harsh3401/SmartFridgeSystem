@@ -52,7 +52,15 @@ const RecipeDetail = ({ route }) => {
         />
       </View>
       <View style={{ marginTop: 20 }}>
-        <YoutubePlayer height={200} play={true} videoId={"84WIaK3bl_s"} />
+        <YoutubePlayer
+          height={200}
+          play={true}
+          videoId={
+            route.params.recipe_video_url.split(
+              "https://www.youtube.com/watch?v="
+            )[1]
+          }
+        />
       </View>
       <View style={{ marginTop: 20 }}>
         <Text

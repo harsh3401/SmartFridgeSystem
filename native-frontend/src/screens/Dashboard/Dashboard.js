@@ -20,6 +20,7 @@ const Dashboard = () => {
   const [staleItems, setStaleItems] = useState(1);
   const [imageUrl, setImageUrl] = useState();
   const [recipeImageUrl, setRecipeImageUrl] = useState();
+  const [recipeData, setRecipeData] = useState();
   useEffect(() => {
     if (isFocused) {
       axios
@@ -53,6 +54,7 @@ const Dashboard = () => {
         .then((response) => {
           console.log(response.data);
           setRecipeImageUrl(response.data[0].recipe_image_url);
+          setRecipeData(response.data[0]);
         })
         .catch((error) => {
           console.log(error);
@@ -72,45 +74,58 @@ const Dashboard = () => {
         {imageUrl ? (
           <Image source={imageUrl} style={styles.cameraFeed} />
         ) : (
-          <LoadingView />
+          <Image
+            source={{
+              uri: "https://static.vecteezy.com/system/resources/thumbnails/016/808/173/small/camera-not-allowed-no-photography-image-not-available-concept-icon-in-line-style-design-isolated-on-white-background-editable-stroke-vector.jpg",
+            }}
+            style={styles.cameraFeed}
+          />
         )}
       </TouchableOpacity>
       <View style={styles.graphContainer}>
         <Card
-          data={{
-            graphData: [
-              { quarter: 1, earnings: 20 },
-              { quarter: 2, earnings: 28 },
-              { quarter: 3, earnings: 45 },
-              { quarter: 4, earnings: 40 },
-              { quarter: 5, earnings: 30 },
-            ],
-            graphOrientation: "horizontal",
-          }}
-          titleText={"Nutritional Details of recipes"}
+          descriptor={true}
+          data={
+            recipeData
+              ? {
+                  graphData: [
+                    { totalfat: 1, earnings: recipeData.total_fat },
+                    { sugar: 2, earnings: recipeData.sugar },
+                    { protein: 4, earnings: recipeData.protein },
+                    { carbohydrates: 5, earnings: recipeData.carbohydrates },
+                  ],
+                  graphOrientation: "vertical",
+                }
+              : []
+          }
+          titleText={"Avg Nutritional Data of  recipes (FSPC)"}
         ></Card>
-        <Card
-          data={{
-            graphData: [
-              { quarter: 1, earnings: 20 },
-              { quarter: 2, earnings: 28 },
-              { quarter: 3, earnings: 45 },
-              { quarter: 4, earnings: 40 },
-              { quarter: 5, earnings: 30 },
-            ],
-            graphOrientation: "vertical",
-          }}
-          titleText={"Temperature"}
-        ></Card>
+        <View style={styles.smallContainer}>
+          <Card
+            height={"50%"}
+            indicator={recipeData ? recipeData.sodium : 0}
+            titleText={"Average Sodium (mG)"}
+          ></Card>
+
+          <Card
+            height={"50%"}
+            indicator={recipeData ? recipeData.calories : 0}
+            titleText={"Average Calories of recipes"}
+          ></Card>
+        </View>
       </View>
       <View style={styles.graphContainer}>
         <View style={styles.smallContainer}>
           {/* TODO : API Integration for value */}
-          <Card height={"50%"} titleText={"No of times Opened"} indicator={5} />
+          <Card
+            height={"50%"}
+            titleText={"No of times Opened Today"}
+            indicator={5}
+          />
           <Card
             height={"50%"}
             indicator={staleItems}
-            titleText={"Stale Items Found"}
+            titleText={"Stale Items Found currently"}
           />
         </View>
         <Card list titleText={"Grocery List"} />

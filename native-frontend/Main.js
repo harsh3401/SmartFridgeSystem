@@ -108,6 +108,7 @@ export default function Main(props) {
               component={RecipeDetail}
               options={{
                 drawerItemStyle: { height: 0 },
+                headerShown: false,
               }}
             />
             <Drawer.Screen
@@ -115,6 +116,7 @@ export default function Main(props) {
               component={Filters}
               options={{
                 drawerItemStyle: { height: 0 },
+                headerShown: false,
               }}
             />
             <Drawer.Screen

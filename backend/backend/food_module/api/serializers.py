@@ -107,19 +107,23 @@ nutrition_choices = (
 )
 
 class FilteredRecipeSerializer(serializers.Serializer):
-    preperation_time = serializers.CharField()
-    nutrition = serializers.ChoiceField(choices=nutrition_choices)
+    preperation_time_min= serializers.IntegerField(required=False)
+    preperation_time_max = serializers.IntegerField(required=False)
+    nutrition = serializers.ChoiceField(choices=nutrition_choices,required=False)
 
     class Meta:
-        fields = ["preperation_time", "nutrition"]
+        fields = ["preperation_time_min","preperation_time_max", "nutrition"]
 
-    def validate(self, data):
-        if "preperation_time" in data:
-            data["preperation_time"] = int(data["preperation_time"].split("min")[0])
-        return data
 
 
 class GlobalRecipeSerializer(serializers.ModelSerializer):
+    steps = serializers.SerializerMethodField()
+    ingredients = serializers.SerializerMethodField()
     class Meta:
         model = RecipeRecommendation
         fields = "__all__"
+    def get_ingredients(self, obj):
+        return obj.ingredients.values_list("item_name", flat=True)
+
+    def get_steps(self, obj):
+        return ast.literal_eval(obj.steps)

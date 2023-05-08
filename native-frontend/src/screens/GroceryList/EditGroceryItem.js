@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import { View, StyleSheet, Text, TextInput, StatusBar } from "react-native";
 import { useState } from "react";
 import { Button } from "react-native-paper";
 import { Divider, Chip, IconButton } from "react-native-paper";
@@ -31,6 +31,7 @@ const EditItem = (route) => {
   const navigation = useNavigation();
   return (
     <View style={styles.dashContainer}>
+      <StatusBar animated={true} backgroundColor="#5856d6" />
       <View style={styles.topHalf}>
         <View style={styles.buttonContainer}>
           <Button
@@ -93,16 +94,42 @@ const EditItem = (route) => {
           }}
         />
         <Divider style={{ color: "white", marginTop: 5, marginBottom: 20 }} />
-        <Chip
-          style={styles.categoryChip}
-          icon="food-apple"
-          onPress={() => console.log("Pressed")}
-        >
-          Fruits
-        </Chip>
+        {/* <Text style={{ color: "#cacaf2", marginTop: 10, marginBottom: 20 }}>
+          CATEGORY NAME
+        </Text> */}
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          {/* <Chip
+            style={styles.categoryChip}
+            icon="food-apple"
+            onPress={() => console.log("Pressed")}
+          >
+            Fruits
+          </Chip>
+          <Chip
+            style={styles.categoryChip}
+            icon="food"
+            onPress={() => console.log("Pressed")}
+          >
+            Snacks
+          </Chip>
+
+          <Chip
+            style={styles.categoryChip}
+            icon="food-steak"
+            onPress={() => console.log("Pressed")}
+          >
+            Meats
+          </Chip>
+          <Chip
+            style={styles.categoryChip}
+            onPress={() => console.log("Pressed")}
+          >
+            Other
+          </Chip> */}
+        </View>
       </View>
       <View style={styles.bottomHalf}>
-        <View style={styles.valueDrawer}>
+        {/* <View style={styles.valueDrawer}>
           <Text style={{ color: "#999999" }}>Qty</Text>
           <Text style={{ marginLeft: "10%" }}>5</Text>
           <View
@@ -116,7 +143,7 @@ const EditItem = (route) => {
                 borderRadius: 2,
               }}
             >
-              <Button title="+" color="#a1a0e8" style={{ fontSize: 10 }} />
+              <Button icon="plus" color="#a1a0e8" style={{ fontSize: 10 }} />
             </View>
             <View
               style={{
@@ -126,10 +153,10 @@ const EditItem = (route) => {
                 borderRadius: 3,
               }}
             >
-              <Button title="-" color="#a1a0e8" style={{ fontSize: 10 }} />
+              <Button icon="minus" color="#a1a0e8" style={{ fontSize: 10 }} />
             </View>
           </View>
-        </View>
+        </View> */}
         <Divider style={{ color: "#999999" }} />
       </View>
     </View>
@@ -143,11 +170,10 @@ const styles = StyleSheet.create({
     paddingRight: "5%",
   },
   dashContainer: {
-    height: "95%",
     justifyContent: "flex-start",
   },
   buttonContainer: {
-    marginTop: "15%",
+    marginTop: "5%",
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -156,7 +182,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#ffffff",
     fontColor: "#000000",
     // borderRadius:"50px",
-    width: "30%",
+    fontSize: 5,
+    width: "23%",
     marginBottom: "5%",
   },
   valueDrawer: {

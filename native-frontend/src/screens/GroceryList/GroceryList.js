@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, FlatList } from "react-native";
+import { View, StyleSheet, Text, FlatList, StatusBar } from "react-native";
 import { Chip } from "react-native-paper";
 import { Divider, Button, FAB, Snackbar } from "react-native-paper";
 import { useState, useEffect } from "react";
@@ -26,8 +26,9 @@ const GroceryList = (props) => {
   // }
   return (
     <View style={styles.dashContainer}>
+      <StatusBar animated={true} backgroundColor="white" />
       <View>{/* <Text style={styles.titleText}>Grocery List</Text> */}</View>
-      <View style={styles.chipDrawer}>
+      {/* <View style={styles.chipDrawer}>
         <Chip
           style={styles.categoryChip}
           icon="food"
@@ -49,7 +50,7 @@ const GroceryList = (props) => {
         >
           Meats
         </Chip>
-      </View>
+      </View> */}
       <FlatList
         style={{ paddingTop: 20, color: "#6200EE" }}
         data={listState}
@@ -75,17 +76,7 @@ const GroceryList = (props) => {
 
                 {item.item_name.toLowerCase().includes("stale") ? (
                   <Text style={{ fontSize: 20, color: "red" }}>
-                    {item.item_name
-                      .toLowerCase()
-                      .split("stale")[1]
-                      .trim()
-                      .charAt(0)
-                      .toUpperCase() +
-                      item.item_name
-                        .toLowerCase()
-                        .split("stale")[1]
-                        .trim()
-                        .slice(1)}
+                    {item.item_name}
                   </Text>
                 ) : (
                   <Text style={{ fontSize: 20, color: "green" }}>
