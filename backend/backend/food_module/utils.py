@@ -39,11 +39,11 @@ def get_recipe_image_url(recipe_name:str):
     response = requests.get(url)
     response_json = response.json()
     print(response.json())
-    # if response_json['items']:
-    #     first_video_thumbnail = response_json['items'][0]['snippet']['thumbnails']['medium']['url']
-    #     return first_video_thumbnail
-    # else:
-    return None
+    if response_json['items']:
+        first_video_thumbnail = response_json['items'][0]['snippet']['thumbnails']['medium']['url']
+        return first_video_thumbnail
+    else:
+        return None
 
 
 def get_recipe_video_url(recipe_name:str):
@@ -60,14 +60,13 @@ def get_recipe_video_url(recipe_name:str):
     #     first_video_link = video_tags[0]['href'][7:]
     #     return first_video_link    
     # else:
-    #     return None
-
-    # api_key = os.environ.get("YOUTUBE_API_KEY")
-    # url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=" + recipe_name + "&type=video&key=" + api_key
-    # response = requests.get(url)
-    # response_json = response.json()
-    # if response_json['items']:
-    #     first_video_link = "https://www.youtube.com/watch?v=" + response_json['items'][0]['id']['videoId']
-    #     return first_video_link
-    # else:
-    return None
+    api_key = os.environ.get("YOUTUBE_API_KEY")
+    print(api_key)
+    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=" + recipe_name + "&type=video&key=" + api_key
+    response = requests.get(url)
+    response_json = response.json()
+    if response_json['items']:
+        first_video_link = "https://www.youtube.com/watch?v=" + response_json['items'][0]['id']['videoId']
+        return first_video_link
+    else:
+        return None
