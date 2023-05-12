@@ -332,6 +332,18 @@ class FilteredRecipesAPIView(APIView):
                 qs = RecipeRecommendation.objects.filter(carbohydrates__gte=tmp['high_carbs'], time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'])
             else: 
                 qs = RecipeRecommendation.objects.filter(time_to_make__gte=data['preperation_time_min'],time_to_make__lte=data['preperation_time_max'])
+        else :
+            if "high_protein" in data:
+                qs = RecipeRecommendation.objects.filter(protein__gte=tmp['high_protein'])
+            elif "low_sugar" in data:
+                qs = RecipeRecommendation.objects.filter(sugar__lte=tmp['low_sugar'])
+            elif "low_cal" in data:
+                qs = RecipeRecommendation.objects.filter(calories__lte=tmp['low_cal'])
+            elif "high_carbs" in data:
+                qs = RecipeRecommendation.objects.filter(carbohydrates__gte=tmp['high_carbs'])
+            else: 
+                qs = RecipeRecommendation.objects.all()
+        
 
         # print(qs)
         ser = GlobalRecipeSerializer(qs, many=True)

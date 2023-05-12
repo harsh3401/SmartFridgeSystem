@@ -66,14 +66,11 @@ const GroceryList = (props) => {
                   paddingBottom: 10,
                 }}
               >
-                <Button
-                  onPress={() => {
-                    navigation.navigate("EditGList", { obj: item });
-                  }}
-                  labelStyle={{ fontSize: 30 }}
-                  icon={"plus-circle-outline"}
-                ></Button>
-
+                <Text
+                  style={{ marginLeft: 10, marginRight: 10, color: "#6200EE" }}
+                >
+                  {"\u2B24"}
+                </Text>
                 {item.item_name.toLowerCase().includes("stale") ? (
                   <Text style={{ fontSize: 20, color: "red" }}>
                     {item.item_name}

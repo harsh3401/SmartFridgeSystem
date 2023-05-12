@@ -48,9 +48,16 @@ const Recipes = () => {
         axios
           .get("prev-recipes/")
           .then((response) => {
-            setNoResults(false);
-            setRecipeList(response.data);
-            setIsLoading(false);
+            console.log("========>", response.data);
+            if (response.data.length == 0) {
+              setIsLoading(false);
+              setIsFetching(false);
+              setNoResults(true);
+            } else {
+              setIsLoading(false);
+              setRecipeList(response.data);
+              setIsFetching(false);
+            }
           })
           .catch((error) => {
             console.error(error);
@@ -100,10 +107,17 @@ const Recipes = () => {
     axios
       .get("get-recommendation/")
       .then((response) => {
-        console.log(response.data.recommendations[0]);
-        setNoResults(false);
-        setRecipeList(response.data.recommendations);
-        setIsFetching(false);
+        if (response.data.recommendations.length == 0) {
+          setNoResults(false);
+          setIsFetching(false);
+          setNoResults(true);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          setRecipeList(response.data.recommendations);
+          setIsFetching(false);
+          setNoResults(false);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -158,11 +172,18 @@ const Recipes = () => {
       axios
         .post("filtered-recipes/", requestData)
         .then((response) => {
+          console.log(
+            response.data.map((recipes) => {
+              console.log(recipes.recipe_name);
+              return recipes.name;
+            })
+          );
           if (response.data.length == 0) {
-            setNoResults(false);
+            setIsLoading(false);
             setIsFetching(false);
             setNoResults(true);
           } else {
+            setIsLoading(false);
             setRecipeList(response.data);
             setIsFetching(false);
           }
@@ -171,6 +192,7 @@ const Recipes = () => {
           console.error(error);
         });
     } else {
+      setIsLoading(false);
       setIsFetching(false);
     }
   };
@@ -236,7 +258,7 @@ const Recipes = () => {
               fontWeight: "bold",
             }}
           >
-            <Text>Sorry no results were returned for that filter.</Text>
+            <Text>Sorry no results were found.</Text>
           </View>
         ) : (
           <FlatList

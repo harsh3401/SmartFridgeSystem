@@ -32,7 +32,7 @@ os.environ[
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
 ALLOWED_HOSTS = ['*']
 
 

@@ -93,8 +93,9 @@ class HardwareImageAPIView(APIView):
         operation_summary="Request the arduino to take a picture of the fridge"
     )
     def get(self, request):
+        ESP_IP="192.168.1.2"
         response = requests.get(
-                f"http://{ip}/capture",
+                f"http://{ESP_IP}/capture",
         )
         # 200 means that arduino is available
         if response.status_code == 200:

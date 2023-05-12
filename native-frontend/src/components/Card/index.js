@@ -42,8 +42,20 @@ const Card = (props) => {
                 data={props.data.graphData}
                 x="quarter"
                 y="earnings"
-                labels={({ datum }) => datum.y}
-                labelComponent={<VictoryLabel dy={30} />}
+                labels={({ datum }) => {
+                  console.log("-------->datum", datum);
+                  if (datum != undefined) {
+                    var result = Object.keys(datum).filter((key) => {
+                      if (key == "_x" || key == "_y" || key == "earnings") {
+                        return false;
+                      } else {
+                        return true;
+                      }
+                    });
+                    return result[0];
+                  }
+                }}
+                labelComponent={<VictoryLabel angle={-75} textAnchor="start" />}
               />
 
               <VictoryAxis
@@ -69,7 +81,9 @@ const Card = (props) => {
         {props?.indicator >= 0 ? (
           <Text style={styles.indicator}>{props?.indicator}</Text>
         ) : null}
-        {props?.descriptor ? <Text style={styles.indicator}>Hello</Text> : null}
+        {props?.descriptor ? (
+          <Text style={styles.indicator}>No Data</Text>
+        ) : null}
 
         {props?.image && (
           <Image
@@ -77,28 +91,31 @@ const Card = (props) => {
             source={require("../../../assets/Dashboard/Pasta.png")}
           />
         )}
-        {props.list && (
-          <FlatList
-            style={{ paddingLeft: 10, color: "#6200EE" }}
-            data={listdata.map((obj) => {
-              return { key: obj.item_name };
-            })}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    marginBottom: 10,
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text>{"\u2B24"}</Text>
-                  <Text style={{ fontSize: 20 }}>{" " + item.key + " "}</Text>
-                </View>
-              );
-            }}
-          />
-        )}
+        {props.list &&
+          (listdata.length > 0 ? (
+            <FlatList
+              style={{ paddingLeft: 10, color: "#6200EE" }}
+              data={listdata.map((obj) => {
+                return { key: obj.item_name };
+              })}
+              renderItem={({ item }) => {
+                return (
+                  <View
+                    style={{
+                      marginBottom: 10,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text>{"\u2B24"}</Text>
+                    <Text style={{ fontSize: 20 }}>{" " + item.key + " "}</Text>
+                  </View>
+                );
+              }}
+            />
+          ) : (
+            <Text style={{ margin: 10 }}>No data</Text>
+          ))}
       </View>
     </Pressable>
   );

@@ -78,7 +78,7 @@ const Dashboard = () => {
             source={{
               uri: "https://static.vecteezy.com/system/resources/thumbnails/016/808/173/small/camera-not-allowed-no-photography-image-not-available-concept-icon-in-line-style-design-isolated-on-white-background-editable-stroke-vector.jpg",
             }}
-            style={styles.cameraFeed}
+            style={styles.cameraFeedDummy}
           />
         )}
       </TouchableOpacity>
@@ -119,8 +119,8 @@ const Dashboard = () => {
           {/* TODO : API Integration for value */}
           <Card
             height={"50%"}
-            titleText={"No of times Opened Today"}
-            indicator={5}
+            titleText={"Average Protein (gms)"}
+            indicator={recipeData ? recipeData.protein.toString() : 0}
           />
           <Card
             height={"50%"}
@@ -142,11 +142,21 @@ const Dashboard = () => {
         
           source={require("../../../assets/Dashboard/Pasta.png")}
           
+          
         /> */}
-        <Image
-          style={styles.cameraFeedBottom}
-          source={{ uri: recipeImageUrl }}
-        />
+        {recipeImageUrl ? (
+          <Image
+            style={styles.cameraFeedBottom}
+            source={{ uri: recipeImageUrl }}
+          />
+        ) : (
+          <Image
+            source={{
+              uri: "https://static.vecteezy.com/system/resources/thumbnails/016/808/173/small/camera-not-allowed-no-photography-image-not-available-concept-icon-in-line-style-design-isolated-on-white-background-editable-stroke-vector.jpg",
+            }}
+            style={styles.cameraFeedDummy}
+          />
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -172,6 +182,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "contain",
+  },
+  cameraFeed: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+  },
+  cameraFeedDummy: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
   },
   cameraFeedBottom: {
     flex: 1,

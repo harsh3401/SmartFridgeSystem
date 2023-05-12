@@ -16,14 +16,10 @@ const EditItem = (route) => {
     if (isFocused) {
       console.log("Focused");
       console.log(
-        route.route.params?.hasOwnProperty("obj")
-          ? route.route.params.obj.key
-          : ""
+        route.route.params?.hasOwnProperty("obj") ? route.route.params.obj : ""
       );
       setItemName(
-        route.route.params?.hasOwnProperty("obj")
-          ? route.route.params.obj.key
-          : ""
+        route.route.params?.hasOwnProperty("obj") ? route.route.params.obj : ""
       );
     }
   }, [isFocused]);
@@ -36,7 +32,7 @@ const EditItem = (route) => {
         <View style={styles.buttonContainer}>
           <Button
             textColor={"#e7e7f9"}
-            title="Done"
+            title="Cancel"
             onPress={() => {
               navigation.navigate("Grocery List");
             }}
@@ -46,9 +42,9 @@ const EditItem = (route) => {
           <Button
             textColor={"#e7e7f9"}
             onPress={() => {
-              console.log(route.route.params);
+              console.log("this---->", route.route.params);
               var data = [...route.route.params.listdata];
-              console.log("this", data);
+
               console.log(itemName.trim() !== "");
               if (itemName.trim() !== "") {
                 console.log("request", {

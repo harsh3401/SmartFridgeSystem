@@ -16,9 +16,7 @@ const FridgeDetail = () => {
   const [fetch, setFetch] = useState(0);
   const [arduinoStatus, setArduinoStatus] = useState(false);
   const isFocused = useIsFocused();
-  setInterval(() => {
-    fetchImage();
-  }, 30000);
+
   const fetchImage = () => {
     axios
       .get("hardware-image")
@@ -30,9 +28,14 @@ const FridgeDetail = () => {
         console.log("Unable to fetch image");
       });
 
-    // useEffect(() => {
-
-    // }, []);
+    useEffect(() => {
+      let intervalId = setInterval(() => {
+        fetchImage();
+      }, 50000);
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, []);
     // console.log("here");
     // // axios
     // //   .get("hardware-image")
