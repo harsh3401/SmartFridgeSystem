@@ -12,3 +12,4 @@ __pycache__/
 backend/logs/scheduled_jobs.log
 *.sqlite3
 serviceAccountKey.json
+.DS_Store

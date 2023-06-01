@@ -8,7 +8,7 @@ import { Alert } from "react-native";
 
 import { useDispatch } from "react-redux";
 // import {BACKEND_URL} from 'react-native-dotenv';
-axios.defaults.baseURL = "http://167.71.224.8/api/backend/";
+axios.defaults.baseURL = "http://167.71.224.8:8080/api/backend/";
 
 let refresh = false;
 

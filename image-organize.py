@@ -1,15 +1,11 @@
 import os 
-image_list=os.listdir('Training_images')
-folders=['Harsh','Naman','Samved','Ishaan']
-print(len(image_list))
+import shutil
+labels=os.listdir('../YoloT/labels/train')
 
-for j in range(0,len(folders)):
-    path='Training_images/'+folders[j]
-    os.mkdir(path)
-    for i in range(len(image_list)/4*j,len(image_list)/4*(j+1)):
-        og_path='Training_images/'+image_list[i]
-        new_path='Training_images/'+folders[j]+"/"+image_list[i]
-        os.rename(og_path,new_path)
+for label in labels:
+    image_dest_path='../YoloT/images/train2/'+label.split('.txt')[0]+'.png'
+    image_source_path='../YoloT/images/train/'+label.split('.txt')[0]+'.png'
+    shutil.move(image_source_path, image_dest_path)
       
 
         
