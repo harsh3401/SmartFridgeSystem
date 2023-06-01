@@ -40,7 +40,8 @@ class ImageAPIView(APIView):
     def get(self, request):
         user = request.user
 
-        qs = Image.objects.filter(user=user)
+        qs = Image.objects.filter(id=Image.objects.filter(user=user).last().id)
+        
         return Response(ImageSerializer(qs, many=True).data, status=HTTP_200_OK)
 
 
@@ -95,7 +96,7 @@ class HardwareImageAPIView(APIView):
     def get(self, request):
         ESP_IP="192.168.1.2"
         response = requests.get(
-                f"http://{ESP_IP}/capture",
+                f"http://192.168.100.231/capture",
         )
         # 200 means that arduino is available
         if response.status_code == 200:
@@ -198,6 +199,7 @@ class ArduinoListenerAPIView(APIView):
                 with open(name, 'rb') as fi:
                         print("here")
                         img= Image.objects.create(user=user, image=request.FILES["image"],image_identified=File(fi))
+                        print(img.__dict__)
             except:
                 print("here 2")
                 img = Image.objects.create(user=user, image=request.FILES["image"],image_identified=request.FILES["image"])
@@ -206,7 +208,7 @@ class ArduinoListenerAPIView(APIView):
             print(text_files)
             labels=[]
             #dictionary to store class mappings to yolo indexes
-            class_mappings={'0':'Fresh Tomatoe','1':'Stale Tomatoe','2':'Fresh Cabbage','3':'Stale Cabbage','4':'Fresh Apple','5':'Stale Apple'}
+            class_mappings={'0':'Fresh Tomatoe','1':'Stale Tomatoe','2':'Fresh Cabbage','3':'Stale Cabbage','4':'Fresh Apple','5':'Stale Apple','6':'Fresh Banana','7':'Stale Banana'}
             for file in text_files:
                  with open(file,'r') as f:
                      for line in f.readlines():
